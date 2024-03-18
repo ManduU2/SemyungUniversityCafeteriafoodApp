@@ -9,7 +9,7 @@ import UIKit
 import FirebaseCore
 import FirebaseFirestore
 
-class BellViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class BellViewController: UIViewController  {
     
     
     // 파이어스토어
@@ -21,25 +21,6 @@ class BellViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     var tableView = UITableView(frame: .zero, style: .insetGrouped)
     
-    // 라벨
-//    lazy var label: UILabel = {
-//        
-//        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 150, height: 150))
-//        
-////        label.backgroundColor = UIColor.gray
-////        label.text = "On"
-//        label.layer.masksToBounds = true
-//        label.layer.cornerRadius = 75.0
-//        label.textColor = UIColor.white
-//        label.shadowColor = UIColor.gray
-//        label.font = UIFont.systemFont(ofSize: 30.0)
-//        label.textAlignment = NSTextAlignment.center
-//        label.layer.position = CGPoint(x: self.view.bounds.width/2,y: 200)
-//        
-//        return label
-//    }()
-    
-
     
     // 토글 스위치 모양 만들기 (위치 설정 포함)
     lazy var controlSwitch: UISwitch = {
@@ -101,12 +82,6 @@ class BellViewController: UIViewController, UITableViewDataSource, UITableViewDe
         applyConstraints()
         
         
-        // 토글 스위치의 초기 상태에 따라 버튼의 상태 설정
-//        if let isOn = UserDefaults.standard.value(forKey: switchStateKey) as? Bool {
-//                updateButtonState(isOn: isOn)
-//            }
-        
-        
     }
     
     fileprivate func applyConstraints() {
@@ -162,12 +137,9 @@ class BellViewController: UIViewController, UITableViewDataSource, UITableViewDe
         } else {
             text = "Off"
             color = UIColor.gray
-            // 여기에 알림 취소 로직 추가 (optional)
         }
-        
-//        self.label.text = text
-//        self.label.backgroundColor = color
     }
+    
     
     // 아침메뉴 가져오기
     func getBreakfastMenu(completion: @escaping (String?, Error?) -> Void) {
@@ -262,17 +234,10 @@ class BellViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     }
                     
                     
-                    
                     // 현재 날짜 데이터 포맷
                     let formatter = DateFormatter()
                     formatter.dateFormat = "YYYY-MM-dd"
                     let current_date_string = formatter.string(from: Date())
-                    
-                    
-                    // 지우기
-                    //let docRef = db.collection("Menu").document(current_date_string)
-                    
-                    
                     
                     
                     let content = UNMutableNotificationContent()
@@ -307,8 +272,8 @@ class BellViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     
                     // 두 번째 알림: 11:30
                     var dateComponents2 = DateComponents()
-                    dateComponents2.hour = 16
-                    dateComponents2.minute = 45
+                    dateComponents2.hour = 11
+                    dateComponents2.minute = 30
                     let trigger2 = UNCalendarNotificationTrigger(dateMatching: dateComponents2, repeats: false)
                     let request2 = UNNotificationRequest(identifier: "uniqueIdentifier2", content: content2, trigger: trigger2)
                     
@@ -316,8 +281,8 @@ class BellViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     
                     // 세 번째 알림: 17:30
                     var dateComponents3 = DateComponents()
-                    dateComponents3.hour = 15
-                    dateComponents3.minute = 14
+                    dateComponents3.hour = 17
+                    dateComponents3.minute = 30
                     let trigger3 = UNCalendarNotificationTrigger(dateMatching: dateComponents3, repeats: false)
                     let request3 = UNNotificationRequest(identifier: "uniqueIdentifier3", content: content3, trigger: trigger3)
                     
@@ -355,22 +320,30 @@ class BellViewController: UIViewController, UITableViewDataSource, UITableViewDe
  
     
     
+
+    
+    
+}
+
+
+// 테이블 델리게이트
+extension BellViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             // 첫 번째 섹션에는 하나의 셀만 있음
             return 1
         } else if section == 1 {
             // 두 번째 섹션에는 3개의 셀이 있음
-            return 3
+            return 2
         } else {
             return 0
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = UITableViewCell(style: .default, reuseIdentifier: .none)
-////        cell.textLabel?.text = data[indexPath.section][indexPath.row]
-//        return cell
+
         
         if indexPath.section == 0 && indexPath.row == 0 {
             let switchCell = UITableViewCell(style: .default, reuseIdentifier: nil)
@@ -444,9 +417,9 @@ class BellViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     label.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
                 ])
                 
-                // 예시 이메일을 추가
+                // 이메일을 추가
                 let emailLabel = UILabel()
-                emailLabel.text = "developer@example.com"
+                emailLabel.text = "wlsgurrla716@icolud.com"
                 cell.contentView.addSubview(emailLabel)
                 emailLabel.translatesAutoresizingMaskIntoConstraints = false
                 NSLayoutConstraint.activate([
@@ -465,11 +438,11 @@ class BellViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
-    // 실제 기기에서 사용해보기
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 1 && indexPath.row == 1 {
             // 예시 이메일 주소
-            let emailAddress = "developer@example.com"
+            let emailAddress = "wlsgurrla716@icolud.com"
             
             // 이메일 주소를 NSURL 형식으로 변환
             if let url = URL(string: "mailto:\(emailAddress)") {
@@ -490,13 +463,11 @@ class BellViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if section == 0 {
-            return "설정"
+            return "설정  (조식 - 8:30, 중식 - 11:30, 석식 - 17:30)"
         } else if section == 1 {
             return "앱 정보"
         } else {return ""}
     
 }
-    
-    
     
 }

@@ -51,7 +51,7 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
         let navigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)) // 네비게이션 바의 기본 높이는 44입니다.
         
         // 네비게이션 바 아이템 생성
-        let navItem = UINavigationItem(title: ViewController.navTitle + " 댓글 ") // 타이틀 설정
+        let navItem = UINavigationItem(title: Data.navTitle + " 댓글 ") // 타이틀 설정
         
         // 네비게이션 바에 아이템 추가
         navigationBar.setItems([navItem], animated: false)
@@ -154,7 +154,7 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
             return
         }
         
-        if ViewController.navTitle == "식단표 (학생회관_학생식당)" {
+        if Data.navTitle == "식단표 (학생회관_학생식당)" {
             db.collection("Comment1").document("2024-03-14").setData(["댓글": commentText], merge: true)
             
             // 댓글 저장 후 다시 불러오기
@@ -177,7 +177,7 @@ class CommentViewController: UIViewController, UITableViewDataSource, UITableVie
         
         // 파이어베이스 [데이터 불러오기]
         
-        if ViewController.navTitle == "식단표 (학생회관_학생식당)" {
+        if Data.navTitle == "식단표 (학생회관_학생식당)" {
             
             
             

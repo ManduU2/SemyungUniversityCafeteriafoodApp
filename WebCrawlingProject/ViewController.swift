@@ -7,15 +7,18 @@
 
 /*
  
- 데이터 로딩때 나오는 효과만 넣어주면 될뜻 -> 마지막쯤에 시도
  
- 좋아요 싫어요 기능 만들기
  
- 댓글 기능 만들기
+
+ 
+
  
  */
 
+ 
 
+
+//
 
 import UIKit
 import FSCalendar
@@ -28,22 +31,13 @@ import FirebaseFirestore
 class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource, UITextFieldDelegate {
     
     
-    static var navTitle: String = "식단표 (학생회관_학생식당)"
     
-    static var dateEx: String = "x"
     
-    static var trueint: Int = 0
-    
-    static var trueint2 : Int = 0
-    
+    // 파이어베이스
     let db = Firestore.firestore()
     
     private let calendar: FSCalendar = {
         let calendar = FSCalendar(frame: .zero)
-        
-        
-        // 년도 제거
-        //calendar.calendarHeaderView.calendar = .none
         
         calendar.headerHeight = 50
         calendar.weekdayHeight = 20
@@ -51,15 +45,12 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         // 주간 달력 설정
         calendar.scope = .week
         
-        
-        
         // 텍스트 컬러 설정
         calendar.appearance.headerTitleColor = .black
         calendar.appearance.weekdayTextColor = .black
         
         // 요일 설정 (한국어)
         calendar.locale = Locale(identifier: "ko_KR")
-        
         
         // 월 표시 나오도록 설정
         calendar.appearance.headerDateFormat = "yyyy년 MM월" // 월의 축약 형태로 표시
@@ -71,17 +62,12 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
     }()
     
     
-    
-    
+    // 식단 테이블
     var tableView = UITableView(frame: .zero, style: .insetGrouped)
     
     
     
-    
-
-    
-    // 임시 데이터
-    
+    // 식단 테이블을 위한 데이터
     var data: [[String]] = [[""], [""], [""]]
     let header = ["조식","중식","석식"]
     
@@ -90,6 +76,7 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
     override func viewDidLoad() {
         super.viewDidLoad()
         
+       
         calendar.delegate = self
         calendar.dataSource = self
         
@@ -107,7 +94,7 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         applyConstraints()
         
     }
-        
+    
     
     // 풀 스크린이 아니면 viewWillAppear이 실행되지를 않음
     override func viewWillAppear(_ animated: Bool) {
@@ -120,10 +107,10 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         
         
         // 이렇게 넣으면 타입 저장 속성에 계속해서 현재 날짜가 기입됨
-        ViewController.dateEx = current_date_string
+        Data.currentDateStringSpace = current_date_string
         
         
-        self.title = ViewController.navTitle
+        self.title = Data.navTitle
         
         dateNow()
     }
@@ -140,13 +127,20 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         
     }
     
+    // 화면 돌리기 제한
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+            return .portrait
+        }
     
+    
+    
+    // 네비게이션 바 아이템
     private func configureItems() {
         
-        // Custom hamburger button image
+        // Custom hamburger button image (left)
         let hamburgerImage = UIImage(systemName: "line.horizontal.3")
         
-        // Custom bell button image
+        // Custom bell button image (right)
         let bellImage = UIImage(systemName: "bell.fill")
         
         
@@ -169,6 +163,8 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         
         
     }
+    
+    
     
     
     fileprivate func applyConstraints() {
@@ -210,29 +206,9 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         dateFormatter.dateFormat = "YYYY-MM-dd"
         //print("날짜 선택 : " + dateFormatter.string(from: date))
         
-        ViewController.dateEx = dateFormatter.string(from: date)
-        
-        //        docRef.getDocument { (document, error) in
-        //            if let document = document {
-        //                print("Document ID: \(document.documentID)")
-        //                // 여기서 document.documentID가 문서 이름입니다.
-        //            } else {
-        //                print("Document does not exist")
-        //            }
-        //        }
-        
-        //        docRef.getDocument { (document, error) in
-        //            if let document = document, document.exists {
-        //                let dataDescription = document.data().map(String.init(describing:)) ?? "데이터 없음"
-        //                print("Document data: \(dataDescription)")
-        //
-        //            } else {
-        //                print("Document does not exist")
-        //            }
-        //        }
-        
-        
-        if ViewController.navTitle == "식단표 (학생회관_학생식당)" {
+        Data.currentDateStringSpace = dateFormatter.string(from: date)
+                
+        if Data.navTitle == "식단표 (학생회관_학생식당)" {
             
             let docRef = db.collection("Menu").document(dateFormatter.string(from: date))
             
@@ -282,7 +258,7 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         }
         
     
-        if ViewController.navTitle == "식단표 (학생회관_자율식당)" {
+        if Data.navTitle == "식단표 (학생회관_자율식당)" {
             
             let docRef = db.collection("Menu2").document(dateFormatter.string(from: date))
             
@@ -331,7 +307,7 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         }
         
         
-        if ViewController.navTitle == "식단표 (예지학사_식당)" {
+        if Data.navTitle == "식단표 (예지학사_식당)" {
             
             let docRef = db.collection("Menu3").document(dateFormatter.string(from: date))
             
@@ -380,7 +356,7 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         }
         
         
-        if ViewController.navTitle == "식단표 (65번가_도서관지하분식점)" {
+        if Data.navTitle == "식단표 (65번가_도서관지하분식점)" {
             
             let docRef = db.collection("Menu4").document(dateFormatter.string(from: date))
             
@@ -429,31 +405,8 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         }
         
         
-        
-        
-        
-        //        db.collection("Menu").document("3").getDocument { (snapshot, error) in
-        //            if error == nil && snapshot != nil && snapshot!.data() != nil {
-        //                print(snapshot!.data())
-        //            }
-        //        }
-        //
-        
-        //        if dateFormatter.string(from: date) == "2024-03-07" {
-        //            //print(1)
-        //            data = [["new 아침 메뉴"],
-        //                    ["new 점심 메뉴"],
-        //                    ["new 저녁 메뉴"]]
-        //            //print(data)
-        //
-        //
-        //            // 테이블 데이터 업데이트
-        //            tableView.reloadData()
-        //
-        //        }
-        
-        
     }
+    
     
     
     
@@ -465,7 +418,7 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         
         
         
-        if ViewController.navTitle == "식단표 (학생회관_학생식당)" {
+        if Data.navTitle == "식단표 (학생회관_학생식당)" {
             let docRef = db.collection("Menu").document(current_date_string)
             
             docRef.getDocument { (document, error) in
@@ -512,7 +465,7 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         }
         
         
-        if ViewController.navTitle == "식단표 (학생회관_자율식당)" {
+        if Data.navTitle == "식단표 (학생회관_자율식당)" {
             let docRef = db.collection("Menu2").document(current_date_string)
             
             
@@ -558,7 +511,7 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         }
         
         
-        if ViewController.navTitle == "식단표 (예지학사_식당)" {
+        if Data.navTitle == "식단표 (예지학사_식당)" {
             let docRef = db.collection("Menu3").document(current_date_string)
             
             
@@ -604,7 +557,7 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         }
         
         
-        if ViewController.navTitle == "식단표 (65번가_도서관지하분식점)" {
+        if Data.navTitle == "식단표 (65번가_도서관지하분식점)" {
             let docRef = db.collection("Menu4").document(current_date_string)
             
             
@@ -651,7 +604,6 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         
         
         
-        
     }
     
     // 왼쪽 식당(햄버거 메뉴) 선택
@@ -664,8 +616,6 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         self.navigationItem.backBarButtonItem = backBarButtonItem
         
         navigationController?.pushViewController(vc, animated: true)
-        //        vc.modalPresentationStyle = .fullScreen
-        //        present(vc, animated: true, completion: nil)
     }
     
     
@@ -679,39 +629,19 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         self.navigationItem.backBarButtonItem = backBarButtonItem
         
         navigationController?.pushViewController(vc, animated: true)
-        
-        //        vc.modalPresentationStyle = .fullScreen
-        //        present(vc, animated: true, completion: nil)
-        
-        
-        
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }
 
 
 
+
+
+
+// 테이블 델리게이트 설정
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     
-    // Section
+    // 섹션 수
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return data[section].count
     }
@@ -719,6 +649,34 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        
+        var likeButton: UIButton = {
+            let button = UIButton(type: .system)
+            button.setTitle("👍", for: .normal)
+            button.tintColor = .green // Customize color if needed
+            button.addTarget(self, action: #selector(likeButtonTapped(_:)), for: .touchUpInside)
+            button.tag = indexPath.row // Set tag to identify the button
+            return button
+        }()
+        
+        var dislikeButton: UIButton = {
+            let button = UIButton(type: .system)
+            button.setTitle("👎", for: .normal)
+            button.tintColor = .red // Customize color if needed
+            button.addTarget(self, action: #selector(dislikeButtonTapped(_:)), for: .touchUpInside)
+            button.tag = indexPath.row // Set tag to identify the button
+            
+            return button
+        }()
+        
+        
+        
+        
+        
+        
+        
+        
         
         let cell = UITableViewCell(style: .default, reuseIdentifier: .none)
         
@@ -772,9 +730,9 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         
         // 파이어베이스 [데이터 불러오기]
         
-        if ViewController.navTitle == "식단표 (학생회관_학생식당)" {
+        if Data.navTitle == "식단표 (학생회관_학생식당)" {
             
-            let docRef = db.collection("Menu").document(ViewController.dateEx)
+            let docRef = db.collection("Menu").document(Data.currentDateStringSpace)
             
             
             docRef.getDocument { (document, error) in
@@ -809,44 +767,9 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             }
         }
         
-        if ViewController.navTitle == "식단표 (학생회관_자율식당)" {
+        if Data.navTitle == "식단표 (학생회관_자율식당)" {
             
-            let docRef = db.collection("Menu2").document(ViewController.dateEx)
-            
-            
-            docRef.getDocument { (document, error) in
-                if let document = document, document.exists {
-                    if let like = document.data()?[mealType] as? String {
-                        likeCountLabel.text = like
-                        likeCountLabel.textColor = .red
-                        likeCountLabel.tag = 1000 // Set tag for identification
-                    }
-                }
-                else {
-                    print("   2   ")
-                }
-                
-            }
-            
-            docRef.getDocument { (document, error) in
-                if let document = document, document.exists {
-                    if let like = document.data()?[dismealType] as? String {
-                        dislikeCountLabel.text = like
-                        dislikeCountLabel.textColor = .systemBlue
-                        dislikeCountLabel.tag = 2000 // Set tag for identification
-                    }
-                }
-                else {
-                    print("   2   ")
-                }
-                
-            }
-            
-        }
-        
-        if ViewController.navTitle == "식단표 (예지학사_식당)" {
-            
-            let docRef = db.collection("Menu3").document(ViewController.dateEx)
+            let docRef = db.collection("Menu2").document(Data.currentDateStringSpace)
             
             
             docRef.getDocument { (document, error) in
@@ -879,9 +802,44 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             
         }
         
-        if ViewController.navTitle == "식단표 (65번가_도서관지하분식점)" {
+        if Data.navTitle == "식단표 (예지학사_식당)" {
             
-            let docRef = db.collection("Menu4").document(ViewController.dateEx)
+            let docRef = db.collection("Menu3").document(Data.currentDateStringSpace)
+            
+            
+            docRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    if let like = document.data()?[mealType] as? String {
+                        likeCountLabel.text = like
+                        likeCountLabel.textColor = .red
+                        likeCountLabel.tag = 1000 // Set tag for identification
+                    }
+                }
+                else {
+                    print("   2   ")
+                }
+                
+            }
+            
+            docRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    if let like = document.data()?[dismealType] as? String {
+                        dislikeCountLabel.text = like
+                        dislikeCountLabel.textColor = .systemBlue
+                        dislikeCountLabel.tag = 2000 // Set tag for identification
+                    }
+                }
+                else {
+                    print("   2   ")
+                }
+                
+            }
+            
+        }
+        
+        if Data.navTitle == "식단표 (65번가_도서관지하분식점)" {
+            
+            let docRef = db.collection("Menu4").document(Data.currentDateStringSpace)
             
             
             docRef.getDocument { (document, error) in
@@ -926,49 +884,20 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         
         
         
-        // Create like button
-        let likeButton = UIButton(type: .system)
-        likeButton.setTitle("👍", for: .normal)
-        likeButton.tintColor = .green // Customize color if needed
-        likeButton.addTarget(self, action: #selector(likeButtonTapped(_:)), for: .touchUpInside)
-        likeButton.tag = indexPath.row // Set tag to identify the button
         
         
-        
-        // Create dislike button
-        let dislikeButton = UIButton(type: .system)
-        dislikeButton.setTitle("👎", for: .normal)
-        dislikeButton.tintColor = .red // Customize color if needed
-        dislikeButton.addTarget(self, action: #selector(dislikeButtonTapped(_:)), for: .touchUpInside)
-        dislikeButton.tag = indexPath.row // Set tag to identify the button
-        
-        
-        
-        
-        // Create comment button
-//        let commentButton = UIButton()
-//        commentButton.setTitle("댓글", for: .normal)
-//        commentButton.setTitleColor(.black, for: .normal)
-//        commentButton.backgroundColor = .white
-//        commentButton.titleLabel?.font = UIFont.systemFont(ofSize: 12) // Adjust font size as needed
-//        commentButton.addTarget(self, action: #selector(commentButtonTapped(_:)), for: .touchUpInside)
-//        commentButton.tag = indexPath.row // Set tag to identify the button
-        
-        
-        
-        
-        
+
         
         // Add buttons to cell
         cell.contentView.addSubview(likeButton)
         cell.contentView.addSubview(dislikeButton)
- //       cell.contentView.addSubview(commentButton)
+ 
         
         
         // Layout constraints for buttons
         likeButton.translatesAutoresizingMaskIntoConstraints = false
         dislikeButton.translatesAutoresizingMaskIntoConstraints = false
- //       commentButton.translatesAutoresizingMaskIntoConstraints = false
+
         
         NSLayoutConstraint.activate([
             dislikeButton.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -20),
@@ -976,9 +905,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             
             likeButton.trailingAnchor.constraint(equalTo: dislikeButton.leadingAnchor, constant: -10),
             likeButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor),
-            
-//            commentButton.trailingAnchor.constraint(equalTo: likeButton.leadingAnchor, constant: -10), // Adjust spacing as needed
-//             commentButton.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
         ])
         
         NSLayoutConstraint.activate([
@@ -990,8 +916,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         ])
         
         
-        
-        // Check if the data is empty and hide the buttons accordingly
         // 값이 없는 셀에 좋아요, 싫어요 버튼을 제거
          if data[indexPath.section][indexPath.row] == "" || data[indexPath.section][indexPath.row] == "아직 식단이 등록되지 않았습니다." {
              likeCountLabel.isHidden = true
@@ -1015,6 +939,16 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     @objc func likeButtonTapped(_ sender: UIButton) {
         
+        // 버튼 탭 시 에니메이션 추가
+        UIView.animate(withDuration: 0.2, animations: {
+             // Scale the button to make it appear as if it's tapped
+             sender.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+         }) { (_) in
+             // After the animation completes, restore the original size
+             UIView.animate(withDuration: 0.2) {
+                 sender.transform = .identity
+             }
+         }
         
         
         // 현재 날짜 데이터 포맷
@@ -1031,6 +965,20 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         let indexPath = tableView.indexPath(for: cell) {
             
             
+            let mealType2: String
+                switch indexPath.section {
+                case 0:
+                    mealType2 = "아침메뉴DisLike"
+                case 1:
+                    mealType2 = "점심메뉴DisLike"
+                case 2:
+                    mealType2 = "저녁메뉴DisLike"
+                default:
+                    mealType2 = ""
+                }
+            
+            
+            
             
         let mealType: String
             switch indexPath.section {
@@ -1044,8 +992,10 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 mealType = ""
             }
             
-        
-
+            
+            
+            
+       
             
             
             
@@ -1053,242 +1003,628 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             // UserDefaults에서 버튼 탭 히스토리를 가져옴 (이쪽에 대해서 한번 공식문서 봐보기)
             
             // forKey
-            var buttonTapHistoryKey = "\(ViewController.navTitle)_\(mealType)_\(ViewController.dateEx)"
+            var buttonTapHistoryKey = "\(Data.navTitle)_\(mealType)_\(Data.currentDateStringSpace)"
+            
+            // forKey
+            var buttonTapHistoryKey2 = "\(Data.navTitle)_\(mealType2)_\(Data.currentDateStringSpace)"
+            
+            
+            
             
             
             var buttonTapHistory = UserDefaults.standard.dictionary(forKey: buttonTapHistoryKey) ?? [:]
             
+            var buttonTapHistory2 = UserDefaults.standard.dictionary(forKey: buttonTapHistoryKey2) ?? [:]
+            
 
+            
+            
         
             // 이미 탭한 적이 있는지 확인
+            // 탭 한적이 있으면 1 감소, 없으면 1 증가
+            
             if let tapped = buttonTapHistory["likeButtonTapped"] as? Bool, tapped {
                 
-                let alert = UIAlertController(title: "", message: "이미 좋아요를 누르셨습니다", preferredStyle: .alert)
-                
-                let success = UIAlertAction(title: "확인", style: .default) { action in
+                // 카운트 감소
+                if let likeCountLabel = cell.contentView.viewWithTag(1000) as? UILabel {
+                    
+                    if Data.navTitle == "식단표 (학생회관_학생식당)" {
+                        if let currentCount = Int(likeCountLabel.text ?? "0") {
+                            
+                            // 파이어베이스 [데이터 불러오기]
+                            let docRef = self.db.collection("Menu").document(Data.currentDateStringSpace)
+                            
+                            docRef.getDocument { (document, error) in
+                                if let document = document, document.exists {
+                                    if let like = document.data()?[mealType] as? String {
+                                        likeCountLabel.text = like
+                                    
+                                    }
+                                    
+                                }
+                                
+                                else {
+                                    print("식단 메뉴가 등록되지 않았습니다.")
+                                }
+                                
+                            }
+                            
+                            
+                            // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                            self.db.collection("Menu").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount - 1)" ], merge: true)
+                            
+                            
                             
                         }
+                    }
+                    
+                    if Data.navTitle == "식단표 (학생회관_자율식당)" {
+                        if let currentCount = Int(likeCountLabel.text ?? "0") {
+                            
+                            // 파이어베이스 [데이터 불러오기]
+                            let docRef = self.db.collection("Menu2").document(Data.currentDateStringSpace)
+                            
+                            docRef.getDocument { (document, error) in
+                                if let document = document, document.exists {
+                                    if let like = document.data()?[mealType] as? String {
+                                        likeCountLabel.text = like
+                                        
+                                        print("1")
+                                    }
+                                    
+                                }
+                                
+                                else {
+                                    print("   2   ")
+                                }
+                                
+                            }
+                            
+                            
+                            // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                            self.db.collection("Menu2").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount - 1)" ], merge: true)
+                            
+                            
+                            
+                        }
+                    }
+                    
+                    if Data.navTitle == "식단표 (예지학사_식당)" {
+                        if let currentCount = Int(likeCountLabel.text ?? "0") {
+                            
+                            // 파이어베이스 [데이터 불러오기]
+                            let docRef = self.db.collection("Menu3").document(Data.currentDateStringSpace)
+                            
+                            docRef.getDocument { (document, error) in
+                                if let document = document, document.exists {
+                                    if let like = document.data()?[mealType] as? String {
+                                        likeCountLabel.text = like
+                                        
+                                        print("1")
+                                    }
+                                    
+                                }
+                                
+                                else {
+                                    print("   2   ")
+                                }
+                                
+                            }
+                            
+                            
+                            // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                            self.db.collection("Menu3").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount - 1)" ], merge: true)
+                            
+                            
+                            
+                            
+                            
+                        }
+                    }
+                    
+                    if Data.navTitle == "식단표 (65번가_도서관지하분식점)" {
+                        if let currentCount = Int(likeCountLabel.text ?? "0") {
+                            
+                            // 파이어베이스 [데이터 불러오기]
+                            let docRef = self.db.collection("Menu4").document(Data.currentDateStringSpace)
+                            
+                            docRef.getDocument { (document, error) in
+                                if let document = document, document.exists {
+                                    if let like = document.data()?[mealType] as? String {
+                                        likeCountLabel.text = like
+                                        
+                                        print("1")
+                                    }
+                                    
+                                }
+                                
+                                else {
+                                    print("   2   ")
+                                }
+                                
+                            }
+                            
+                            
+                            // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                            self.db.collection("Menu4").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount - 1)" ], merge: true)
+                            
+                         
+                            
+                        }
+                    }
+                    
+                }
                 
-                alert.addAction(success)
+                // 버튼 탭 히스토리에 저장
+                // 탭 히스토리 초기화
+                buttonTapHistory = [:]
+                UserDefaults.standard.set(buttonTapHistory, forKey: buttonTapHistoryKey)
                 
-                present(alert, animated: true) {
-                           
-                       }
-                
-                print(UserDefaults.standard)
-                    return
                 
                 
                 }
                 
-            
-            // disLike 이미 탭한 적이 있는지 확인
-            if let distapped = buttonTapHistory["likeButtonTapped2"] as? Bool, distapped {
-                    // 이미 한 번 탭한 상태이므로 더 이상 처리하지 않음
+            else {
                 
-                let alert = UIAlertController(title: "", message: "이미 싫어요를 누르셨습니다", preferredStyle: .alert)
-                
-                let success = UIAlertAction(title: "확인", style: .default)
-                            
+                //// (DisLike)를 이미 탭한 적이 있는지 확인
+                /// DisLike를 탭한적이 있으면 싫어요 1 감소 좋아요 1증가
+                if let DisLikeTappedCheck = buttonTapHistory2["dislikeButtonTapped"] as? Bool, DisLikeTappedCheck {
+                    
+                    
+                    // 싫어요 카운트 감소
+                    if let dislikeCountLabel = cell.contentView.viewWithTag(2000) as? UILabel {
                         
-                
-                alert.addAction(success)
-                
-                present(alert, animated: true)
-                
-                    return
+                        if Data.navTitle == "식단표 (학생회관_학생식당)" {
+                            if let currentCount = Int(dislikeCountLabel.text ?? "0") {
+                                
+                                // 파이어베이스 [데이터 불러오기]
+                                let docRef = self.db.collection("Menu").document(Data.currentDateStringSpace)
+                                
+                                docRef.getDocument { (document, error) in
+                                    if let document = document, document.exists {
+                                        if let like = document.data()?[mealType2] as? String {
+                                            dislikeCountLabel.text = like
+                                            
+                                            
+                                        }
+                                        
+                                    }
+                                    
+                                    else {
+                                        print("   2   ")
+                                    }
+                                    
+                                }
+                                
+                                
+                                // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                                self.db.collection("Menu").document(Data.currentDateStringSpace).setData([ mealType2: "\(currentCount - 1)" ], merge: true)
+                                
+                                print(current_date_string)
+                                
+                            }
+                        }
+                        
+                        if Data.navTitle == "식단표 (학생회관_자율식당)" {
+                            if let currentCount = Int(dislikeCountLabel.text ?? "0") {
+                                
+                                // 파이어베이스 [데이터 불러오기]
+                                let docRef = self.db.collection("Menu2").document(Data.currentDateStringSpace)
+                                
+                                docRef.getDocument { (document, error) in
+                                    if let document = document, document.exists {
+                                        if let like = document.data()?[mealType2] as? String {
+                                            dislikeCountLabel.text = like
+                                            
+                                            print("1")
+                                        }
+                                        
+                                    }
+                                    
+                                    else {
+                                        print("   2   ")
+                                    }
+                                    
+                                }
+                                
+                                
+                                // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                                self.db.collection("Menu2").document(Data.currentDateStringSpace).setData([ mealType2: "\(currentCount - 1)" ], merge: true)
+                                
+                                print(current_date_string)
+                                
+                            }
+                        }
+                        
+                        if Data.navTitle == "식단표 (예지학사_식당)" {
+                            if let currentCount = Int(dislikeCountLabel.text ?? "0") {
+                                
+                                // 파이어베이스 [데이터 불러오기]
+                                let docRef = self.db.collection("Menu3").document(Data.currentDateStringSpace)
+                                
+                                docRef.getDocument { (document, error) in
+                                    if let document = document, document.exists {
+                                        if let like = document.data()?[mealType2] as? String {
+                                            dislikeCountLabel.text = like
+                                        }
+                                        
+                                    }
+                                    
+                                    else {
+                                        print("   2   ")
+                                    }
+                                    
+                                }
+                                
+                                
+                                // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                                self.db.collection("Menu3").document(Data.currentDateStringSpace).setData([ mealType2: "\(currentCount - 1)" ], merge: true)
+                                
+                                
+                                
+                            }
+                        }
+                        
+                        if Data.navTitle == "식단표 (65번가_도서관지하분식점)" {
+                            if let currentCount = Int(dislikeCountLabel.text ?? "0") {
+                                
+                                // 파이어베이스 [데이터 불러오기]
+                                let docRef = self.db.collection("Menu4").document(Data.currentDateStringSpace)
+                                
+                                docRef.getDocument { (document, error) in
+                                    if let document = document, document.exists {
+                                        if let like = document.data()?[mealType2] as? String {
+                                            dislikeCountLabel.text = like
+                                        }
+                                        
+                                    }
+                                    
+                                    else {
+                                        print("   2   ")
+                                    }
+                                    
+                                }
+                                
+                                
+                                // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                                self.db.collection("Menu4").document(Data.currentDateStringSpace).setData([ mealType2: "\(currentCount - 1)" ], merge: true)
+                                
+                                
+                                
+                            }
+                        }
+                        
+                        
+                        
+                        
+                        // 버튼 탭 히스토리에 저장
+                        // 탭 히스토리 초기화
+                        buttonTapHistory = [:]
+                        UserDefaults.standard.set(buttonTapHistory, forKey: buttonTapHistoryKey)
+                    }
+                    
+                    
+                    
+                    // 좋아요 카운트 증가
+                    if let likeCountLabel = cell.contentView.viewWithTag(1000) as? UILabel {
+                        
+                        if Data.navTitle == "식단표 (학생회관_학생식당)" {
+                            if let currentCount = Int(likeCountLabel.text ?? "0") {
+                                
+                                // 파이어베이스 [데이터 불러오기]
+                                let docRef = self.db.collection("Menu").document(Data.currentDateStringSpace)
+                                
+                                docRef.getDocument { (document, error) in
+                                    if let document = document, document.exists {
+                                        if let like = document.data()?[mealType] as? String {
+                                            likeCountLabel.text = like
+                                            
+                                        }
+                                        
+                                    }
+                                    
+                                    else {
+                                        print("식단 메뉴가 등록되지 않았습니다.")
+                                    }
+                                    
+                                }
+                                
+                                
+                                // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                                self.db.collection("Menu").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount + 1)" ], merge: true)
+                                
+                                
+                                
+                            }
+                        }
+                        
+                        if Data.navTitle == "식단표 (학생회관_자율식당)" {
+                            if let currentCount = Int(likeCountLabel.text ?? "0") {
+                                
+                                // 파이어베이스 [데이터 불러오기]
+                                let docRef = self.db.collection("Menu2").document(Data.currentDateStringSpace)
+                                
+                                docRef.getDocument { (document, error) in
+                                    if let document = document, document.exists {
+                                        if let like = document.data()?[mealType] as? String {
+                                            likeCountLabel.text = like
+                                            
+                                            print("1")
+                                        }
+                                        
+                                    }
+                                    
+                                    else {
+                                        print("   2   ")
+                                    }
+                                    
+                                }
+                                
+                                
+                                // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                                self.db.collection("Menu2").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount + 1)" ], merge: true)
+                                
+                                
+                                
+                            }
+                        }
+                        
+                        if Data.navTitle == "식단표 (예지학사_식당)" {
+                            if let currentCount = Int(likeCountLabel.text ?? "0") {
+                                
+                                // 파이어베이스 [데이터 불러오기]
+                                let docRef = self.db.collection("Menu3").document(Data.currentDateStringSpace)
+                                
+                                docRef.getDocument { (document, error) in
+                                    if let document = document, document.exists {
+                                        if let like = document.data()?[mealType] as? String {
+                                            likeCountLabel.text = like
+                                            
+                                            print("1")
+                                        }
+                                        
+                                    }
+                                    
+                                    else {
+                                        print("   2   ")
+                                    }
+                                    
+                                }
+                                
+                                
+                                // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                                self.db.collection("Menu3").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount + 1)" ], merge: true)
+                                
+                                
+                                
+                            }
+                        }
+                        
+                        if Data.navTitle == "식단표 (65번가_도서관지하분식점)" {
+                            if let currentCount = Int(likeCountLabel.text ?? "0") {
+                                
+                                // 파이어베이스 [데이터 불러오기]
+                                let docRef = self.db.collection("Menu4").document(Data.currentDateStringSpace)
+                                
+                                docRef.getDocument { (document, error) in
+                                    if let document = document, document.exists {
+                                        if let like = document.data()?[mealType] as? String {
+                                            likeCountLabel.text = like
+                                            
+                                            print("1")
+                                        }
+                                        
+                                    }
+                                    
+                                    else {
+                                        print("   2   ")
+                                    }
+                                    
+                                }
+                                
+                                
+                                // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                                self.db.collection("Menu4").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount + 1)" ], merge: true)
+                                
+                                
+                                
+                            }
+                        }
+                        
+                    }
+                    
+                    
+                    
+                    // 버튼 탭 히스토리에 저장 (dislike 초기화)
+                    buttonTapHistory2 = [:]
+                    UserDefaults.standard.set(buttonTapHistory2, forKey: buttonTapHistoryKey2)
+                    //
+                    
+                    
+                    // 버튼 탭 히스토리에 저장 (like 생성)
+                    buttonTapHistory["likeButtonTapped"] = true
+                    UserDefaults.standard.set(buttonTapHistory, forKey: buttonTapHistoryKey)
+                    //
+                    
                 }
-            
-            
-            
-            // 버튼 탭 히스토리에 저장
-            buttonTapHistory["likeButtonTapped"] = true
-            UserDefaults.standard.set(buttonTapHistory, forKey: buttonTapHistoryKey)
-            //
-            
-            
-            ViewController.trueint2 = 1
-            
-            
-            if ViewController.trueint == 1 {
-//                // 버튼 탭 히스토리에 저장2
-//                buttonTapHistory["likeButtonTapped2"] = true
-//                UserDefaults.standard.set(buttonTapHistory, forKey: buttonTapHistoryKey)
-                let alert = UIAlertController(title: "", message: "이미 싫어요를 누르셨습니다", preferredStyle: .alert)
                 
-                let success = UIAlertAction(title: "확인", style: .default)
-                            
+                
+                //좋아요 1 증가
+                else {
+                    
+                    if let likeCountLabel = cell.contentView.viewWithTag(1000) as? UILabel {
                         
-                
-                alert.addAction(success)
-                
-                ViewController.trueint = 0
-                
-                present(alert, animated: true)
-                
-                    return
-                
-                
+                        if Data.navTitle == "식단표 (학생회관_학생식당)" {
+                            if let currentCount = Int(likeCountLabel.text ?? "0") {
+                                
+                                // 파이어베이스 [데이터 불러오기]
+                                let docRef = self.db.collection("Menu").document(Data.currentDateStringSpace)
+                                
+                                docRef.getDocument { (document, error) in
+                                    if let document = document, document.exists {
+                                        if let like = document.data()?[mealType] as? String {
+                                            likeCountLabel.text = like
+                                            
+                                        }
+                                        
+                                    }
+                                    
+                                    else {
+                                        print("식단 메뉴가 등록되지 않았습니다.")
+                                    }
+                                    
+                                }
+                                
+                                
+                                // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                                self.db.collection("Menu").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount + 1)" ], merge: true)
+                                
+                                
+                                
+                            }
+                        }
+                        
+                        if Data.navTitle == "식단표 (학생회관_자율식당)" {
+                            if let currentCount = Int(likeCountLabel.text ?? "0") {
+                                
+                                // 파이어베이스 [데이터 불러오기]
+                                let docRef = self.db.collection("Menu2").document(Data.currentDateStringSpace)
+                                
+                                docRef.getDocument { (document, error) in
+                                    if let document = document, document.exists {
+                                        if let like = document.data()?[mealType] as? String {
+                                            likeCountLabel.text = like
+                                            
+                                            print("1")
+                                        }
+                                        
+                                    }
+                                    
+                                    else {
+                                        print("   2   ")
+                                    }
+                                    
+                                }
+                                
+                                
+                                // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                                self.db.collection("Menu2").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount + 1)" ], merge: true)
+                                
+                                
+                                
+                            }
+                        }
+                        
+                        if Data.navTitle == "식단표 (예지학사_식당)" {
+                            if let currentCount = Int(likeCountLabel.text ?? "0") {
+                                
+                                // 파이어베이스 [데이터 불러오기]
+                                let docRef = self.db.collection("Menu3").document(Data.currentDateStringSpace)
+                                
+                                docRef.getDocument { (document, error) in
+                                    if let document = document, document.exists {
+                                        if let like = document.data()?[mealType] as? String {
+                                            likeCountLabel.text = like
+                                            
+                                            print("1")
+                                        }
+                                        
+                                    }
+                                    
+                                    else {
+                                        print("   2   ")
+                                    }
+                                    
+                                }
+                                
+                                
+                                // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                                self.db.collection("Menu3").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount + 1)" ], merge: true)
+                                
+                                
+                                
+                            }
+                        }
+                        
+                        if Data.navTitle == "식단표 (65번가_도서관지하분식점)" {
+                            if let currentCount = Int(likeCountLabel.text ?? "0") {
+                                
+                                // 파이어베이스 [데이터 불러오기]
+                                let docRef = self.db.collection("Menu4").document(Data.currentDateStringSpace)
+                                
+                                docRef.getDocument { (document, error) in
+                                    if let document = document, document.exists {
+                                        if let like = document.data()?[mealType] as? String {
+                                            likeCountLabel.text = like
+                                            
+                                            print("1")
+                                        }
+                                        
+                                    }
+                                    
+                                    else {
+                                        print("   2   ")
+                                    }
+                                    
+                                }
+                                
+                                
+                                // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                                self.db.collection("Menu4").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount + 1)" ], merge: true)
+                                
+                                
+                                
+                            }
+                        }
+                        
+                    }
+                    
+                    // 버튼 탭 히스토리에 저장
+                    buttonTapHistory["likeButtonTapped"] = true
+                    UserDefaults.standard.set(buttonTapHistory, forKey: buttonTapHistoryKey)
+                }
             }
-            
-      
-            
-            
-            
-            // Increment like count
-            if let likeCountLabel = cell.contentView.viewWithTag(1000) as? UILabel {
-                
-                if ViewController.navTitle == "식단표 (학생회관_학생식당)" {
-                    if let currentCount = Int(likeCountLabel.text ?? "0") {
-                        
-                        // 파이어베이스 [데이터 불러오기]
-                        let docRef = db.collection("Menu").document(ViewController.dateEx)
-                        
-                        docRef.getDocument { (document, error) in
-                            if let document = document, document.exists {
-                                if let like = document.data()?[mealType] as? String {
-                                    likeCountLabel.text = like
-                                
-                                }
-                                
-                            }
-                            
-                            else {
-                                print("   2   ")
-                            }
-                            
-                        }
-                        
-                        
-                        // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
-                        db.collection("Menu").document(ViewController.dateEx).setData([ mealType: "\(currentCount + 1)" ], merge: true)
-                        
-                        
-                        
-                    }
-                }
-                
-                if ViewController.navTitle == "식단표 (학생회관_자율식당)" {
-                    if let currentCount = Int(likeCountLabel.text ?? "0") {
-                        
-                        // 파이어베이스 [데이터 불러오기]
-                        let docRef = db.collection("Menu2").document(ViewController.dateEx)
-                        
-                        docRef.getDocument { (document, error) in
-                            if let document = document, document.exists {
-                                if let like = document.data()?[mealType] as? String {
-                                    likeCountLabel.text = like
-                                    
-                                    print("1")
-                                }
-                                
-                            }
-                            
-                            else {
-                                print("   2   ")
-                            }
-                            
-                        }
-                        
-                        
-                        // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
-                        db.collection("Menu2").document(ViewController.dateEx).setData([ mealType: "\(currentCount + 1)" ], merge: true)
-                        
-                        
-                        
-                    }
-                }
-                
-                if ViewController.navTitle == "식단표 (예지학사_식당)" {
-                    if let currentCount = Int(likeCountLabel.text ?? "0") {
-                        
-                        // 파이어베이스 [데이터 불러오기]
-                        let docRef = db.collection("Menu3").document(ViewController.dateEx)
-                        
-                        docRef.getDocument { (document, error) in
-                            if let document = document, document.exists {
-                                if let like = document.data()?[mealType] as? String {
-                                    likeCountLabel.text = like
-                                    
-                                    print("1")
-                                }
-                                
-                            }
-                            
-                            else {
-                                print("   2   ")
-                            }
-                            
-                        }
-                        
-                        
-                        // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
-                        db.collection("Menu3").document(ViewController.dateEx).setData([ mealType: "\(currentCount + 1)" ], merge: true)
-                        
-                        
-                        
-                    }
-                }
-                
-                if ViewController.navTitle == "식단표 (65번가_도서관지하분식점)" {
-                    if let currentCount = Int(likeCountLabel.text ?? "0") {
-                        
-                        // 파이어베이스 [데이터 불러오기]
-                        let docRef = db.collection("Menu4").document(ViewController.dateEx)
-                        
-                        docRef.getDocument { (document, error) in
-                            if let document = document, document.exists {
-                                if let like = document.data()?[mealType] as? String {
-                                    likeCountLabel.text = like
-                                    
-                                    print("1")
-                                }
-                                
-                            }
-                            
-                            else {
-                                print("   2   ")
-                            }
-                            
-                        }
-                        
-                        
-                        // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
-                        db.collection("Menu4").document(ViewController.dateEx).setData([ mealType: "\(currentCount + 1)" ], merge: true)
-                        
-                        
-                        
-                    }
-                }
-                
-            }
-            
-            
-            
         }
-        
-        
-        
-  
-        
     }
     
 
     
     @objc func dislikeButtonTapped(_ sender: UIButton) {
+        
+        // 버튼 탭 시 에니메이션 추가
+        UIView.animate(withDuration: 0.2, animations: {
+             // Scale the button to make it appear as if it's tapped
+             sender.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+         }) { (_) in
+             // After the animation completes, restore the original size
+             UIView.animate(withDuration: 0.2) {
+                 sender.transform = .identity
+             }
+         }
+        
         // 현재 날짜 데이터 포맷
         let formatter = DateFormatter()
         formatter.dateFormat = "YYYY-MM-dd"
         let current_date_string = formatter.string(from: Date())
-        
-        
-        
+       
 
         // Get the cell containing the button
         if let cell = sender.superview?.superview as? UITableViewCell,
            
             let indexPath = tableView.indexPath(for: cell) {
             
+            
+            let mealType2: String
+                switch indexPath.section {
+                case 0:
+                    mealType2 = "아침메뉴Like"
+                case 1:
+                    mealType2 = "점심메뉴Like"
+                case 2:
+                    mealType2 = "저녁메뉴Like"
+                default:
+                    mealType2 = ""
+                }
             
             let mealType: String
             switch indexPath.section {
@@ -1303,159 +1639,590 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             }
             
             
+            
+            
             // 한 유저당 딱 좋아요를 한 번만 누를 수 있는 기능 (앱 삭제 후 실행시 까지는 해결못함)
             // UserDefaults에서 버튼 탭 히스토리를 가져옴 (이쪽에 대해서 한번 공식문서 봐보기)
             
- 
+            
             
             // forKey
-            var buttonTapHistoryKey = "\(ViewController.navTitle)_\(mealType)_\(ViewController.dateEx)"
+            let buttonTapHistoryKey = "\(Data.navTitle)_\(mealType)_\(Data.currentDateStringSpace)"
+            
+            
+            // forKey2 like
+            let buttonTapHistoryKey2 = "\(Data.navTitle)_\(mealType2)_\(Data.currentDateStringSpace)"
+            
+            
+            //if buttonTapHistory["likeButtonTapped"] == true {return}
+            
+            
             
             
             var buttonTapHistory = UserDefaults.standard.dictionary(forKey: buttonTapHistoryKey) ?? [:]
-              
-            
-
-          
             
             
+            var buttonTapHistory2 = UserDefaults.standard.dictionary(forKey: buttonTapHistoryKey2) ?? [:]
             
-            // 이미 탭한 적이 있는지 확인
+            
+            
+            
+            // 이미 탭한 적이 있는지 확인 (disLike)
             if let tapped = buttonTapHistory["dislikeButtonTapped"] as? Bool, tapped {
-                    // 이미 한 번 탭한 상태이므로 더 이상 처리하지 않음
-                
-                let alert = UIAlertController(title: "", message: "이미 싫어요를 누르셨습니다", preferredStyle: .alert)
-                
-                let success = UIAlertAction(title: "확인", style: .default)
+                // 증가 시킨적이 있으면 싫어요 1 감소
+                if let dislikeCountLabel = cell.contentView.viewWithTag(2000) as? UILabel {
+                    
+                    if Data.navTitle == "식단표 (학생회관_학생식당)" {
+                        if let currentCount = Int(dislikeCountLabel.text ?? "0") {
                             
-                        
-                
-                alert.addAction(success)
-                
-                present(alert, animated: true)
-                
-                    return
-                }
-            
-                
-
-
-
-                
-            // 버튼 탭 히스토리에 저장
-            buttonTapHistory["dislikeButtonTapped"] = true
-            UserDefaults.standard.set(buttonTapHistory, forKey: buttonTapHistoryKey)
-            //
-        
-            ViewController.trueint = 1
-            
-            if ViewController.trueint2 == 1 {
-//                // 버튼 탭 히스토리에 저장2
-//                buttonTapHistory["likeButtonTapped2"] = true
-//                UserDefaults.standard.set(buttonTapHistory, forKey: buttonTapHistoryKey)
-                let alert = UIAlertController(title: "", message: "이미 싫어요를 누르셨습니다", preferredStyle: .alert)
-                
-                let success = UIAlertAction(title: "확인", style: .default)
+                            // 파이어베이스 [데이터 불러오기]
+                            let docRef = self.db.collection("Menu").document(Data.currentDateStringSpace)
                             
-                        
-                
-                alert.addAction(success)
-                
-                ViewController.trueint2 = 0
-                
-                present(alert, animated: true)
-                
-                    return
-                
-                
-            }
-            
-            
-            // Increment like count
-            if let dislikeCountLabel = cell.contentView.viewWithTag(2000) as? UILabel {
-                
-                if ViewController.navTitle == "식단표 (학생회관_학생식당)" {
-                    if let currentCount = Int(dislikeCountLabel.text ?? "0") {
-                        
-                        // 파이어베이스 [데이터 불러오기]
-                        let docRef = db.collection("Menu").document(ViewController.dateEx)
-                        
-                        docRef.getDocument { (document, error) in
-                            if let document = document, document.exists {
-                                if let like = document.data()?[mealType] as? String {
-                                    dislikeCountLabel.text = like
+                            docRef.getDocument { (document, error) in
+                                if let document = document, document.exists {
+                                    if let like = document.data()?[mealType] as? String {
+                                        dislikeCountLabel.text = like
+                                        
+                                        
+                                    }
                                     
-                                    
+                                }
+                                
+                                else {
+                                    print("   2   ")
                                 }
                                 
                             }
                             
-                            else {
-                                print("   2   ")
-                            }
+                            
+                            // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                            self.db.collection("Menu").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount - 1)" ], merge: true)
+                            
+                            print(current_date_string)
                             
                         }
-                        
-                        
-                        // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
-                        db.collection("Menu").document(ViewController.dateEx).setData([ mealType: "\(currentCount + 1)" ], merge: true)
-                        
-                        print(current_date_string)
-                        
                     }
-                }
-                
-                if ViewController.navTitle == "식단표 (학생회관_자율식당)" {
-                    if let currentCount = Int(dislikeCountLabel.text ?? "0") {
-                        
-                        // 파이어베이스 [데이터 불러오기]
-                        let docRef = db.collection("Menu2").document(ViewController.dateEx)
-                        
-                        docRef.getDocument { (document, error) in
-                            if let document = document, document.exists {
-                                if let like = document.data()?[mealType] as? String {
-                                    dislikeCountLabel.text = like
+                    
+                    if Data.navTitle == "식단표 (학생회관_자율식당)" {
+                        if let currentCount = Int(dislikeCountLabel.text ?? "0") {
+                            
+                            // 파이어베이스 [데이터 불러오기]
+                            let docRef = self.db.collection("Menu2").document(Data.currentDateStringSpace)
+                            
+                            docRef.getDocument { (document, error) in
+                                if let document = document, document.exists {
+                                    if let like = document.data()?[mealType] as? String {
+                                        dislikeCountLabel.text = like
+                                        
+                                        print("1")
+                                    }
                                     
-                                    print("1")
+                                }
+                                
+                                else {
+                                    print("   2   ")
                                 }
                                 
                             }
                             
-                            else {
-                                print("   2   ")
-                            }
+                            
+                            // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                            self.db.collection("Menu2").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount - 1)" ], merge: true)
+                            
+                            print(current_date_string)
                             
                         }
+                    }
+                    
+                    if Data.navTitle == "식단표 (예지학사_식당)" {
+                        if let currentCount = Int(dislikeCountLabel.text ?? "0") {
+                            
+                            // 파이어베이스 [데이터 불러오기]
+                            let docRef = self.db.collection("Menu3").document(Data.currentDateStringSpace)
+                            
+                            docRef.getDocument { (document, error) in
+                                if let document = document, document.exists {
+                                    if let like = document.data()?[mealType] as? String {
+                                        dislikeCountLabel.text = like
+                                    }
+                                    
+                                }
+                                
+                                else {
+                                    print("   2   ")
+                                }
+                                
+                            }
+                            
+                            
+                            // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                            self.db.collection("Menu3").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount - 1)" ], merge: true)
+                            
+                            
+                            
+                        }
+                    }
+                    
+                    if Data.navTitle == "식단표 (65번가_도서관지하분식점)" {
+                        if let currentCount = Int(dislikeCountLabel.text ?? "0") {
+                            
+                            // 파이어베이스 [데이터 불러오기]
+                            let docRef = self.db.collection("Menu4").document(Data.currentDateStringSpace)
+                            
+                            docRef.getDocument { (document, error) in
+                                if let document = document, document.exists {
+                                    if let like = document.data()?[mealType] as? String {
+                                        dislikeCountLabel.text = like
+                                    }
+                                    
+                                }
+                                
+                                else {
+                                    print("   2   ")
+                                }
+                                
+                            }
+                            
+                            
+                            // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                            self.db.collection("Menu4").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount - 1)" ], merge: true)
+                            
+                            
+                            
+                        }
+                    }
+                    
+                    
+                    // 버튼 탭 히스토리에 저장
+                    // 탭 히스토리 초기화
+                    buttonTapHistory = [:]
+                    UserDefaults.standard.set(buttonTapHistory, forKey: buttonTapHistoryKey)
+                }
+                
+               
+            }
+            // 좋아요 탭 기록을 삭제하고 싫어요 탭 기록을 생성해야함.
+            
+            // 증가 시킨적이 없다면
+            else {
+                
+                // (Like)를 이미 탭한 적이 있는지 확인
+                if let likeTappedCheck = buttonTapHistory2["likeButtonTapped"] as? Bool, likeTappedCheck {
+                   
+
+                    // 좋아요 카운트 감소
+                    if let likeCountLabel = cell.contentView.viewWithTag(1000) as? UILabel {
                         
+                        if Data.navTitle == "식단표 (학생회관_학생식당)" {
+                            if let currentCount = Int(likeCountLabel.text ?? "0") {
+                                
+                                // 파이어베이스 [데이터 불러오기]
+                                let docRef = self.db.collection("Menu").document(Data.currentDateStringSpace)
+                                
+                                docRef.getDocument { (document, error) in
+                                    if let document = document, document.exists {
+                                        if let like = document.data()?[mealType2] as? String {
+                                            likeCountLabel.text = like
+                                        
+                                        }
+                                        
+                                    }
+                                    
+                                    else {
+                                        print("식단 메뉴가 등록되지 않았습니다.")
+                                    }
+                                    
+                                }
+                                
+                                
+                                // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                                self.db.collection("Menu").document(Data.currentDateStringSpace).setData([ mealType2: "\(currentCount - 1)" ], merge: true)
+                                
+                                
+                                
+                            }
+                        }
                         
-                        // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
-                        db.collection("Menu2").document(ViewController.dateEx).setData([ mealType: "\(currentCount + 1)" ], merge: true)
+                        if Data.navTitle == "식단표 (학생회관_자율식당)" {
+                            if let currentCount = Int(likeCountLabel.text ?? "0") {
+                                
+                                // 파이어베이스 [데이터 불러오기]
+                                let docRef = self.db.collection("Menu2").document(Data.currentDateStringSpace)
+                                
+                                docRef.getDocument { (document, error) in
+                                    if let document = document, document.exists {
+                                        if let like = document.data()?[mealType2] as? String {
+                                            likeCountLabel.text = like
+                                            
+                                            print("1")
+                                        }
+                                        
+                                    }
+                                    
+                                    else {
+                                        print("   2   ")
+                                    }
+                                    
+                                }
+                                
+                                
+                                // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                                self.db.collection("Menu2").document(Data.currentDateStringSpace).setData([ mealType2: "\(currentCount - 1)" ], merge: true)
+                                
+                                
+                                
+                            }
+                        }
                         
-                        print(current_date_string)
+                        if Data.navTitle == "식단표 (예지학사_식당)" {
+                            if let currentCount = Int(likeCountLabel.text ?? "0") {
+                                
+                                // 파이어베이스 [데이터 불러오기]
+                                let docRef = self.db.collection("Menu3").document(Data.currentDateStringSpace)
+                                
+                                docRef.getDocument { (document, error) in
+                                    if let document = document, document.exists {
+                                        if let like = document.data()?[mealType2] as? String {
+                                            likeCountLabel.text = like
+                                            
+                                            print("1")
+                                        }
+                                        
+                                    }
+                                    
+                                    else {
+                                        print("   2   ")
+                                    }
+                                    
+                                }
+                                
+                                
+                                // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                                self.db.collection("Menu3").document(Data.currentDateStringSpace).setData([ mealType2: "\(currentCount - 1)" ], merge: true)
+                                
+                                
+                                
+                                
+                                
+                            }
+                        }
+                        
+                        if Data.navTitle == "식단표 (65번가_도서관지하분식점)" {
+                            if let currentCount = Int(likeCountLabel.text ?? "0") {
+                                
+                                // 파이어베이스 [데이터 불러오기]
+                                let docRef = self.db.collection("Menu4").document(Data.currentDateStringSpace)
+                                
+                                docRef.getDocument { (document, error) in
+                                    if let document = document, document.exists {
+                                        if let like = document.data()?[mealType2] as? String {
+                                            likeCountLabel.text = like
+                                            
+                                            print("1")
+                                        }
+                                        
+                                    }
+                                    
+                                    else {
+                                        print("   2   ")
+                                    }
+                                    
+                                }
+                                
+                                
+                                // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                                self.db.collection("Menu4").document(Data.currentDateStringSpace).setData([ mealType2: "\(currentCount - 1)" ], merge: true)
+                                
+                             
+                                
+                            }
+                        }
                         
                     }
+                    
+                    // 싫어요 카운트 증가
+                    if let dislikeCountLabel = cell.contentView.viewWithTag(2000) as? UILabel {
+                        
+                        if Data.navTitle == "식단표 (학생회관_학생식당)" {
+                            if let currentCount = Int(dislikeCountLabel.text ?? "0") {
+                                
+                                // 파이어베이스 [데이터 불러오기]
+                                let docRef = self.db.collection("Menu").document(Data.currentDateStringSpace)
+                                
+                                docRef.getDocument { (document, error) in
+                                    if let document = document, document.exists {
+                                        if let like = document.data()?[mealType] as? String {
+                                            dislikeCountLabel.text = like
+                                            
+                                            
+                                        }
+                                        
+                                    }
+                                    
+                                    else {
+                                        print("   2   ")
+                                    }
+                                    
+                                }
+                                
+                                
+                                // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                                self.db.collection("Menu").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount + 1)" ], merge: true)
+                                
+                                print(current_date_string)
+                                
+                            }
+                        }
+                        
+                        if Data.navTitle == "식단표 (학생회관_자율식당)" {
+                            if let currentCount = Int(dislikeCountLabel.text ?? "0") {
+                                
+                                // 파이어베이스 [데이터 불러오기]
+                                let docRef = self.db.collection("Menu2").document(Data.currentDateStringSpace)
+                                
+                                docRef.getDocument { (document, error) in
+                                    if let document = document, document.exists {
+                                        if let like = document.data()?[mealType] as? String {
+                                            dislikeCountLabel.text = like
+                                            
+                                            print("1")
+                                        }
+                                        
+                                    }
+                                    
+                                    else {
+                                        print("   2   ")
+                                    }
+                                    
+                                }
+                                
+                                
+                                // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                                self.db.collection("Menu2").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount + 1)" ], merge: true)
+                                
+                                print(current_date_string)
+                                
+                            }
+                        }
+                        
+                        if Data.navTitle == "식단표 (예지학사_식당)" {
+                            if let currentCount = Int(dislikeCountLabel.text ?? "0") {
+                                
+                                // 파이어베이스 [데이터 불러오기]
+                                let docRef = self.db.collection("Menu3").document(Data.currentDateStringSpace)
+                                
+                                docRef.getDocument { (document, error) in
+                                    if let document = document, document.exists {
+                                        if let like = document.data()?[mealType] as? String {
+                                            dislikeCountLabel.text = like
+                                            
+                                        
+                                        }
+                                        
+                                    }
+                                    
+                                    else {
+                                        print("   2   ")
+                                    }
+                                    
+                                }
+                                
+                                
+                                // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                                self.db.collection("Menu3").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount + 1)" ], merge: true)
+                                
+                                print(current_date_string)
+                                
+                            }
+                        }
+                        
+                        if Data.navTitle == "식단표 (65번가_도서관지하분식점)" {
+                            if let currentCount = Int(dislikeCountLabel.text ?? "0") {
+                                
+                                // 파이어베이스 [데이터 불러오기]
+                                let docRef = self.db.collection("Menu4").document(Data.currentDateStringSpace)
+                                
+                                docRef.getDocument { (document, error) in
+                                    if let document = document, document.exists {
+                                        if let like = document.data()?[mealType] as? String {
+                                            dislikeCountLabel.text = like
+                                            
+                                        
+                                        }
+                                        
+                                    }
+                                    
+                                    else {
+                                        print("   2   ")
+                                    }
+                                    
+                                }
+                                
+                                
+                                // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                                self.db.collection("Menu4").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount + 1)" ], merge: true)
+                            }
+                        }
+                        
+                    }
+                    
+                    
+                    
+                    // 버튼 탭 히스토리에 저장 (like 초기화)
+                    buttonTapHistory2 = [:]
+                    UserDefaults.standard.set(buttonTapHistory2, forKey: buttonTapHistoryKey2)
+                    //
+                    
+                    
+                    // 버튼 탭 히스토리에 저장 (dislike 생성)
+                    buttonTapHistory["dislikeButtonTapped"] = true
+                    UserDefaults.standard.set(buttonTapHistory, forKey: buttonTapHistoryKey)
+                    //
+                 
                 }
                 
                 
-                
-                
+                // 싫어요 1 증가
+                else {
+                    if let dislikeCountLabel = cell.contentView.viewWithTag(2000) as? UILabel {
+                        
+                        if Data.navTitle == "식단표 (학생회관_학생식당)" {
+                            if let currentCount = Int(dislikeCountLabel.text ?? "0") {
+                                
+                                // 파이어베이스 [데이터 불러오기]
+                                let docRef = self.db.collection("Menu").document(Data.currentDateStringSpace)
+                                
+                                docRef.getDocument { (document, error) in
+                                    if let document = document, document.exists {
+                                        if let like = document.data()?[mealType] as? String {
+                                            dislikeCountLabel.text = like
+                                            
+                                            
+                                        }
+                                        
+                                    }
+                                    
+                                    else {
+                                        print("   2   ")
+                                    }
+                                    
+                                }
+                                
+                                
+                                // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                                self.db.collection("Menu").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount + 1)" ], merge: true)
+                                
+                                print(current_date_string)
+                                
+                            }
+                        }
+                        
+                        if Data.navTitle == "식단표 (학생회관_자율식당)" {
+                            if let currentCount = Int(dislikeCountLabel.text ?? "0") {
+                                
+                                // 파이어베이스 [데이터 불러오기]
+                                let docRef = self.db.collection("Menu2").document(Data.currentDateStringSpace)
+                                
+                                docRef.getDocument { (document, error) in
+                                    if let document = document, document.exists {
+                                        if let like = document.data()?[mealType] as? String {
+                                            dislikeCountLabel.text = like
+                                            
+                                            print("1")
+                                        }
+                                        
+                                    }
+                                    
+                                    else {
+                                        print("   2   ")
+                                    }
+                                    
+                                }
+                                
+                                
+                                // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                                self.db.collection("Menu2").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount + 1)" ], merge: true)
+                                
+                                print(current_date_string)
+                                
+                            }
+                        }
+                        
+                        if Data.navTitle == "식단표 (예지학사_식당)" {
+                            if let currentCount = Int(dislikeCountLabel.text ?? "0") {
+                                
+                                // 파이어베이스 [데이터 불러오기]
+                                let docRef = self.db.collection("Menu3").document(Data.currentDateStringSpace)
+                                
+                                docRef.getDocument { (document, error) in
+                                    if let document = document, document.exists {
+                                        if let like = document.data()?[mealType] as? String {
+                                            dislikeCountLabel.text = like
+                                            
+                                        
+                                        }
+                                        
+                                    }
+                                    
+                                    else {
+                                        print("   2   ")
+                                    }
+                                    
+                                }
+                                
+                                
+                                // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                                self.db.collection("Menu3").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount + 1)" ], merge: true)
+                                
+                                print(current_date_string)
+                                
+                            }
+                        }
+                        
+                        if Data.navTitle == "식단표 (65번가_도서관지하분식점)" {
+                            if let currentCount = Int(dislikeCountLabel.text ?? "0") {
+                                
+                                // 파이어베이스 [데이터 불러오기]
+                                let docRef = self.db.collection("Menu4").document(Data.currentDateStringSpace)
+                                
+                                docRef.getDocument { (document, error) in
+                                    if let document = document, document.exists {
+                                        if let like = document.data()?[mealType] as? String {
+                                            dislikeCountLabel.text = like
+                                            
+                                        
+                                        }
+                                        
+                                    }
+                                    
+                                    else {
+                                        print("   2   ")
+                                    }
+                                    
+                                }
+                                
+                                
+                                // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
+                                self.db.collection("Menu4").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount + 1)" ], merge: true)
+                            }
+                        }
+                        
+                    }
+                    
+                    // 버튼 탭 히스토리에 저장 (dislike 생성)
+                    buttonTapHistory["dislikeButtonTapped"] = true
+                    UserDefaults.standard.set(buttonTapHistory, forKey: buttonTapHistoryKey)
+                    //
+                    
+                }
             }
+            
+            
         }
     }
     
     
-    // 댓글 버튼
-//    @objc func commentButtonTapped(_ sender: UIButton) {
-//        
-//        let commentVC = CommentViewController()
-//        
-//        //commentVC.commentNav = "HELLO"
-//        
-//        present(commentVC, animated: true, completion: nil)
-//        
-//        
-//        
-//    }
+
     
     
     
@@ -1492,7 +2259,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
 }
 
 
-
+// 캘린더 주말 요일 UI 설정
 extension ViewController: FSCalendarDelegateAppearance {
     
     // 토요일 파랑, 일요일 빨강으로 만들기

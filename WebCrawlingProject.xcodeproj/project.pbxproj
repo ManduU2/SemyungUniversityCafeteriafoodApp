@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		DE46F4F72B9F2F8A0042A285 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DE46F4F62B9F2F8A0042A285 /* GoogleService-Info.plist */; };
-		DE46F4F92BA14ADF0042A285 /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE46F4F82BA14ADF0042A285 /* CommentViewController.swift */; };
+		DE46F4FC2BA6E1A50042A285 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE46F4FB2BA6E1A50042A285 /* Data.swift */; };
 		DEB9E5632B9594820084C269 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB9E5622B9594820084C269 /* AppDelegate.swift */; };
 		DEB9E5652B9594820084C269 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB9E5642B9594820084C269 /* SceneDelegate.swift */; };
 		DEB9E5672B9594820084C269 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB9E5662B9594820084C269 /* ViewController.swift */; };
@@ -32,7 +32,7 @@
 		5EEA7539B0386A136A69209D /* Pods-WebCrawlingProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WebCrawlingProject.debug.xcconfig"; path = "Target Support Files/Pods-WebCrawlingProject/Pods-WebCrawlingProject.debug.xcconfig"; sourceTree = "<group>"; };
 		D3295520D03654DD5AD4B30B /* Pods-WebCrawlingProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WebCrawlingProject.release.xcconfig"; path = "Target Support Files/Pods-WebCrawlingProject/Pods-WebCrawlingProject.release.xcconfig"; sourceTree = "<group>"; };
 		DE46F4F62B9F2F8A0042A285 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/WebCrawlingProject-main 11/WebCrawlingProject/GoogleService-Info.plist"; sourceTree = "<group>"; };
-		DE46F4F82BA14ADF0042A285 /* CommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
+		DE46F4FB2BA6E1A50042A285 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		DEB9E55F2B9594820084C269 /* WebCrawlingProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WebCrawlingProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEB9E5622B9594820084C269 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DEB9E5642B9594820084C269 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -83,6 +83,14 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		DE46F4FA2BA6E17D0042A285 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DE46F4FB2BA6E1A50042A285 /* Data.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		DEB9E5562B9594820084C269 = {
 			isa = PBXGroup;
 			children = (
@@ -104,12 +112,12 @@
 		DEB9E5612B9594820084C269 /* WebCrawlingProject */ = {
 			isa = PBXGroup;
 			children = (
+				DE46F4FA2BA6E17D0042A285 /* Models */,
 				DEB9E5622B9594820084C269 /* AppDelegate.swift */,
 				DEB9E5642B9594820084C269 /* SceneDelegate.swift */,
 				DEB9E5662B9594820084C269 /* ViewController.swift */,
 				DEB9E58A2B96D8370084C269 /* HouseViewController.swift */,
 				DEB9E5962B9AC4600084C269 /* BellViewController.swift */,
-				DE46F4F82BA14ADF0042A285 /* CommentViewController.swift */,
 				DEB9E5682B9594820084C269 /* Main.storyboard */,
 				DEB9E56E2B9594830084C269 /* Assets.xcassets */,
 				DEB9E5702B9594830084C269 /* LaunchScreen.storyboard */,
@@ -248,13 +256,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DE46F4F92BA14ADF0042A285 /* CommentViewController.swift in Sources */,
 				DEB9E58B2B96D8370084C269 /* HouseViewController.swift in Sources */,
 				DEB9E5672B9594820084C269 /* ViewController.swift in Sources */,
 				DEB9E5632B9594820084C269 /* AppDelegate.swift in Sources */,
 				DEB9E5652B9594820084C269 /* SceneDelegate.swift in Sources */,
 				DEB9E56D2B9594820084C269 /* WebCrawlingProject.xcdatamodeld in Sources */,
 				DEB9E5972B9AC4600084C269 /* BellViewController.swift in Sources */,
+				DE46F4FC2BA6E1A50042A285 /* Data.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

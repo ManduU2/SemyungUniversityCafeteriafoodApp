@@ -7,7 +7,7 @@
 
 import UIKit
 
-class HouseViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class HouseViewController: UIViewController {
     
     var tableView = UITableView(frame: .zero, style: .insetGrouped)
     
@@ -30,6 +30,8 @@ class HouseViewController: UIViewController, UITableViewDataSource, UITableViewD
         
     }
     
+    
+    // 테이블 오토 레이아웃
     fileprivate func applyConstraints() {
         self.view.addSubview(self.tableView)
         
@@ -44,6 +46,18 @@ class HouseViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         
     }
+    
+}
+
+
+
+
+
+
+
+// 테이블 델리게이트
+extension HouseViewController:  UITableViewDataSource, UITableViewDelegate {
+    
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -66,28 +80,27 @@ class HouseViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     
-    
     // 열 선택
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         switch indexPath.row {
         case 0:
             // 학생회관_학생식당 selected
-            ViewController.navTitle = "식단표 (학생회관_학생식당)"
+            Data.navTitle = "식단표 (학생회관_학생식당)"
             navigationController?.popViewController(animated: true)
         case 1:
             // 학생회관_자율식당 selected
-            ViewController.navTitle = "식단표 (학생회관_자율식당)"
+            Data.navTitle = "식단표 (학생회관_자율식당)"
             navigationController?.popViewController(animated: true)
         case 2:
             // 예지학사식당 selected
             // Handle as needed
-            ViewController.navTitle = "식단표 (예지학사_식당)"
+            Data.navTitle = "식단표 (예지학사_식당)"
             navigationController?.popViewController(animated: true)
         case 3:
             // 세명식당 selected
             // Handle as needed
-            ViewController.navTitle = "식단표 (65번가_도서관지하분식점)"
+            Data.navTitle = "식단표 (65번가_도서관지하분식점)"
             navigationController?.popViewController(animated: true)
         default:
             break
@@ -97,6 +110,4 @@ class HouseViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     
     
-    
 }
-
