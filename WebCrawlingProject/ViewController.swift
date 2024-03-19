@@ -76,7 +76,8 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
     override func viewDidLoad() {
         super.viewDidLoad()
         
-       
+        let bundleID = Bundle.main.bundleIdentifier
+        
         calendar.delegate = self
         calendar.dataSource = self
         
@@ -111,7 +112,7 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         
         
         self.title = Data.navTitle
-        
+       
         dateNow()
     }
     
@@ -127,10 +128,7 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         
     }
     
-    // 화면 돌리기 제한
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-            return .portrait
-        }
+
     
     
     
@@ -141,7 +139,7 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         let hamburgerImage = UIImage(systemName: "line.horizontal.3")
         
         // Custom bell button image (right)
-        let bellImage = UIImage(systemName: "bell.fill")
+        let bellImage = UIImage(systemName: "gearshape.fill")
         
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(
@@ -165,12 +163,12 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
     }
     
     
-    
-    
     fileprivate func applyConstraints() {
         view.addSubview(calendar)
         self.view.addSubview(self.tableView)
         tableView.backgroundColor = .systemGray2
+        
+        
         
         calendar.translatesAutoresizingMaskIntoConstraints = false
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -410,7 +408,19 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
     
     
     
+    
     func dateNow() {
+        
+        
+        let loadingView = UIView(frame: view.bounds)
+        loadingView.backgroundColor = UIColor.lightGray
+            let activityIndicator = UIActivityIndicatorView(style: .large)
+            activityIndicator.center = loadingView.center
+            loadingView.addSubview(activityIndicator)
+            view.addSubview(loadingView)
+            activityIndicator.startAnimating()
+        
+        
         // 현재 날짜 데이터 포맷
         let formatter = DateFormatter()
         formatter.dateFormat = "YYYY-MM-dd"
@@ -436,11 +446,22 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
                                             if let 저녁메뉴 = document.data()?["저녁메뉴"] as? String {
                                                 let 저녁메뉴 = 저녁메뉴.replacingOccurrences(of: "\\n", with: "\n")
                                                 
+                                                
+                                                
                                                 self.data = [[아침메뉴],
                                                              [점심메뉴],
                                                              [저녁메뉴]]
                                                 
+                                                // 이곳이 데이터 로딩이 끝내는 함수
+                                                activityIndicator.stopAnimating()
+                                                loadingView.removeFromSuperview()
+                                               
+                                                
                                                 self.tableView.reloadData()
+                                                
+                                              
+                                               
+                                              
                                             }
                                         }
                                     }
@@ -458,10 +479,15 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
                     self.data = [["아직 식단이 등록되지 않았습니다."],
                                  ["아직 식단이 등록되지 않았습니다."],
                                  ["아직 식단이 등록되지 않았습니다."]]
+                    // 이곳이 데이터 로딩이 끝내는 함수
+                    activityIndicator.stopAnimating()
+                    loadingView.removeFromSuperview()
                     self.tableView.reloadData()
                 }
             }
             self.tableView.reloadData()
+           
+           
         }
         
         
@@ -490,6 +516,9 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
                                                              [점심메뉴],
                                                              [저녁메뉴]]
                                                 self.tableView.reloadData()
+                                                
+                                                activityIndicator.stopAnimating()
+                                                loadingView.removeFromSuperview()
                                             }
                                         }
                                     }
@@ -504,7 +533,13 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
                         print("아침메뉴가 없습니다.")
                     }
                 } else {
-                    print("Document does not exist")
+                    self.data = [["아직 식단이 등록되지 않았습니다."],
+                                 ["아직 식단이 등록되지 않았습니다."],
+                                 ["아직 식단이 등록되지 않았습니다."]]
+                    // 이곳이 데이터 로딩이 끝내는 함수
+                    activityIndicator.stopAnimating()
+                    loadingView.removeFromSuperview()
+                    self.tableView.reloadData()
                 }
             }
             self.tableView.reloadData()
@@ -536,6 +571,11 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
                                                              [점심메뉴],
                                                              [저녁메뉴]]
                                                 self.tableView.reloadData()
+                                                
+                                                // 이곳이 데이터 로딩이 끝내는 함수
+                                                activityIndicator.stopAnimating()
+                                                loadingView.removeFromSuperview()
+                                                self.tableView.reloadData()
                                             }
                                         }
                                     }
@@ -550,7 +590,13 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
                         print("아침메뉴가 없습니다.")
                     }
                 } else {
-                    print("Document does not exist")
+                    self.data = [["아직 식단이 등록되지 않았습니다."],
+                                 ["아직 식단이 등록되지 않았습니다."],
+                                 ["아직 식단이 등록되지 않았습니다."]]
+                    // 이곳이 데이터 로딩이 끝내는 함수
+                    activityIndicator.stopAnimating()
+                    loadingView.removeFromSuperview()
+                    self.tableView.reloadData()
                 }
             }
             self.tableView.reloadData()
@@ -582,6 +628,11 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
                                                              [점심메뉴],
                                                              [저녁메뉴]]
                                                 self.tableView.reloadData()
+                                                
+                                                // 이곳이 데이터 로딩이 끝내는 함수
+                                                activityIndicator.stopAnimating()
+                                                loadingView.removeFromSuperview()
+                                                self.tableView.reloadData()
                                             }
                                         }
                                     }
@@ -596,7 +647,13 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
                         print("아침메뉴가 없습니다.")
                     }
                 } else {
-                    print("Document does not exist")
+                    self.data = [["아직 식단이 등록되지 않았습니다."],
+                                 ["아직 식단이 등록되지 않았습니다."],
+                                 ["아직 식단이 등록되지 않았습니다."]]
+                    // 이곳이 데이터 로딩이 끝내는 함수
+                    activityIndicator.stopAnimating()
+                    loadingView.removeFromSuperview()
+                    self.tableView.reloadData()
                 }
             }
             self.tableView.reloadData()
@@ -2257,6 +2314,9 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     
 }
+
+
+
 
 
 // 캘린더 주말 요일 UI 설정

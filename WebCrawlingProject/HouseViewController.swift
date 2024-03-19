@@ -35,6 +35,9 @@ class HouseViewController: UIViewController {
     fileprivate func applyConstraints() {
         self.view.addSubview(self.tableView)
         
+        tableView.backgroundColor = .systemGray2
+        
+        
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -66,6 +69,9 @@ extension HouseViewController:  UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: .none)
+        cell.textLabel?.textColor = .black // 글자 색깔을 검은색으로 변경
+        cell.backgroundColor = .white // 셀 컬러를 하얀색으로
+        
         cell.textLabel?.text = data[indexPath.section][indexPath.row]
         return cell
     }
@@ -76,6 +82,8 @@ extension HouseViewController:  UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        
+        
         return header[section]
     }
     
@@ -110,4 +118,7 @@ extension HouseViewController:  UITableViewDataSource, UITableViewDelegate {
     
     
     
+    
+    
+   
 }

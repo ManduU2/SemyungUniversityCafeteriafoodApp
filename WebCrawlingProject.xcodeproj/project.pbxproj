@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		DE46F4F72B9F2F8A0042A285 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DE46F4F62B9F2F8A0042A285 /* GoogleService-Info.plist */; };
 		DE46F4FC2BA6E1A50042A285 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE46F4FB2BA6E1A50042A285 /* Data.swift */; };
+		DE46F4FF2BA945780042A285 /* SkeletonView in Frameworks */ = {isa = PBXBuildFile; productRef = DE46F4FE2BA945780042A285 /* SkeletonView */; };
 		DEB9E5632B9594820084C269 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB9E5622B9594820084C269 /* AppDelegate.swift */; };
 		DEB9E5652B9594820084C269 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB9E5642B9594820084C269 /* SceneDelegate.swift */; };
 		DEB9E5672B9594820084C269 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB9E5662B9594820084C269 /* ViewController.swift */; };
@@ -59,6 +60,7 @@
 				DEB9E5852B95B97D0084C269 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				F8D22A36C3C69DADB93BE183 /* Pods_WebCrawlingProject.framework in Frameworks */,
 				DEB9E5912B97F7CE0084C269 /* FirebaseFirestore in Frameworks */,
+				DE46F4FF2BA945780042A285 /* SkeletonView in Frameworks */,
 				DEB9E5932B97F7CE0084C269 /* FirebaseFirestoreSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -154,6 +156,7 @@
 				DEB9E5862B95B97D0084C269 /* FirebaseAppCheck */,
 				DEB9E5902B97F7CE0084C269 /* FirebaseFirestore */,
 				DEB9E5922B97F7CE0084C269 /* FirebaseFirestoreSwift */,
+				DE46F4FE2BA945780042A285 /* SkeletonView */,
 			);
 			productName = WebCrawlingProject;
 			productReference = DEB9E55F2B9594820084C269 /* WebCrawlingProject.app */;
@@ -185,6 +188,7 @@
 			mainGroup = DEB9E5562B9594820084C269;
 			packageReferences = (
 				DEB9E57D2B95B97D0084C269 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				DE46F4FD2BA945780042A285 /* XCRemoteSwiftPackageReference "SkeletonView" */,
 			);
 			productRefGroup = DEB9E5602B9594820084C269 /* Products */;
 			projectDirPath = "";
@@ -421,13 +425,14 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ManduU2.WebCrawlingProject;
+				PRODUCT_BUNDLE_IDENTIFIER = com.SemyungUniversityCafeteriafoodApp.ManduU2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -453,13 +458,14 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.ManduU2.WebCrawlingProject;
+				PRODUCT_BUNDLE_IDENTIFIER = com.SemyungUniversityCafeteriafoodApp.ManduU2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -495,6 +501,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		DE46F4FD2BA945780042A285 /* XCRemoteSwiftPackageReference "SkeletonView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Juanpe/SkeletonView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.30.4;
+			};
+		};
 		DEB9E57D2B95B97D0084C269 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -506,6 +520,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		DE46F4FE2BA945780042A285 /* SkeletonView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DE46F4FD2BA945780042A285 /* XCRemoteSwiftPackageReference "SkeletonView" */;
+			productName = SkeletonView;
+		};
 		DEB9E57E2B95B97D0084C269 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = DEB9E57D2B95B97D0084C269 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

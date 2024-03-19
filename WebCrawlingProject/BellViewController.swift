@@ -22,33 +22,9 @@ class BellViewController: UIViewController  {
     var tableView = UITableView(frame: .zero, style: .insetGrouped)
     
     
-    // 토글 스위치 모양 만들기 (위치 설정 포함)
-    lazy var controlSwitch: UISwitch = {
-        
-        
-        let swicth: UISwitch = UISwitch()
-        
-        // 위치 설정
-//            swicth.layer.position = CGPoint(x: self.view.frame.width/2, y: self.label.layer.position.y + self.label.frame.height + 10)
-        
-        
-        // Display the border of Swicth.
-        swicth.tintColor = UIColor.gray
-        
-        
-        
-        
-        swicth.addTarget(self, action: #selector(onClickSwitch(sender:)), for: UIControl.Event.valueChanged)
-        
-        // Set initial state from UserDefaults
-        if let isOn = UserDefaults.standard.value(forKey: switchStateKey) as? Bool {
-            swicth.isOn = isOn
-        }
-        
-        return swicth
-    }()
-    
 
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,25 +35,10 @@ class BellViewController: UIViewController  {
         self.tableView.dataSource = self
         self.tableView.delegate = self
         
-        
-        requestNotificationAuthorization()
-        
-        //self.view.addSubview(self.label)
-        self.view.addSubview(self.controlSwitch)
-        
-        
-        
+    
         navigationItem.title = "알림 설정"
         
-        // Check notification settings
-        UNUserNotificationCenter.current().getNotificationSettings { settings in
-            DispatchQueue.main.async {
-                // Update switch based on notification authorization status
-                let isOn = settings.authorizationStatus == .authorized
-                self.updateButtonState(isOn: isOn)
-                self.saveSwitchState(isOn: isOn)
-            }
-        }
+      
         
         applyConstraints()
         
@@ -86,6 +47,8 @@ class BellViewController: UIViewController  {
     
     fileprivate func applyConstraints() {
         self.view.addSubview(self.tableView)
+        
+        tableView.backgroundColor = .systemGray2
         
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -106,39 +69,9 @@ class BellViewController: UIViewController  {
         UserDefaults.standard.set(isOn, forKey: switchStateKey)
     }
     
-    func requestNotificationAuthorization() {
-           UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
-               if granted {
-                   DispatchQueue.main.async {
-                       self.controlSwitch.isOn = true
-                       self.saveSwitchState(isOn: true)
-                       self.scheduleNotification()
-                   }
-               } else {
-                   DispatchQueue.main.async {
-                       self.controlSwitch.isOn = false
-                       self.saveSwitchState(isOn: false)
-                   }
-               }
-           }
-       }
+
     
-    
-    
-    // 초기 버튼 상태
-    func updateButtonState(isOn: Bool) {
-        var text: String!
-        var color: UIColor!
-        
-        if isOn {
-            text = "On"
-            color = UIColor.systemGreen
-            scheduleNotification()
-        } else {
-            text = "Off"
-            color = UIColor.gray
-        }
-    }
+
     
     
     // 아침메뉴 가져오기
@@ -312,15 +245,11 @@ class BellViewController: UIViewController  {
     
     
     
-    @objc func onClickSwitch(sender: UISwitch) {
-        let isOn = sender.isOn
-            updateButtonState(isOn: isOn)
-            saveSwitchState(isOn: isOn)
-    }
- 
-    
-    
 
+    
+    
+    
+    
     
     
 }
@@ -343,48 +272,48 @@ extension BellViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
+        
+        
+        
         
         if indexPath.section == 0 && indexPath.row == 0 {
             let switchCell = UITableViewCell(style: .default, reuseIdentifier: nil)
             switchCell.selectionStyle = .none
+            switchCell.backgroundColor = .white // 셀 컬러를 하얀색으로
             
-            
-     
             
             
             // Label
-             let label = UILabel()
-             label.text = "알림"
-             switchCell.contentView.addSubview(label)
-             label.translatesAutoresizingMaskIntoConstraints = false
-             NSLayoutConstraint.activate([
-                 label.leadingAnchor.constraint(equalTo: switchCell.contentView.leadingAnchor, constant: 20),
-                 label.centerYAnchor.constraint(equalTo: switchCell.contentView.centerYAnchor)
-             ])
-            
-       
-            
-            // Add switch to the cell's contentView
-            switchCell.contentView.addSubview(controlSwitch)
-            
-            // Apply constraints for the switch
-            controlSwitch.translatesAutoresizingMaskIntoConstraints = false
+            let label = UILabel()
+            label.text = "알림"
+            label.textColor = .black
+            switchCell.contentView.addSubview(label)
+            label.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
-                controlSwitch.centerYAnchor.constraint(equalTo: switchCell.contentView.centerYAnchor),
-                controlSwitch.trailingAnchor.constraint(equalTo: switchCell.contentView.trailingAnchor, constant: -20) // Adjust the constant as per your need
+                label.leadingAnchor.constraint(equalTo: switchCell.contentView.leadingAnchor, constant: 20),
+                label.centerYAnchor.constraint(equalTo: switchCell.contentView.centerYAnchor)
             ])
             
             
             
-           
+
+            
+      
             
             return switchCell
-        } else if indexPath.section == 1 && indexPath.row == 0 {
+        }
+        
+        
+        else if indexPath.section == 1 && indexPath.row == 0 {
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+            
+            
+            cell.backgroundColor = .white // 셀 컬러를 하얀색으로
+            
             // "앱 버전" 라벨을 추가
             let versionLabel = UILabel()
             versionLabel.text = "앱 버전"
+            versionLabel.textColor = .black
             cell.contentView.addSubview(versionLabel)
             versionLabel.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
@@ -395,6 +324,7 @@ extension BellViewController: UITableViewDataSource, UITableViewDelegate {
             // 앱 버전 번호를 추가 (예: "1.0")
             let appVersionLabel = UILabel()
             appVersionLabel.text = "1.0"
+            appVersionLabel.textColor = .black
             cell.contentView.addSubview(appVersionLabel)
             appVersionLabel.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
@@ -406,40 +336,61 @@ extension BellViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         else if indexPath.section == 1 && indexPath.row == 1 {
-                let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-                // "개발자 연락처" 라벨을 추가
-                let label = UILabel()
-                label.text = "개발자 연락처"
-                cell.contentView.addSubview(label)
-                label.translatesAutoresizingMaskIntoConstraints = false
-                NSLayoutConstraint.activate([
-                    label.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 20),
-                    label.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
-                ])
-                
-                // 이메일을 추가
-                let emailLabel = UILabel()
-                emailLabel.text = "wlsgurrla716@icolud.com"
-                cell.contentView.addSubview(emailLabel)
-                emailLabel.translatesAutoresizingMaskIntoConstraints = false
-                NSLayoutConstraint.activate([
-                    emailLabel.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -20),
-                    emailLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
-                ])
-                
-                return cell
-            }
+            let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+            
+            cell.textLabel?.textColor = .black // 글자 색깔을 검은색으로 변경
+            cell.backgroundColor = .white // 셀 컬러를 하얀색으로
+            
+            // "개발자 연락처" 라벨을 추가
+            let label = UILabel()
+            label.text = "개발자 연락처"
+            label.textColor = .black
+            cell.contentView.addSubview(label)
+            label.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                label.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 20),
+                label.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
+            ])
+            
+            // 이메일을 추가
+            let emailLabel = UILabel()
+            emailLabel.text = "wlsgurrla716@icolud.com"
+            emailLabel.textColor = .black
+            cell.contentView.addSubview(emailLabel)
+            
+            emailLabel.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                emailLabel.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -20),
+                emailLabel.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
+            ])
+            
+            return cell
+        }
         
         
         else {
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-            // Configure other cells as needed
+            
+            cell.textLabel?.textColor = .black // 글자 색깔을 검은색으로 변경
+            cell.backgroundColor = .white // 셀 컬러를 하얀색으로
+            
             return cell
         }
     }
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        
+        if indexPath.section == 0 && indexPath.row == 0 {
+                // 알림 셀이 선택된 경우 설정 앱으로 이동
+                if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(settingsURL)
+                }
+                tableView.deselectRow(at: indexPath, animated: true)
+            }
+        
+        
         if indexPath.section == 1 && indexPath.row == 1 {
             // 예시 이메일 주소
             let emailAddress = "wlsgurrla716@icolud.com"
@@ -467,7 +418,7 @@ extension BellViewController: UITableViewDataSource, UITableViewDelegate {
         } else if section == 1 {
             return "앱 정보"
         } else {return ""}
-    
-}
+        
+    }
     
 }
