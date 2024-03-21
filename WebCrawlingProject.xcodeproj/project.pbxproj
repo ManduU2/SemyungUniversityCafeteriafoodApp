@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DE46F4F72B9F2F8A0042A285 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DE46F4F62B9F2F8A0042A285 /* GoogleService-Info.plist */; };
 		DE46F4FC2BA6E1A50042A285 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE46F4FB2BA6E1A50042A285 /* Data.swift */; };
 		DE46F4FF2BA945780042A285 /* SkeletonView in Frameworks */ = {isa = PBXBuildFile; productRef = DE46F4FE2BA945780042A285 /* SkeletonView */; };
+		DE797E742BAC40E300E45A58 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DE797E732BAC40E300E45A58 /* GoogleService-Info.plist */; };
 		DEB9E5632B9594820084C269 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB9E5622B9594820084C269 /* AppDelegate.swift */; };
 		DEB9E5652B9594820084C269 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB9E5642B9594820084C269 /* SceneDelegate.swift */; };
 		DEB9E5672B9594820084C269 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB9E5662B9594820084C269 /* ViewController.swift */; };
@@ -32,8 +32,8 @@
 /* Begin PBXFileReference section */
 		5EEA7539B0386A136A69209D /* Pods-WebCrawlingProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WebCrawlingProject.debug.xcconfig"; path = "Target Support Files/Pods-WebCrawlingProject/Pods-WebCrawlingProject.debug.xcconfig"; sourceTree = "<group>"; };
 		D3295520D03654DD5AD4B30B /* Pods-WebCrawlingProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WebCrawlingProject.release.xcconfig"; path = "Target Support Files/Pods-WebCrawlingProject/Pods-WebCrawlingProject.release.xcconfig"; sourceTree = "<group>"; };
-		DE46F4F62B9F2F8A0042A285 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/WebCrawlingProject-main 11/WebCrawlingProject/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DE46F4FB2BA6E1A50042A285 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
+		DE797E732BAC40E300E45A58 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DEB9E55F2B9594820084C269 /* WebCrawlingProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WebCrawlingProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEB9E5622B9594820084C269 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DEB9E5642B9594820084C269 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -125,7 +125,7 @@
 				DEB9E5702B9594830084C269 /* LaunchScreen.storyboard */,
 				DEB9E5732B9594830084C269 /* Info.plist */,
 				DEB9E56B2B9594820084C269 /* WebCrawlingProject.xcdatamodeld */,
-				DE46F4F62B9F2F8A0042A285 /* GoogleService-Info.plist */,
+				DE797E732BAC40E300E45A58 /* GoogleService-Info.plist */,
 			);
 			path = WebCrawlingProject;
 			sourceTree = "<group>";
@@ -205,7 +205,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DEB9E5722B9594830084C269 /* LaunchScreen.storyboard in Resources */,
-				DE46F4F72B9F2F8A0042A285 /* GoogleService-Info.plist in Resources */,
+				DE797E742BAC40E300E45A58 /* GoogleService-Info.plist in Resources */,
 				DEB9E56F2B9594830084C269 /* Assets.xcassets in Resources */,
 				DEB9E56A2B9594820084C269 /* Main.storyboard in Resources */,
 			);
@@ -432,7 +432,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.SemyungUniversityCafeteriafoodApp.ManduU2App;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -466,7 +466,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.SemyungUniversityCafeteriafoodApp.ManduU2App;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

@@ -9,20 +9,19 @@ import UIKit
 import FirebaseCore
 import FirebaseFirestore
 
-class BellViewController: UIViewController  {
+class BellViewController: UIViewController, UNUserNotificationCenterDelegate  {
     
     
     // 파이어스토어
     let db = Firestore.firestore()
     
-    // UserDefaults key
     let switchStateKey = "SwitchState"
     
     
     var tableView = UITableView(frame: .zero, style: .insetGrouped)
     
     
-
+    
     
     
     
@@ -35,15 +34,20 @@ class BellViewController: UIViewController  {
         self.tableView.dataSource = self
         self.tableView.delegate = self
         
-    
+        
+        
         navigationItem.title = "알림 설정"
         
-      
+        
         
         applyConstraints()
         
         
+        
+       
+        
     }
+    
     
     fileprivate func applyConstraints() {
         self.view.addSubview(self.tableView)
@@ -64,195 +68,22 @@ class BellViewController: UIViewController  {
     
     
     
-    // Save switch state to UserDefaults
-    func saveSwitchState(isOn: Bool) {
-        UserDefaults.standard.set(isOn, forKey: switchStateKey)
-    }
-    
-
-    
-
-    
-    
-    // 아침메뉴 가져오기
-    func getBreakfastMenu(completion: @escaping (String?, Error?) -> Void) {
-        // 현재 날짜 데이터 포맷
-        let formatter = DateFormatter()
-        formatter.dateFormat = "YYYY-MM-dd"
-        let current_date_string = formatter.string(from: Date())
-        
-        let docRef = db.collection("Menu").document(current_date_string)
-        docRef.getDocument { (document, error) in
-            if let document = document, document.exists {
-                if let breakfastMenu = document.data()?["아침메뉴"] as? String {
-                    let breakfastMenu = breakfastMenu.replacingOccurrences(of: "\\n", with: "\n")
-                    
-                    completion(breakfastMenu, nil)
-                    
-                } else {
-                    completion(nil, nil)
-                }
-            } else {
-                completion(nil, error)
-            }
-        }
-    }
-    
-    // 점심메뉴 가져오기
-    func getLunchMenu(completion: @escaping (String?, Error?) -> Void) {
-        // 현재 날짜 데이터 포맷
-        let formatter = DateFormatter()
-        formatter.dateFormat = "YYYY-MM-dd"
-        let current_date_string = formatter.string(from: Date())
-        
-        let docRef = db.collection("Menu").document(current_date_string)
-        docRef.getDocument { (document, error) in
-            if let document = document, document.exists {
-                if let lunchMenu = document.data()?["점심메뉴"] as? String {
-                    let lunchMenu = lunchMenu.replacingOccurrences(of: "\\n", with: "\n")
-                    completion(lunchMenu, nil)
-                } else {
-                    completion(nil, nil)
-                }
-            } else {
-                completion(nil, error)
-            }
-        }
-    }
-    
-    // 저녁메뉴 가져오기
-    func getDinnerMenu(completion: @escaping (String?, Error?) -> Void) {
-        // 현재 날짜 데이터 포맷
-        let formatter = DateFormatter()
-        formatter.dateFormat = "YYYY-MM-dd"
-        let current_date_string = formatter.string(from: Date())
-        
-        let docRef = db.collection("Menu").document(current_date_string)
-        docRef.getDocument { (document, error) in
-            if let document = document, document.exists {
-                if let dinnerMenu = document.data()?["저녁메뉴"] as? String {
-                    let dinnerMenu = dinnerMenu.replacingOccurrences(of: "\\n", with: "\n")
-                    completion(dinnerMenu, nil)
-                } else {
-                    completion(nil, nil)
-                }
-            } else {
-                completion(nil, error)
-            }
-        }
-    }
-    
-    // 알림 (Notification)
-    func scheduleNotification() {
-        
-        // 아침메뉴 가져오기
-        getBreakfastMenu { (breakfastMenu, error) in
-            guard let breakfastMenu = breakfastMenu else {
-                print("Error getting breakfast menu: \(error?.localizedDescription ?? "Unknown error")")
-                return
-            }
-            
-            // 점심메뉴 가져오기
-            self.getLunchMenu { (lunchMenu, error) in
-                guard let lunchMenu = lunchMenu else {
-                    print("Error getting lunch menu: \(error?.localizedDescription ?? "Unknown error")")
-                    return
-                }
-                
-                // 저녁메뉴 가져오기
-                self.getDinnerMenu { (dinnerMenu, error) in
-                    guard let dinnerMenu = dinnerMenu else {
-                        print("Error getting dinner menu: \(error?.localizedDescription ?? "Unknown error")")
-                        return
-                    }
-                    
-                    
-                    // 현재 날짜 데이터 포맷
-                    let formatter = DateFormatter()
-                    formatter.dateFormat = "YYYY-MM-dd"
-                    let current_date_string = formatter.string(from: Date())
-                    
-                    
-                    let content = UNMutableNotificationContent()
-                    content.title = "세명대학교 조식"
-                    content.body = breakfastMenu
-                    content.sound = UNNotificationSound.default
-                    
-                    
-                    
-                    let content2 = UNMutableNotificationContent()
-                    content2.title = "세명대학교 중식"
-                    content2.body = lunchMenu
-                    content2.sound = UNNotificationSound.default
-                    
-                    
-                    
-                    let content3 = UNMutableNotificationContent()
-                    content3.title = "세명대학교 석식"
-                    content3.body = dinnerMenu
-                    content3.sound = UNNotificationSound.default
-                    
-                    
-                    
-                    // 첫 번째 알림: 08:30
-                    var dateComponents1 = DateComponents()
-                    dateComponents1.hour = 8
-                    dateComponents1.minute = 30
-                    let trigger1 = UNCalendarNotificationTrigger(dateMatching: dateComponents1, repeats: false)
-                    let request1 = UNNotificationRequest(identifier: "uniqueIdentifier1", content: content, trigger: trigger1)
-                    
-                    
-                    
-                    // 두 번째 알림: 11:30
-                    var dateComponents2 = DateComponents()
-                    dateComponents2.hour = 11
-                    dateComponents2.minute = 30
-                    let trigger2 = UNCalendarNotificationTrigger(dateMatching: dateComponents2, repeats: false)
-                    let request2 = UNNotificationRequest(identifier: "uniqueIdentifier2", content: content2, trigger: trigger2)
-                    
-                    
-                    
-                    // 세 번째 알림: 17:30
-                    var dateComponents3 = DateComponents()
-                    dateComponents3.hour = 17
-                    dateComponents3.minute = 30
-                    let trigger3 = UNCalendarNotificationTrigger(dateMatching: dateComponents3, repeats: false)
-                    let request3 = UNNotificationRequest(identifier: "uniqueIdentifier3", content: content3, trigger: trigger3)
-                    
-                    
-                    
-                    
-                    let notificationCenter = UNUserNotificationCenter.current()
-                    notificationCenter.add(request1) { (error) in
-                        if let error = error {
-                            print("Error adding notification request1: \(error)")
-                        }
-                    }
-                    notificationCenter.add(request2) { (error) in
-                        if let error = error {
-                            print("Error adding notification request2: \(error)")
-                        }
-                    }
-                    notificationCenter.add(request3) { (error) in
-                        if let error = error {
-                            print("Error adding notification request3: \(error)")
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    
-    
-
-    
-    
-    
     
     
     
 }
+
+    
+
+    
+    
+  
+    
+    
+    
+
+    
+
 
 
 // 테이블 델리게이트
@@ -293,8 +124,6 @@ extension BellViewController: UITableViewDataSource, UITableViewDelegate {
                 label.leadingAnchor.constraint(equalTo: switchCell.contentView.leadingAnchor, constant: 20),
                 label.centerYAnchor.constraint(equalTo: switchCell.contentView.centerYAnchor)
             ])
-            
-            
             
 
             
