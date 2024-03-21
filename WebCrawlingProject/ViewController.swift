@@ -9,13 +9,13 @@
  
  
  
-
  
-
+ 
+ 
  
  */
 
- 
+
 
 
 //
@@ -62,6 +62,7 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
     }()
     
     
+    
     // 식단 테이블
     var tableView = UITableView(frame: .zero, style: .insetGrouped)
     
@@ -76,8 +77,6 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let bundleID = Bundle.main.bundleIdentifier
-        
         calendar.delegate = self
         calendar.dataSource = self
         
@@ -90,7 +89,7 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         
         // Set navigation bar title text color to black
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
-    
+        
         configureItems()
         applyConstraints()
         
@@ -112,7 +111,7 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         
         
         self.title = Data.navTitle
-       
+        
         dateNow()
     }
     
@@ -128,7 +127,7 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         
     }
     
-
+    
     
     
     
@@ -205,7 +204,7 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         //print("날짜 선택 : " + dateFormatter.string(from: date))
         
         Data.currentDateStringSpace = dateFormatter.string(from: date)
-                
+        
         if Data.navTitle == "식단표 (학생회관_학생식당)" {
             
             let docRef = db.collection("Menu").document(dateFormatter.string(from: date))
@@ -255,7 +254,7 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
             
         }
         
-    
+        
         if Data.navTitle == "식단표 (학생회관_자율식당)" {
             
             let docRef = db.collection("Menu2").document(dateFormatter.string(from: date))
@@ -414,11 +413,11 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         
         let loadingView = UIView(frame: view.bounds)
         loadingView.backgroundColor = UIColor.lightGray
-            let activityIndicator = UIActivityIndicatorView(style: .large)
-            activityIndicator.center = loadingView.center
-            loadingView.addSubview(activityIndicator)
-            view.addSubview(loadingView)
-            activityIndicator.startAnimating()
+        let activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.center = loadingView.center
+        loadingView.addSubview(activityIndicator)
+        view.addSubview(loadingView)
+        activityIndicator.startAnimating()
         
         
         // 현재 날짜 데이터 포맷
@@ -455,13 +454,13 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
                                                 // 이곳이 데이터 로딩이 끝내는 함수
                                                 activityIndicator.stopAnimating()
                                                 loadingView.removeFromSuperview()
-                                               
+                                                
                                                 
                                                 self.tableView.reloadData()
                                                 
-                                              
-                                               
-                                              
+                                                
+                                                
+                                                
                                             }
                                         }
                                     }
@@ -486,8 +485,8 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
                 }
             }
             self.tableView.reloadData()
-           
-           
+            
+            
         }
         
         
@@ -708,7 +707,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         
-        var likeButton: UIButton = {
+        let likeButton: UIButton = {
             let button = UIButton(type: .system)
             button.setTitle("👍", for: .normal)
             button.tintColor = .green // Customize color if needed
@@ -717,7 +716,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             return button
         }()
         
-        var dislikeButton: UIButton = {
+        let dislikeButton: UIButton = {
             let button = UIButton(type: .system)
             button.setTitle("👎", for: .normal)
             button.tintColor = .red // Customize color if needed
@@ -726,13 +725,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             
             return button
         }()
-        
-        
-        
-        
-        
-        
-        
         
         
         let cell = UITableViewCell(style: .default, reuseIdentifier: .none)
@@ -757,17 +749,17 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         
         
         // 파이어베이스 [데이터 불러오기] (임시)
-            let mealType: String
-            switch indexPath.section {
-            case 0:
-                mealType = "아침메뉴Like"
-            case 1:
-                mealType = "점심메뉴Like"
-            case 2:
-                mealType = "저녁메뉴Like"
-            default:
-                mealType = ""
-            }
+        let mealType: String
+        switch indexPath.section {
+        case 0:
+            mealType = "아침메뉴Like"
+        case 1:
+            mealType = "점심메뉴Like"
+        case 2:
+            mealType = "저녁메뉴Like"
+        default:
+            mealType = ""
+        }
         
         
         
@@ -792,36 +784,85 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             let docRef = db.collection("Menu").document(Data.currentDateStringSpace)
             
             
-            docRef.getDocument { (document, error) in
-                if let document = document, document.exists {
+            //
+            //////
+            //
+            //            docRef.getDocument { (document, error) in
+            //                if let document = document, document.exists {
+            //                    if let like = document.data()?[mealType] as? String {
+            //                        likeCountLabel.text = like
+            //                        likeCountLabel.textColor = .red
+            //                        likeCountLabel.tag = 1000 // Set tag for identification
+            //
+            //                    }
+            //
+            //                }
+            //                else {
+            //                    print("   2   ")
+            //                }
+            //
+            //            }
+            
+            
+            
+            // 이쪽 중요
+            // 데이터 변경 사항을 수신하는 메서드 // 기기로 한 번 테스트
+            docRef.addSnapshotListener { (document, error) in
+                guard let document = document else {
+                    print("Error fetching document: \(error!)")
+                    return
+                }
+                
+                if document.exists {
                     if let like = document.data()?[mealType] as? String {
                         likeCountLabel.text = like
                         likeCountLabel.textColor = .red
                         likeCountLabel.tag = 1000 // Set tag for identification
-                        
                     }
-                    
+                } else {
+                    print("Document does not exist")
                 }
-                else {
-                    print("   2   ")
-                }
-                
             }
             
-            docRef.getDocument { (document, error) in
-                if let document = document, document.exists {
+            
+            
+            docRef.addSnapshotListener { (document, error) in
+                guard let document = document else {
+                    print("Error fetching document: \(error!)")
+                    return
+                }
+                
+                if document.exists {
                     if let like = document.data()?[dismealType] as? String {
                         dislikeCountLabel.text = like
                         dislikeCountLabel.textColor = .systemBlue
                         dislikeCountLabel.tag = 2000 // Set tag for identification
-                        
                     }
-                    
-                }
-                else {
-                    print("   2   ")
+                } else {
+                    print("Document does not exist")
                 }
             }
+            
+            
+            
+//            docRef.getDocument { (document, error) in
+//                if let document = document, document.exists {
+//                    if let like = document.data()?[dismealType] as? String {
+//                        dislikeCountLabel.text = like
+//                        dislikeCountLabel.textColor = .systemBlue
+//                        dislikeCountLabel.tag = 2000 // Set tag for identification
+//                        
+//                    }
+//                    
+//                }
+//                else {
+//                    print("   2   ")
+//                }
+//            }
+            
+            
+            
+            
         }
         
         if Data.navTitle == "식단표 (학생회관_자율식당)" {
@@ -829,33 +870,72 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             let docRef = db.collection("Menu2").document(Data.currentDateStringSpace)
             
             
-            docRef.getDocument { (document, error) in
-                if let document = document, document.exists {
+//            docRef.getDocument { (document, error) in
+//                if let document = document, document.exists {
+//                    if let like = document.data()?[mealType] as? String {
+//                        likeCountLabel.text = like
+//                        likeCountLabel.textColor = .red
+//                        likeCountLabel.tag = 1000 // Set tag for identification
+//                    }
+//                }
+//                else {
+//                    print("   2   ")
+//                }
+//                
+//            }
+//            
+//            docRef.getDocument { (document, error) in
+//                if let document = document, document.exists {
+//                    if let like = document.data()?[dismealType] as? String {
+//                        dislikeCountLabel.text = like
+//                        dislikeCountLabel.textColor = .systemBlue
+//                        dislikeCountLabel.tag = 2000 // Set tag for identification
+//                    }
+//                }
+//                else {
+//                    print("   2   ")
+//                }
+//                
+//            }
+            
+            // 이쪽 중요
+            // 데이터 변경 사항을 수신하는 메서드 // 기기로 한 번 테스트
+            docRef.addSnapshotListener { (document, error) in
+                guard let document = document else {
+                    print("Error fetching document: \(error!)")
+                    return
+                }
+                
+                if document.exists {
                     if let like = document.data()?[mealType] as? String {
                         likeCountLabel.text = like
                         likeCountLabel.textColor = .red
                         likeCountLabel.tag = 1000 // Set tag for identification
                     }
+                } else {
+                    print("Document does not exist")
                 }
-                else {
-                    print("   2   ")
-                }
-                
             }
             
-            docRef.getDocument { (document, error) in
-                if let document = document, document.exists {
+            
+            
+            docRef.addSnapshotListener { (document, error) in
+                guard let document = document else {
+                    print("Error fetching document: \(error!)")
+                    return
+                }
+                
+                if document.exists {
                     if let like = document.data()?[dismealType] as? String {
                         dislikeCountLabel.text = like
                         dislikeCountLabel.textColor = .systemBlue
                         dislikeCountLabel.tag = 2000 // Set tag for identification
                     }
+                } else {
+                    print("Document does not exist")
                 }
-                else {
-                    print("   2   ")
-                }
-                
             }
+            
             
         }
         
@@ -864,33 +944,72 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             let docRef = db.collection("Menu3").document(Data.currentDateStringSpace)
             
             
-            docRef.getDocument { (document, error) in
-                if let document = document, document.exists {
+//            docRef.getDocument { (document, error) in
+//                if let document = document, document.exists {
+//                    if let like = document.data()?[mealType] as? String {
+//                        likeCountLabel.text = like
+//                        likeCountLabel.textColor = .red
+//                        likeCountLabel.tag = 1000 // Set tag for identification
+//                    }
+//                }
+//                else {
+//                    print("   2   ")
+//                }
+//                
+//            }
+//            
+//            docRef.getDocument { (document, error) in
+//                if let document = document, document.exists {
+//                    if let like = document.data()?[dismealType] as? String {
+//                        dislikeCountLabel.text = like
+//                        dislikeCountLabel.textColor = .systemBlue
+//                        dislikeCountLabel.tag = 2000 // Set tag for identification
+//                    }
+//                }
+//                else {
+//                    print("   2   ")
+//                }
+//                
+//            }
+            
+            // 이쪽 중요
+            // 데이터 변경 사항을 수신하는 메서드 // 기기로 한 번 테스트
+            docRef.addSnapshotListener { (document, error) in
+                guard let document = document else {
+                    print("Error fetching document: \(error!)")
+                    return
+                }
+                
+                if document.exists {
                     if let like = document.data()?[mealType] as? String {
                         likeCountLabel.text = like
                         likeCountLabel.textColor = .red
                         likeCountLabel.tag = 1000 // Set tag for identification
                     }
+                } else {
+                    print("Document does not exist")
                 }
-                else {
-                    print("   2   ")
-                }
-                
             }
             
-            docRef.getDocument { (document, error) in
-                if let document = document, document.exists {
+            
+            
+            docRef.addSnapshotListener { (document, error) in
+                guard let document = document else {
+                    print("Error fetching document: \(error!)")
+                    return
+                }
+                
+                if document.exists {
                     if let like = document.data()?[dismealType] as? String {
                         dislikeCountLabel.text = like
                         dislikeCountLabel.textColor = .systemBlue
                         dislikeCountLabel.tag = 2000 // Set tag for identification
                     }
+                } else {
+                    print("Document does not exist")
                 }
-                else {
-                    print("   2   ")
-                }
-                
             }
+            
             
         }
         
@@ -899,36 +1018,75 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             let docRef = db.collection("Menu4").document(Data.currentDateStringSpace)
             
             
-            docRef.getDocument { (document, error) in
-                if let document = document, document.exists {
+//            docRef.getDocument { (document, error) in
+//                if let document = document, document.exists {
+//                    if let like = document.data()?[mealType] as? String {
+//                        likeCountLabel.text = like
+//                        likeCountLabel.textColor = .red
+//                        likeCountLabel.tag = 1000 // Set tag for identification
+//                    }
+//                }
+//                else {
+//                    print("   2   ")
+//                }
+//                
+//            }
+//            
+//            docRef.getDocument { (document, error) in
+//                if let document = document, document.exists {
+//                    if let like = document.data()?[dismealType] as? String {
+//                        dislikeCountLabel.text = like
+//                        dislikeCountLabel.textColor = .systemBlue
+//                        dislikeCountLabel.tag = 2000 // Set tag for identification
+//                    }
+//                }
+//                else {
+//                    print("   2   ")
+//                }
+//                
+//            }
+            
+            
+            // 이쪽 중요
+            // 데이터 변경 사항을 수신하는 메서드 // 기기로 한 번 테스트
+            docRef.addSnapshotListener { (document, error) in
+                guard let document = document else {
+                    print("Error fetching document: \(error!)")
+                    return
+                }
+                
+                if document.exists {
                     if let like = document.data()?[mealType] as? String {
                         likeCountLabel.text = like
                         likeCountLabel.textColor = .red
                         likeCountLabel.tag = 1000 // Set tag for identification
                     }
+                } else {
+                    print("Document does not exist")
                 }
-                else {
-                    print("   2   ")
-                }
-                
             }
             
-            docRef.getDocument { (document, error) in
-                if let document = document, document.exists {
+            
+            
+            docRef.addSnapshotListener { (document, error) in
+                guard let document = document else {
+                    print("Error fetching document: \(error!)")
+                    return
+                }
+                
+                if document.exists {
                     if let like = document.data()?[dismealType] as? String {
                         dislikeCountLabel.text = like
                         dislikeCountLabel.textColor = .systemBlue
                         dislikeCountLabel.tag = 2000 // Set tag for identification
                     }
+                } else {
+                    print("Document does not exist")
                 }
-                else {
-                    print("   2   ")
-                }
-                
             }
             
         }
-
+        
         
         // Add labels to cell
         cell.contentView.addSubview(likeCountLabel)
@@ -943,18 +1101,18 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         
         
         
-
+        
         
         // Add buttons to cell
         cell.contentView.addSubview(likeButton)
         cell.contentView.addSubview(dislikeButton)
- 
+        
         
         
         // Layout constraints for buttons
         likeButton.translatesAutoresizingMaskIntoConstraints = false
         dislikeButton.translatesAutoresizingMaskIntoConstraints = false
-
+        
         
         NSLayoutConstraint.activate([
             dislikeButton.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -20),
@@ -974,17 +1132,17 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         
         
         // 값이 없는 셀에 좋아요, 싫어요 버튼을 제거
-         if data[indexPath.section][indexPath.row] == "" || data[indexPath.section][indexPath.row] == "아직 식단이 등록되지 않았습니다." {
-             likeCountLabel.isHidden = true
-             likeButton.isHidden = true
-             dislikeCountLabel.isHidden = true
-             dislikeButton.isHidden = true
-         } else {
-             likeCountLabel.isHidden = false
-             likeButton.isHidden = false
-             dislikeCountLabel.isHidden = false
-             dislikeButton.isHidden = false
-         }
+        if data[indexPath.section][indexPath.row] == "" || data[indexPath.section][indexPath.row] == "아직 식단이 등록되지 않았습니다." {
+            likeCountLabel.isHidden = true
+            likeButton.isHidden = true
+            dislikeCountLabel.isHidden = true
+            dislikeButton.isHidden = true
+        } else {
+            likeCountLabel.isHidden = false
+            likeButton.isHidden = false
+            dislikeCountLabel.isHidden = false
+            dislikeButton.isHidden = false
+        }
         
         
         
@@ -998,14 +1156,14 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         
         // 버튼 탭 시 에니메이션 추가
         UIView.animate(withDuration: 0.2, animations: {
-             // Scale the button to make it appear as if it's tapped
-             sender.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
-         }) { (_) in
-             // After the animation completes, restore the original size
-             UIView.animate(withDuration: 0.2) {
-                 sender.transform = .identity
-             }
-         }
+            // Scale the button to make it appear as if it's tapped
+            sender.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+        }) { (_) in
+            // After the animation completes, restore the original size
+            UIView.animate(withDuration: 0.2) {
+                sender.transform = .identity
+            }
+        }
         
         
         // 현재 날짜 데이터 포맷
@@ -1019,25 +1177,25 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         // Get the cell containing the button
         if let cell = sender.superview?.superview as? UITableViewCell,
            
-        let indexPath = tableView.indexPath(for: cell) {
+            let indexPath = tableView.indexPath(for: cell) {
             
             
             let mealType2: String
-                switch indexPath.section {
-                case 0:
-                    mealType2 = "아침메뉴DisLike"
-                case 1:
-                    mealType2 = "점심메뉴DisLike"
-                case 2:
-                    mealType2 = "저녁메뉴DisLike"
-                default:
-                    mealType2 = ""
-                }
+            switch indexPath.section {
+            case 0:
+                mealType2 = "아침메뉴DisLike"
+            case 1:
+                mealType2 = "점심메뉴DisLike"
+            case 2:
+                mealType2 = "저녁메뉴DisLike"
+            default:
+                mealType2 = ""
+            }
             
             
             
             
-        let mealType: String
+            let mealType: String
             switch indexPath.section {
             case 0:
                 mealType = "아침메뉴Like"
@@ -1048,13 +1206,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             default:
                 mealType = ""
             }
-            
-            
-            
-            
-       
-            
-            
             
             // 한 유저당 딱 좋아요를 한 번만 누를 수 있는 기능 (앱 삭제 후 실행시 까지는 해결못함)
             // UserDefaults에서 버튼 탭 히스토리를 가져옴 (이쪽에 대해서 한번 공식문서 봐보기)
@@ -1073,10 +1224,10 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             
             var buttonTapHistory2 = UserDefaults.standard.dictionary(forKey: buttonTapHistoryKey2) ?? [:]
             
-
             
             
-        
+            
+            
             // 이미 탭한 적이 있는지 확인
             // 탭 한적이 있으면 1 감소, 없으면 1 증가
             
@@ -1095,7 +1246,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                                 if let document = document, document.exists {
                                     if let like = document.data()?[mealType] as? String {
                                         likeCountLabel.text = like
-                                    
+                                        
                                     }
                                     
                                 }
@@ -1205,7 +1356,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                             // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
                             self.db.collection("Menu4").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount - 1)" ], merge: true)
                             
-                         
+                            
                             
                         }
                     }
@@ -1219,8 +1370,8 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 
                 
                 
-                }
-                
+            }
+            
             else {
                 
                 //// (DisLike)를 이미 탭한 적이 있는지 확인
@@ -1509,6 +1660,11 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 //좋아요 1 증가
                 else {
                     
+                    
+                    // 라벨을 가져오는게 아니라 데이터베이스의 데이터를 가져와서 증가시켜야할뜻
+                    // -> 실시간 데이터베이스를 활용?
+                    
+                    
                     if let likeCountLabel = cell.contentView.viewWithTag(1000) as? UILabel {
                         
                         if Data.navTitle == "식단표 (학생회관_학생식당)" {
@@ -1516,6 +1672,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                                 
                                 // 파이어베이스 [데이터 불러오기]
                                 let docRef = self.db.collection("Menu").document(Data.currentDateStringSpace)
+                                
                                 
                                 docRef.getDocument { (document, error) in
                                     if let document = document, document.exists {
@@ -1531,6 +1688,28 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                                     }
                                     
                                 }
+                                
+                                
+                                
+                                //                                // 데이터 변경 사항을 수신하는 메서드 // 기기로 한 번 테스트
+                                //                                docRef.addSnapshotListener { (document, error) in
+                                //                                    guard let document = document else {
+                                //                                        print("Error fetching document: \(error!)")
+                                //                                        return
+                                //                                    }
+                                //
+                                //                                    if document.exists {
+                                //                                        if let like = document.data()?[mealType] as? String {
+                                //                                            likeCountLabel.text = like
+                                //                                        }
+                                //                                    } else {
+                                //                                        print("Document does not exist")
+                                //                                    }
+                                //                                }
+                                //
+                                //
+                                
+                                
                                 
                                 
                                 // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
@@ -1644,27 +1823,27 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
     
-
+    
     
     @objc func dislikeButtonTapped(_ sender: UIButton) {
         
         // 버튼 탭 시 에니메이션 추가
         UIView.animate(withDuration: 0.2, animations: {
-             // Scale the button to make it appear as if it's tapped
-             sender.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
-         }) { (_) in
-             // After the animation completes, restore the original size
-             UIView.animate(withDuration: 0.2) {
-                 sender.transform = .identity
-             }
-         }
+            // Scale the button to make it appear as if it's tapped
+            sender.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+        }) { (_) in
+            // After the animation completes, restore the original size
+            UIView.animate(withDuration: 0.2) {
+                sender.transform = .identity
+            }
+        }
         
         // 현재 날짜 데이터 포맷
         let formatter = DateFormatter()
         formatter.dateFormat = "YYYY-MM-dd"
         let current_date_string = formatter.string(from: Date())
-       
-
+        
+        
         // Get the cell containing the button
         if let cell = sender.superview?.superview as? UITableViewCell,
            
@@ -1672,16 +1851,16 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             
             
             let mealType2: String
-                switch indexPath.section {
-                case 0:
-                    mealType2 = "아침메뉴Like"
-                case 1:
-                    mealType2 = "점심메뉴Like"
-                case 2:
-                    mealType2 = "저녁메뉴Like"
-                default:
-                    mealType2 = ""
-                }
+            switch indexPath.section {
+            case 0:
+                mealType2 = "아침메뉴Like"
+            case 1:
+                mealType2 = "점심메뉴Like"
+            case 2:
+                mealType2 = "저녁메뉴Like"
+            default:
+                mealType2 = ""
+            }
             
             let mealType: String
             switch indexPath.section {
@@ -1856,17 +2035,19 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                     UserDefaults.standard.set(buttonTapHistory, forKey: buttonTapHistoryKey)
                 }
                 
-               
+                
             }
             // 좋아요 탭 기록을 삭제하고 싫어요 탭 기록을 생성해야함.
+            
+            
             
             // 증가 시킨적이 없다면
             else {
                 
                 // (Like)를 이미 탭한 적이 있는지 확인
                 if let likeTappedCheck = buttonTapHistory2["likeButtonTapped"] as? Bool, likeTappedCheck {
-                   
-
+                    
+                    
                     // 좋아요 카운트 감소
                     if let likeCountLabel = cell.contentView.viewWithTag(1000) as? UILabel {
                         
@@ -1880,7 +2061,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                                     if let document = document, document.exists {
                                         if let like = document.data()?[mealType2] as? String {
                                             likeCountLabel.text = like
-                                        
+                                            
                                         }
                                         
                                     }
@@ -1990,7 +2171,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                                 // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
                                 self.db.collection("Menu4").document(Data.currentDateStringSpace).setData([ mealType2: "\(currentCount - 1)" ], merge: true)
                                 
-                             
+                                
                                 
                             }
                         }
@@ -2073,7 +2254,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                                         if let like = document.data()?[mealType] as? String {
                                             dislikeCountLabel.text = like
                                             
-                                        
+                                            
                                         }
                                         
                                     }
@@ -2104,7 +2285,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                                         if let like = document.data()?[mealType] as? String {
                                             dislikeCountLabel.text = like
                                             
-                                        
+                                            
                                         }
                                         
                                     }
@@ -2135,7 +2316,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                     buttonTapHistory["dislikeButtonTapped"] = true
                     UserDefaults.standard.set(buttonTapHistory, forKey: buttonTapHistoryKey)
                     //
-                 
+                    
                 }
                 
                 
@@ -2153,12 +2334,8 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                                     if let document = document, document.exists {
                                         if let like = document.data()?[mealType] as? String {
                                             dislikeCountLabel.text = like
-                                            
-                                            
                                         }
-                                        
                                     }
-                                    
                                     else {
                                         print("   2   ")
                                     }
@@ -2166,10 +2343,31 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                                 }
                                 
                                 
+                                //                                // 데이터 변경 사항을 수신하는 메서드 // 기기로 한 번 테스트
+                                //                                docRef.addSnapshotListener { (document, error) in
+                                //                                    guard let document = document else {
+                                //                                        print("Error fetching document: \(error!)")
+                                //                                        return
+                                //                                    }
+                                //
+                                //                                    if document.exists {
+                                //                                        if let like = document.data()?[mealType] as? String {
+                                //                                            // 데이터베이스의 값
+                                //
+                                //                                            dislikeCountLabel.text = like
+                                //
+                                //                                        }
+                                //                                    } else {
+                                //                                        print("Document does not exist")
+                                //                                    }
+                                //                                }
+                                
+                                
+                                
                                 // 파이어베이스에 like수를 올리기 (메뉴쪽 한 번 보기) 병합되게 설정 [데이터쓰기]
                                 self.db.collection("Menu").document(Data.currentDateStringSpace).setData([ mealType: "\(currentCount + 1)" ], merge: true)
                                 
-                                print(current_date_string)
+                                
                                 
                             }
                         }
@@ -2216,7 +2414,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                                         if let like = document.data()?[mealType] as? String {
                                             dislikeCountLabel.text = like
                                             
-                                        
+                                            
                                         }
                                         
                                     }
@@ -2247,7 +2445,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                                         if let like = document.data()?[mealType] as? String {
                                             dislikeCountLabel.text = like
                                             
-                                        
+                                            
                                         }
                                         
                                     }
@@ -2279,7 +2477,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     
-
+    
     
     
     

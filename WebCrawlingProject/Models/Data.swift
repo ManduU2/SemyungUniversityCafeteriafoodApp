@@ -17,5 +17,7 @@ struct Data {
     
     // 현재 날짜 설정을 위해 만든 공간
     static var currentDateStringSpace: String = "x"
+ 
     
+    static var databaseDislikeNumber: Int = 0
 }
