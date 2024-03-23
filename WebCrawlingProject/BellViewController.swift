@@ -28,8 +28,7 @@ class BellViewController: UIViewController, UNUserNotificationCenterDelegate  {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
-        
+        view.backgroundColor = UIColor(hexCode: "#222f3e")
         
         self.tableView.dataSource = self
         self.tableView.delegate = self
@@ -39,7 +38,8 @@ class BellViewController: UIViewController, UNUserNotificationCenterDelegate  {
         navigationItem.title = "알림 설정"
         
        
-        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
+        // Set navigation bar title text color to black
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(hexCode: "#c8d6e5")]
     
         
         
@@ -55,13 +55,13 @@ class BellViewController: UIViewController, UNUserNotificationCenterDelegate  {
     fileprivate func applyConstraints() {
         self.view.addSubview(self.tableView)
         
-        tableView.backgroundColor = .systemGray2
+        tableView.backgroundColor = UIColor(hexCode: "#222f3e")
         
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             self.tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-            self.tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+            self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
             self.tableView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
             self.tableView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor)
         ])
@@ -113,14 +113,14 @@ extension BellViewController: UITableViewDataSource, UITableViewDelegate {
         if indexPath.section == 0 && indexPath.row == 0 {
             let switchCell = UITableViewCell(style: .default, reuseIdentifier: nil)
             switchCell.selectionStyle = .none
-            switchCell.backgroundColor = .white // 셀 컬러를 하얀색으로
+            switchCell.backgroundColor = UIColor(hexCode: "#576574") // 셀 컬러를 하얀색으로
             
             
             
             // Label
             let label = UILabel()
             label.text = "알림"
-            label.textColor = .black
+            label.textColor = UIColor(hexCode: "#c8d6e5")
             switchCell.contentView.addSubview(label)
             label.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
@@ -140,12 +140,12 @@ extension BellViewController: UITableViewDataSource, UITableViewDelegate {
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
             
             
-            cell.backgroundColor = .white // 셀 컬러를 하얀색으로
+            cell.backgroundColor = UIColor(hexCode: "#576574") // 셀 컬러를 하얀색으로
             
             // "앱 버전" 라벨을 추가
             let versionLabel = UILabel()
             versionLabel.text = "앱 버전"
-            versionLabel.textColor = .black
+            versionLabel.textColor = UIColor(hexCode: "#c8d6e5")
             cell.contentView.addSubview(versionLabel)
             versionLabel.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
@@ -158,7 +158,8 @@ extension BellViewController: UITableViewDataSource, UITableViewDelegate {
             // 현재 앱 버전 확인
             let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
             appVersionLabel.text = version
-            appVersionLabel.textColor = .black
+            appVersionLabel.textColor = UIColor(hexCode: "#c8d6e5")
+            
             cell.contentView.addSubview(appVersionLabel)
             appVersionLabel.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
@@ -172,13 +173,13 @@ extension BellViewController: UITableViewDataSource, UITableViewDelegate {
         else if indexPath.section == 1 && indexPath.row == 1 {
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
             
-            cell.textLabel?.textColor = .black // 글자 색깔을 검은색으로 변경
-            cell.backgroundColor = .white // 셀 컬러를 하얀색으로
+            cell.textLabel?.textColor = UIColor(hexCode: "#c8d6e5") // 글자 색깔을 검은색으로 변경
+            cell.backgroundColor = UIColor(hexCode: "#576574") // 셀 컬러를 하얀색으로
             
             // "개발자 연락처" 라벨을 추가
             let label = UILabel()
             label.text = "개발자 연락처"
-            label.textColor = .black
+            label.textColor = UIColor(hexCode: "#c8d6e5")
             cell.contentView.addSubview(label)
             label.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
@@ -189,7 +190,7 @@ extension BellViewController: UITableViewDataSource, UITableViewDelegate {
             // 이메일을 추가
             let emailLabel = UILabel()
             emailLabel.text = "wlsgurrla716@icolud.com"
-            emailLabel.textColor = .black
+            emailLabel.textColor = UIColor(hexCode: "#c8d6e5")
             cell.contentView.addSubview(emailLabel)
             
             emailLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -205,8 +206,8 @@ extension BellViewController: UITableViewDataSource, UITableViewDelegate {
         else {
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
             
-            cell.textLabel?.textColor = .black // 글자 색깔을 검은색으로 변경
-            cell.backgroundColor = .white // 셀 컬러를 하얀색으로
+            cell.textLabel?.textColor = UIColor(hexCode: "#c8d6e5") // 글자 색깔을 검은색으로 변경
+            cell.backgroundColor = UIColor(hexCode: "#576574") // 셀 컬러를 하얀색으로
             
             return cell
         }
@@ -214,6 +215,8 @@ extension BellViewController: UITableViewDataSource, UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        tableView.cellForRow(at: indexPath)?.selectionStyle = .none
         
         
         if indexPath.section == 0 && indexPath.row == 0 {
@@ -246,6 +249,9 @@ extension BellViewController: UITableViewDataSource, UITableViewDelegate {
         return 2
     }
     
+   
+    
+    
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if section == 0 {
             return "설정  (조식 - 8:30, 중식 - 11:30, 석식 - 17:30)"
@@ -254,5 +260,16 @@ extension BellViewController: UITableViewDataSource, UITableViewDelegate {
         } else {return ""}
         
     }
+    
+    // 섹션 글자색 변경
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+           // 섹션 헤더의 뷰가 표시될 때 호출되는 함수
+           guard let header = view as? UITableViewHeaderFooterView else { return }
+           
+           // 섹션 헤더의 글자색 설정
+           header.textLabel?.textColor = UIColor(hexCode: "#c8d6e5") // 변경하고자 하는 색상으로 설정
+       }
+    
+    
     
 }

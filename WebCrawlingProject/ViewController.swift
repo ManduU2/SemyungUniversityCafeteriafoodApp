@@ -6,18 +6,25 @@
 //
 
 /*
+ 
+ <알림> 유심히 보기
+ 
+ 
+ 
  <완료>
  1.0.3 ->
  1. 앱 버전이 정확하게 나타나게 수정완료.
- 
- 
+ 2. header에 조식, 중식, 석식 시간 표기하기 -> 시간은 다음 버전에서 하기(식사시간이 확실하지 않음)
+ UIColor 전부 수정하기 (팔레트 이용)
+ 좋아요, 싫어요 버튼을 탭할때 알림(눌렸다, 취소됐다)창이 나오도록 변경?
  
  
  
  */
 /*
  <예정>
- 좋아요, 싫어요 버튼을 탭할때 알림(눌렸다, 취소됐다)창이 나오도록 변경?
+ 
+ 
  
  
  
@@ -54,8 +61,11 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         calendar.scope = .week
         
         // 텍스트 컬러 설정
-        calendar.appearance.headerTitleColor = .black
-        calendar.appearance.weekdayTextColor = .black
+        calendar.appearance.headerTitleColor = UIColor(hexCode: "#c8d6e5")
+        calendar.appearance.weekdayTextColor = UIColor(hexCode: "#c8d6e5")
+        calendar.appearance.selectionColor = UIColor(hexCode: "#ff9ff3")
+        calendar.appearance.todayColor = UIColor(hexCode: "#feca57")
+        calendar.backgroundColor = UIColor(hexCode: "#222f3e") //calendarColor
         
         // 요일 설정 (한국어)
         calendar.locale = Locale(identifier: "ko_KR")
@@ -91,12 +101,13 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         self.tableView.dataSource = self
         self.tableView.delegate = self
         
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(hexCode: "#222f3e") // backgroundColor
+
         
         self.navigationItem.title = ""
         
-        // Set navigation bar title text color to black
-        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+        
+        
         
         configureItems()
         applyConstraints()
@@ -120,6 +131,11 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         
         self.title = Data.navTitle
         
+        // Set navigation bar title text color to black
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(hexCode: "#c8d6e5")]
+        
+        
+        
         dateNow()
     }
     
@@ -142,15 +158,22 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
     // 네비게이션 바 아이템
     private func configureItems() {
         
+        
+        
+        
         // Custom hamburger button image (left)
-        let hamburgerImage = UIImage(systemName: "line.horizontal.3")
+        let hamburgerImage = UIImage(systemName: "line.horizontal.3")! as UIImage
+        let blueHamburgerImage = hamburgerImage.imageWithColor(color: UIColor(hexCode: "#636e72"))
+        
+        
         
         // Custom bell button image (right)
-        let bellImage = UIImage(systemName: "gearshape.fill")
+        let gearImage = UIImage(systemName: "gearshape.fill")! as UIImage
+        let bluegearImage = gearImage.imageWithColor(color: UIColor(hexCode: "#636e72"))
         
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: hamburgerImage,
+            image: blueHamburgerImage,
             style: .plain,
             target: self,
             action: #selector(houseButtonTapped)
@@ -159,7 +182,7 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: bellImage,
+            image: bluegearImage,
             style: .plain,
             target: self,
             action: #selector(bellButtonTapped)
@@ -173,7 +196,7 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
     fileprivate func applyConstraints() {
         view.addSubview(calendar)
         self.view.addSubview(self.tableView)
-        tableView.backgroundColor = .systemGray2
+        tableView.backgroundColor = UIColor(hexCode: "#222f3e") // tableColor
         
         
         
@@ -194,7 +217,7 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         
         NSLayoutConstraint.activate([
             self.tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 170),
-            self.tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
+            self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
             self.tableView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
             self.tableView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor)
         ])
@@ -676,7 +699,7 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         
         // backButton
         let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil) // title 부분 수정
-        backBarButtonItem.tintColor = .black
+        backBarButtonItem.tintColor = UIColor(hexCode: "#c8d6e5")
         self.navigationItem.backBarButtonItem = backBarButtonItem
         
         navigationController?.pushViewController(vc, animated: true)
@@ -689,7 +712,7 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         
         // backButton
         let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil) // title 부분 수정
-        backBarButtonItem.tintColor = .black
+        backBarButtonItem.tintColor = UIColor(hexCode: "#c8d6e5")
         self.navigationItem.backBarButtonItem = backBarButtonItem
         
         navigationController?.pushViewController(vc, animated: true)
@@ -718,7 +741,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         let likeButton: UIButton = {
             let button = UIButton(type: .system)
             button.setTitle("👍", for: .normal)
-            button.tintColor = .green // Customize color if needed
+            
             button.addTarget(self, action: #selector(likeButtonTapped(_:)), for: .touchUpInside)
             button.tag = indexPath.row // Set tag to identify the button
             return button
@@ -727,7 +750,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         let dislikeButton: UIButton = {
             let button = UIButton(type: .system)
             button.setTitle("👎", for: .normal)
-            button.tintColor = .red // Customize color if needed
+            
             button.addTarget(self, action: #selector(dislikeButtonTapped(_:)), for: .touchUpInside)
             button.tag = indexPath.row // Set tag to identify the button
             
@@ -745,9 +768,9 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         
         
         
-        cell.backgroundColor = .white
+        cell.backgroundColor = UIColor(hexCode: "#576574") // cellColor
         cell.textLabel?.numberOfLines = 0 // 줄바꿈 설정
-        cell.textLabel?.textColor = .black // 글자 색깔을 검은색으로 변경
+        cell.textLabel?.textColor = UIColor(hexCode: "#c8d6e5") // tintColor
         cell.textLabel?.text = data[indexPath.section][indexPath.row]
         
         
@@ -824,7 +847,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 if document.exists {
                     if let like = document.data()?[mealType] as? String {
                         likeCountLabel.text = like
-                        likeCountLabel.textColor = .red
+                        likeCountLabel.textColor = UIColor(hexCode: "#ee5253")
                         likeCountLabel.tag = 1000 // Set tag for identification
                     }
                 } else {
@@ -843,7 +866,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 if document.exists {
                     if let like = document.data()?[dismealType] as? String {
                         dislikeCountLabel.text = like
-                        dislikeCountLabel.textColor = .systemBlue
+                        dislikeCountLabel.textColor = UIColor(hexCode: "#0abde3")
                         dislikeCountLabel.tag = 2000 // Set tag for identification
                     }
                 } else {
@@ -1241,6 +1264,18 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             
             if let tapped = buttonTapHistory["likeButtonTapped"] as? Bool, tapped {
                 
+                
+                let alert = UIAlertController(title: "", message: "좋아요가 취소되셨습니다.", preferredStyle: .alert)
+                
+                
+                present(alert, animated: true) {
+                    // 문구가 1초뒤 사라지게 설정
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                           alert.dismiss(animated: true, completion: nil)
+                       }
+                }
+                
+                
                 // 카운트 감소
                 if let likeCountLabel = cell.contentView.viewWithTag(1000) as? UILabel {
                     
@@ -1371,6 +1406,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                     
                 }
                 
+            
                 // 버튼 탭 히스토리에 저장
                 // 탭 히스토리 초기화
                 buttonTapHistory = [:]
@@ -1380,7 +1416,20 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 
             }
             
+            
+            
             else {
+                
+                let alert = UIAlertController(title: "", message: "좋아요를 선택하셨습니다.", preferredStyle: .alert)
+                
+                
+                present(alert, animated: true) {
+                    // 문구가 1초뒤 사라지게 설정
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                           alert.dismiss(animated: true, completion: nil)
+                       }
+                }
+                
                 
                 //// (DisLike)를 이미 탭한 적이 있는지 확인
                 /// DisLike를 탭한적이 있으면 싫어요 1 감소 좋아요 1증가
@@ -1913,7 +1962,24 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             
             // 이미 탭한 적이 있는지 확인 (disLike)
             if let tapped = buttonTapHistory["dislikeButtonTapped"] as? Bool, tapped {
+                
+                
+                
+                let alert = UIAlertController(title: "", message: "싫어요가 취소되셨습니다.", preferredStyle: .alert)
+                
+                
+                present(alert, animated: true) {
+                    // 문구가 1초뒤 사라지게 설정
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                           alert.dismiss(animated: true, completion: nil)
+                       }
+                }
+                
+                
+                
+                
                 // 증가 시킨적이 있으면 싫어요 1 감소
+                
                 if let dislikeCountLabel = cell.contentView.viewWithTag(2000) as? UILabel {
                     
                     if Data.navTitle == "식단표 (학생회관_학생식당)" {
@@ -2051,6 +2117,18 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             
             // 증가 시킨적이 없다면
             else {
+                
+                let alert = UIAlertController(title: "", message: "싫어요를 선택하셨습니다.", preferredStyle: .alert)
+                
+                
+                present(alert, animated: true) {
+                    // 문구가 1초뒤 사라지게 설정
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                           alert.dismiss(animated: true, completion: nil)
+                       }
+                }
+                
+                
                 
                 // (Like)를 이미 탭한 적이 있는지 확인
                 if let likeTappedCheck = buttonTapHistory2["likeButtonTapped"] as? Bool, likeTappedCheck {
@@ -2496,11 +2574,21 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         return header.count
     }
     
+    
+    
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        
         return header[section]
     }
     
-    
+    // 섹션 글자색 변경
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+           // 섹션 헤더의 뷰가 표시될 때 호출되는 함수
+           guard let header = view as? UITableViewHeaderFooterView else { return }
+           
+           // 섹션 헤더의 글자색 설정
+           header.textLabel?.textColor = UIColor(hexCode: "#c8d6e5") // 변경하고자 하는 색상으로 설정
+       }
     
     
     // 로우 높이 (높이 자동 조절)
@@ -2533,24 +2621,24 @@ extension ViewController: FSCalendarDelegateAppearance {
         let day = Calendar.current.component(.weekday, from: date) - 1
         
         if Calendar.current.shortWeekdaySymbols[day] == "Sun" || Calendar.current.shortWeekdaySymbols[day] == "일" {
-            return .systemRed
+            return UIColor(hexCode: "#d63031")
         } else if Calendar.current.shortWeekdaySymbols[day] == "Sat" || Calendar.current.shortWeekdaySymbols[day] == "토" {
-            return .systemBlue
+            return UIColor(hexCode: "#0984e3")
         } else if Calendar.current.shortWeekdaySymbols[day] == "Mon" ||
                     Calendar.current.shortWeekdaySymbols[day] == "월" {
-            return .black
+            return UIColor(hexCode: "#c8d6e5")
         } else if Calendar.current.shortWeekdaySymbols[day] == "Tue" ||
                     Calendar.current.shortWeekdaySymbols[day] == "화" {
-            return .black
+            return UIColor(hexCode: "#c8d6e5")
         } else if Calendar.current.shortWeekdaySymbols[day] == "Wed" ||
                     Calendar.current.shortWeekdaySymbols[day] == "수" {
-            return .black
+            return UIColor(hexCode: "#c8d6e5")
         } else if Calendar.current.shortWeekdaySymbols[day] == "Thu" ||
                     Calendar.current.shortWeekdaySymbols[day] == "목" {
-            return .black
+            return UIColor(hexCode: "#c8d6e5")
         } else if Calendar.current.shortWeekdaySymbols[day] == "Fri" ||
                     Calendar.current.shortWeekdaySymbols[day] == "금" {
-            return .black
+            return UIColor(hexCode: "#c8d6e5")
         }
         
         
@@ -2560,4 +2648,47 @@ extension ViewController: FSCalendarDelegateAppearance {
     }
 }
 
+// 16진수 컬러 사용 확장
+extension UIColor {
+    
+    convenience init(hexCode: String, alpha: CGFloat = 1.0) {
+        var hexFormatted: String = hexCode.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).uppercased()
+        
+        if hexFormatted.hasPrefix("#") {
+            hexFormatted = String(hexFormatted.dropFirst())
+        }
+        
+        assert(hexFormatted.count == 6, "Invalid hex code used.")
+        
+        var rgbValue: UInt64 = 0
+        Scanner(string: hexFormatted).scanHexInt64(&rgbValue)
+        
+        self.init(red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+                  green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+                  blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+                  alpha: alpha)
+    }
+}
+
+// UIImage 색상 변경 확장
+extension UIImage {
+    func imageWithColor(color: UIColor) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(self.size, false, self.scale)
+        color.setFill()
+
+        let context = UIGraphicsGetCurrentContext()
+        context?.translateBy(x: 0, y: self.size.height)
+        context?.scaleBy(x: 1.0, y: -1.0)
+        context?.setBlendMode(CGBlendMode.normal)
+
+        let rect = CGRect(origin: .zero, size: CGSize(width: self.size.width, height: self.size.height))
+        context?.clip(to: rect, mask: self.cgImage!)
+        context?.fill(rect)
+
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return newImage!
+    }
+}
 
