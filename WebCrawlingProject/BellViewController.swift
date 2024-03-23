@@ -38,6 +38,9 @@ class BellViewController: UIViewController, UNUserNotificationCenterDelegate  {
         
         navigationItem.title = "알림 설정"
         
+       
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
+    
         
         
         applyConstraints()
@@ -152,7 +155,9 @@ extension BellViewController: UITableViewDataSource, UITableViewDelegate {
             
             // 앱 버전 번호를 추가 (예: "1.0")
             let appVersionLabel = UILabel()
-            appVersionLabel.text = "1.0"
+            // 현재 앱 버전 확인
+            let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
+            appVersionLabel.text = version
             appVersionLabel.textColor = .black
             cell.contentView.addSubview(appVersionLabel)
             appVersionLabel.translatesAutoresizingMaskIntoConstraints = false

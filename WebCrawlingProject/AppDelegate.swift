@@ -160,15 +160,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
                     let trigger1 = UNCalendarNotificationTrigger(dateMatching: dateComponents1, repeats: false)
                     let request1 = UNNotificationRequest(identifier: "uniqueIdentifier1", content: content, trigger: trigger1)
                     
-                    
-                    
                     // 두 번째 알림: 11:30
                     var dateComponents2 = DateComponents()
                     dateComponents2.hour = 11
                     dateComponents2.minute = 30
                     let trigger2 = UNCalendarNotificationTrigger(dateMatching: dateComponents2, repeats: false)
                     let request2 = UNNotificationRequest(identifier: "uniqueIdentifier2", content: content2, trigger: trigger2)
-                    
                     
                     
                     // 세 번째 알림: 17:30

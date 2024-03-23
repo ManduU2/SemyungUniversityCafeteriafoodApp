@@ -6,15 +6,23 @@
 //
 
 /*
- 
- 
+ <완료>
+ 1.0.3 ->
+ 1. 앱 버전이 정확하게 나타나게 수정완료.
  
  
  
  
  
  */
-
+/*
+ <예정>
+ 좋아요, 싫어요 버튼을 탭할때 알림(눌렸다, 취소됐다)창이 나오도록 변경?
+ 
+ 
+ 
+ 
+ */
 
 
 
@@ -212,7 +220,7 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
             docRef.getDocument { (document, error) in
                 if let document = document, document.exists {
                     if let 아침메뉴 = document.data()?["아침메뉴"] as? String {
-                        // 줄 바꿈 코드 (미완성) 성공 -> 생명주기 모든 화면 적용하기 (아직 안함)
+                        
                         let 아침메뉴 = 아침메뉴.replacingOccurrences(of: "\\n", with: "\n")
                         
                         docRef.getDocument { (document, error) in
@@ -237,7 +245,7 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
                             }
                         }
                         
-                        
+
                         
                     } else {
                         print("아침메뉴가 없습니다.")
