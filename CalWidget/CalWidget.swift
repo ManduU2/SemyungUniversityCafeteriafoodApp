@@ -366,152 +366,155 @@ struct CalWidgetEntryView : View {
     @ViewBuilder
     func sizeBody() -> some View {
         
-        ZStack {
-            Color(hex: 0x222f3e)
-                .ignoresSafeArea()
-            
-            
-            switch family {
-                //                case .systemSmall:
-                //                    VStack {
-                //                        Text(entry.currentDate)
-                //                            .font(.system(size: 12))
-                //                            .foregroundColor(Color(hex: 0xc8d6e5))
-                //
-                //                        Divider()
-                //                            .background(Color(hex: 0xc8d6e5))
-                //
-                //                        HStack {
-                //                            HStack {
-                //                                Text("중식 - ")
-                //                                    .font(.system(size: 10))
-                //                                    .foregroundColor(Color(hex: 0xc8d6e5))
-                //
-                //
-                //                                Text(entry.lunch)
-                //                                    .font(.system(size: 9))
-                //                                    .foregroundColor(Color(hex: 0xc8d6e5))
-                //
-                //                            }
-                //                        }
-                //
-                //                        Divider()
-                //                            .background(Color(hex: 0xc8d6e5))
-                //                    }
-            case .systemMedium:
-                VStack {
-                    Text(entry.currentDate)
-                        .font(.system(size: 12))
-                        .foregroundColor(Color(hex: 0xc8d6e5))
-                        .foregroundColor(Color(hex: 0xc8d6e5))
-                    
-                    Divider()
-                        .background(Color(hex: 0xc8d6e5))
-                    
+        
+        switch family {
+            //                case .systemSmall:
+            //                    VStack {
+            //                        Text(entry.currentDate)
+            //                            .font(.system(size: 12))
+            //                            .foregroundColor(Color(hex: 0xc8d6e5))
+            //
+            //                        Divider()
+            //                            .background(Color(hex: 0xc8d6e5))
+            //
+            //                        HStack {
+            //                            HStack {
+            //                                Text("중식 - ")
+            //                                    .font(.system(size: 10))
+            //                                    .foregroundColor(Color(hex: 0xc8d6e5))
+            //
+            //
+            //                                Text(entry.lunch)
+            //                                    .font(.system(size: 9))
+            //                                    .foregroundColor(Color(hex: 0xc8d6e5))
+            //
+            //                            }
+            //                        }
+            //
+            //                        Divider()
+            //                            .background(Color(hex: 0xc8d6e5))
+            //                    }
+        case .systemMedium:
+            VStack {
+                Text(entry.currentDate)
+                    .font(.system(size: 11))
+                    .foregroundColor(Color(hex: 0xc8d6e5))
+                Divider()
+                    .background(Color(hex: 0xc8d6e5))
+                HStack {
                     HStack {
-                        HStack {
-                            Text("조식 - ")
-                                .font(.system(size: 10))
-                                .foregroundColor(Color(hex: 0xc8d6e5))
-                            
-                            
-                            Text(entry.emoji)
-                                .font(.system(size: 8))
-                                .foregroundColor(Color(hex: 0xc8d6e5))
-                            
-                        }
+                        Text("조식 - ")
+                            .font(.system(size: 11))
+                            .foregroundColor(Color(hex: 0xc8d6e5))
                         
                         
-                        
-                        
-                        HStack {
-                            Divider()
-                                .background(Color(hex: 0xc8d6e5))
-                            Text("중식 - ")
-                                .font(.system(size: 10))
-                                .foregroundColor(Color(hex: 0xc8d6e5))
-                            
-                            
-                            Text(entry.lunch)
-                                .font(.system(size: 8))
-                                .foregroundColor(Color(hex: 0xc8d6e5))
-                            
-                        }
-                        
-                        
-                        
-                        
-                        HStack {
-                            Divider()
-                                .background(Color(hex: 0xc8d6e5))
-                            Text("석식 - ")
-                            
-                                .font(.system(size: 10))
-                                .foregroundColor(Color(hex: 0xc8d6e5))
-                            
-                            Text(entry.dinner)
-                                .font(.system(size: 8))
-                                .foregroundColor(Color(hex: 0xc8d6e5))
-                            
-                        }
+                        Text(entry.emoji)
+                            .font(.system(size: 8))
+                            .foregroundColor(Color(hex: 0xc8d6e5))
                         
                     }
                     
-                    Divider()
-                        .background(Color(hex: 0xc8d6e5))
-                }
-            case .systemLarge:
-                VStack {
-                    Text(entry.currentDate)
-                        .font(.system(size: 14))
-                    Divider()
-                        .background(Color(hex: 0xc8d6e5))
+                    
+                    
+                    
                     HStack {
-                        Text("조식")
-                            .font(.system(size: 14))
-                            .foregroundColor(Color(hex: 0xc8d6e5))
                         Divider()
                             .background(Color(hex: 0xc8d6e5))
+                        Text("중식 - ")
+                            .font(.system(size: 11))
+                            .foregroundColor(Color(hex: 0xc8d6e5))
+                        
+                        
+                        Text(entry.lunch)
+                            .font(.system(size: 8))
+                            .foregroundColor(Color(hex: 0xc8d6e5))
+                        
+                    }
+                    
+                    
+                    
+                    
+                    HStack {
+                        Divider()
+                            .background(Color(hex: 0xc8d6e5))
+                        Text("석식 - ")
+                        
+                            .font(.system(size: 11))
+                            .foregroundColor(Color(hex: 0xc8d6e5))
+                        
+                        Text(entry.dinner)
+                            .font(.system(size: 8))
+                            .foregroundColor(Color(hex: 0xc8d6e5))
+                        
+                    }
+                    
+                }
+                
+                Divider()
+                    .background(Color(hex: 0xc8d6e5))
+            }
+            
+
+            
+            // UI가 삐뚤했던 이유는 VStack에서 가운데 정렬로 되있어서 -> 왼쪽 정렬로 하면 성공 (보이지 않는 테두리를 생각해야함)
+        case .systemLarge:
+            
+            Text(entry.currentDate)
+                .font(.system(size: 14))
+                .foregroundColor(Color(hex: 0xc8d6e5))
+            Divider()
+                .background(Color(hex: 0xc8d6e5))
+            
+               
+                VStack(alignment: .leading) {
+                    HStack {
+                        Spacer()
+                            .frame(width: 50)
+                        Text("조식            -")
+                            .font(.system(size: 14))
+                            .foregroundColor(Color(hex: 0xc8d6e5))
+                        Spacer()
+                            .frame(width: 20)
                         Text(entry.emoji)
                             .font(.system(size: 11))
                             .foregroundColor(Color(hex: 0xc8d6e5))
                     }
                     Divider()
                         .background(Color(hex: 0xc8d6e5))
-                    HStack {
-                        Text("중식")
+                    HStack{
+                        Spacer()
+                            .frame(width: 50)
+                        Text("중식            -")
                             .font(.system(size: 14))
                             .foregroundColor(Color(hex: 0xc8d6e5))
-                        Divider()
-                            .background(Color(hex: 0xc8d6e5))
+                        Spacer()
+                            .frame(width: 20)
                         Text(entry.lunch)
                             .font(.system(size: 11))
                             .foregroundColor(Color(hex: 0xc8d6e5))
                     }
                     Divider()
                         .background(Color(hex: 0xc8d6e5))
-                    HStack {
-                        Text("석식")
+                    HStack{
+                        Spacer()
+                            .frame(width: 50)
+                        Text("석식            -")
                             .font(.system(size: 14))
-                            .offset(x: 5) // 이 부분이 석식Stack을 오른쪽으로 4px 이동시킵니다. (임시)
                             .foregroundColor(Color(hex: 0xc8d6e5))
-                        Divider()
-                            .background(Color(hex: 0xc8d6e5))
-                            .offset(x: 5) // 이 부분이 석식Stack을 오른쪽으로 4px 이동시킵니다. (임시)
-                            .foregroundColor(Color(hex: 0xc8d6e5))
+                        Spacer()
+                            .frame(width: 20)
                         Text(entry.dinner)
                             .font(.system(size: 11))
-                            .offset(x: 5) // 이 부분이 석식Stack을 오른쪽으로 4px 이동시킵니다. (임시)
                             .foregroundColor(Color(hex: 0xc8d6e5))
                     }
-                    Divider()
-                        .background(Color(hex: 0xc8d6e5))
-                    
                 }
-            default:
-                EmptyView()
-            }
+            
+            Divider()
+                .background(Color(hex: 0xc8d6e5))
+        default:
+            EmptyView()
         }
+        
         
     }
     
@@ -629,19 +632,19 @@ struct SmallWidget: Widget {
         FirebaseApp.configure()
     }
     
-        var body: some WidgetConfiguration {
-            StaticConfiguration(kind: kind, provider: Provider()) { entry in
-                if #available(iOS 17.0, *) {
-                    SmallWidgetView(entry: entry)
-                        .containerBackground(Color(hex: 0x222f3e), for: .widget) // 전체색 변경
-                } else {
-                    SmallWidgetView(entry: entry)
-                        .padding()
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)    // << here !! 전체색 변경
-                        .background(Color(hex: 0x222f3e))
-    
-                }
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: kind, provider: Provider()) { entry in
+            if #available(iOS 17.0, *) {
+                SmallWidgetView(entry: entry)
+                    .containerBackground(Color(hex: 0x222f3e), for: .widget) // 전체색 변경
+            } else {
+                SmallWidgetView(entry: entry)
+                    .padding()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)    // << here !! 전체색 변경
+                    .background(Color(hex: 0x222f3e))
+                
             }
+        }
         .configurationDisplayName("세명대학교 학식 알리미")
         .description("식사시간에 맞춰 학식 메뉴가 변경돼요!")
         .supportedFamilies([.systemSmall])

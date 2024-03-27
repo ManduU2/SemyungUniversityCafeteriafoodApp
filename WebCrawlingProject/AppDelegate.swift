@@ -186,8 +186,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
                     
                     // 세 번째 알림: 17:30
                     var dateComponents3 = DateComponents()
-                    dateComponents3.hour = 20
-                    dateComponents3.minute = 38
+                    dateComponents3.hour = 17
+                    dateComponents3.minute = 30
                     let trigger3 = UNCalendarNotificationTrigger(dateMatching: dateComponents3, repeats: false)
                     let request3 = UNNotificationRequest(identifier: "uniqueIdentifier3", content: content3, trigger: trigger3)
                     
