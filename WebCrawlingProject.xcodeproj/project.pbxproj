@@ -9,6 +9,14 @@
 /* Begin PBXBuildFile section */
 		DE46F4FC2BA6E1A50042A285 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE46F4FB2BA6E1A50042A285 /* Data.swift */; };
 		DE46F4FF2BA945780042A285 /* SkeletonView in Frameworks */ = {isa = PBXBuildFile; productRef = DE46F4FE2BA945780042A285 /* SkeletonView */; };
+		DE785B582BB19BD10011EA6D /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE785B572BB19BD10011EA6D /* WidgetKit.framework */; };
+		DE785B5A2BB19BD10011EA6D /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE785B592BB19BD10011EA6D /* SwiftUI.framework */; };
+		DE785B5D2BB19BD10011EA6D /* CalWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE785B5C2BB19BD10011EA6D /* CalWidgetBundle.swift */; };
+		DE785B5F2BB19BD10011EA6D /* CalWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE785B5E2BB19BD10011EA6D /* CalWidget.swift */; };
+		DE785B612BB19BD20011EA6D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE785B602BB19BD20011EA6D /* Assets.xcassets */; };
+		DE785B652BB19BD20011EA6D /* CalWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = DE785B562BB19BD10011EA6D /* CalWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		DE785B6D2BB32AB50011EA6D /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = DE785B6C2BB32AB50011EA6D /* FirebaseFirestore */; };
+		DE785B722BB3E6920011EA6D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DE797E732BAC40E300E45A58 /* GoogleService-Info.plist */; };
 		DE797E742BAC40E300E45A58 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DE797E732BAC40E300E45A58 /* GoogleService-Info.plist */; };
 		DEB9E5632B9594820084C269 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB9E5622B9594820084C269 /* AppDelegate.swift */; };
 		DEB9E5652B9594820084C269 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB9E5642B9594820084C269 /* SceneDelegate.swift */; };
@@ -29,10 +37,43 @@
 		F8D22A36C3C69DADB93BE183 /* Pods_WebCrawlingProject.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9B8317DE72E72E72F2512A6 /* Pods_WebCrawlingProject.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		DE785B632BB19BD20011EA6D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DEB9E5572B9594820084C269 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DE785B552BB19BD10011EA6D;
+			remoteInfo = CalWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		DE785B662BB19BD20011EA6D /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				DE785B652BB19BD20011EA6D /* CalWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		5EEA7539B0386A136A69209D /* Pods-WebCrawlingProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WebCrawlingProject.debug.xcconfig"; path = "Target Support Files/Pods-WebCrawlingProject/Pods-WebCrawlingProject.debug.xcconfig"; sourceTree = "<group>"; };
 		D3295520D03654DD5AD4B30B /* Pods-WebCrawlingProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WebCrawlingProject.release.xcconfig"; path = "Target Support Files/Pods-WebCrawlingProject/Pods-WebCrawlingProject.release.xcconfig"; sourceTree = "<group>"; };
 		DE46F4FB2BA6E1A50042A285 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
+		DE785B562BB19BD10011EA6D /* CalWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CalWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		DE785B572BB19BD10011EA6D /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		DE785B592BB19BD10011EA6D /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		DE785B5C2BB19BD10011EA6D /* CalWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalWidgetBundle.swift; sourceTree = "<group>"; };
+		DE785B5E2BB19BD10011EA6D /* CalWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalWidget.swift; sourceTree = "<group>"; };
+		DE785B602BB19BD20011EA6D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		DE785B622BB19BD20011EA6D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DE785B6A2BB19C0A0011EA6D /* CalWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CalWidgetExtension.entitlements; sourceTree = "<group>"; };
+		DE785B6B2BB19E300011EA6D /* WebCrawlingProject.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WebCrawlingProject.entitlements; sourceTree = "<group>"; };
 		DE797E732BAC40E300E45A58 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DEB9E55F2B9594820084C269 /* WebCrawlingProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WebCrawlingProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEB9E5622B9594820084C269 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -49,6 +90,16 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		DE785B532BB19BD10011EA6D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE785B5A2BB19BD10011EA6D /* SwiftUI.framework in Frameworks */,
+				DE785B582BB19BD10011EA6D /* WidgetKit.framework in Frameworks */,
+				DE785B6D2BB32AB50011EA6D /* FirebaseFirestore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DEB9E55C2B9594820084C269 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -72,6 +123,8 @@
 			isa = PBXGroup;
 			children = (
 				F9B8317DE72E72E72F2512A6 /* Pods_WebCrawlingProject.framework */,
+				DE785B572BB19BD10011EA6D /* WidgetKit.framework */,
+				DE785B592BB19BD10011EA6D /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -93,10 +146,23 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		DE785B5B2BB19BD10011EA6D /* CalWidget */ = {
+			isa = PBXGroup;
+			children = (
+				DE785B5C2BB19BD10011EA6D /* CalWidgetBundle.swift */,
+				DE785B5E2BB19BD10011EA6D /* CalWidget.swift */,
+				DE785B602BB19BD20011EA6D /* Assets.xcassets */,
+				DE785B622BB19BD20011EA6D /* Info.plist */,
+			);
+			path = CalWidget;
+			sourceTree = "<group>";
+		};
 		DEB9E5562B9594820084C269 = {
 			isa = PBXGroup;
 			children = (
+				DE785B6A2BB19C0A0011EA6D /* CalWidgetExtension.entitlements */,
 				DEB9E5612B9594820084C269 /* WebCrawlingProject */,
+				DE785B5B2BB19BD10011EA6D /* CalWidget */,
 				DEB9E5602B9594820084C269 /* Products */,
 				82C6BAE3598AEBED84A80A2B /* Pods */,
 				484F961CDE61C99EBADFE1D8 /* Frameworks */,
@@ -107,6 +173,7 @@
 			isa = PBXGroup;
 			children = (
 				DEB9E55F2B9594820084C269 /* WebCrawlingProject.app */,
+				DE785B562BB19BD10011EA6D /* CalWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -114,6 +181,7 @@
 		DEB9E5612B9594820084C269 /* WebCrawlingProject */ = {
 			isa = PBXGroup;
 			children = (
+				DE785B6B2BB19E300011EA6D /* WebCrawlingProject.entitlements */,
 				DE46F4FA2BA6E17D0042A285 /* Models */,
 				DEB9E5622B9594820084C269 /* AppDelegate.swift */,
 				DEB9E5642B9594820084C269 /* SceneDelegate.swift */,
@@ -133,6 +201,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		DE785B552BB19BD10011EA6D /* CalWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DE785B692BB19BD20011EA6D /* Build configuration list for PBXNativeTarget "CalWidgetExtension" */;
+			buildPhases = (
+				DE785B522BB19BD10011EA6D /* Sources */,
+				DE785B532BB19BD10011EA6D /* Frameworks */,
+				DE785B542BB19BD10011EA6D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CalWidgetExtension;
+			packageProductDependencies = (
+				DE785B6C2BB32AB50011EA6D /* FirebaseFirestore */,
+			);
+			productName = CalWidgetExtension;
+			productReference = DE785B562BB19BD10011EA6D /* CalWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		DEB9E55E2B9594820084C269 /* WebCrawlingProject */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DEB9E5762B9594830084C269 /* Build configuration list for PBXNativeTarget "WebCrawlingProject" */;
@@ -142,10 +230,12 @@
 				DEB9E55C2B9594820084C269 /* Frameworks */,
 				DEB9E55D2B9594820084C269 /* Resources */,
 				F5D09FABFC81C064DF49F5FC /* [CP] Embed Pods Frameworks */,
+				DE785B662BB19BD20011EA6D /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				DE785B642BB19BD20011EA6D /* PBXTargetDependency */,
 			);
 			name = WebCrawlingProject;
 			packageProductDependencies = (
@@ -169,9 +259,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1520;
+				LastSwiftUpdateCheck = 1530;
 				LastUpgradeCheck = 1520;
 				TargetAttributes = {
+					DE785B552BB19BD10011EA6D = {
+						CreatedOnToolsVersion = 15.3;
+					};
 					DEB9E55E2B9594820084C269 = {
 						CreatedOnToolsVersion = 15.2;
 					};
@@ -195,11 +288,21 @@
 			projectRoot = "";
 			targets = (
 				DEB9E55E2B9594820084C269 /* WebCrawlingProject */,
+				DE785B552BB19BD10011EA6D /* CalWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		DE785B542BB19BD10011EA6D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE785B612BB19BD20011EA6D /* Assets.xcassets in Resources */,
+				DE785B722BB3E6920011EA6D /* GoogleService-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DEB9E55D2B9594820084C269 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -256,6 +359,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		DE785B522BB19BD10011EA6D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE785B5F2BB19BD10011EA6D /* CalWidget.swift in Sources */,
+				DE785B5D2BB19BD10011EA6D /* CalWidgetBundle.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DEB9E55B2B9594820084C269 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -271,6 +383,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DE785B642BB19BD20011EA6D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DE785B552BB19BD10011EA6D /* CalWidgetExtension */;
+			targetProxy = DE785B632BB19BD20011EA6D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		DEB9E5682B9594820084C269 /* Main.storyboard */ = {
@@ -292,6 +412,74 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		DE785B672BB19BD20011EA6D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = CalWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = W4ZPYHTRPJ;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CalWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = CalWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.SemyungUniversityCafeteriafoodApp.ManduU2App.CalWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		DE785B682BB19BD20011EA6D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = CalWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = W4ZPYHTRPJ;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CalWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = CalWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.SemyungUniversityCafeteriafoodApp.ManduU2App.CalWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		DEB9E5742B9594830084C269 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -415,8 +603,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5EEA7539B0386A136A69209D /* Pods-WebCrawlingProject.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = WebCrawlingProject/WebCrawlingProject.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = W4ZPYHTRPJ;
@@ -432,7 +622,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.SemyungUniversityCafeteriafoodApp.ManduU2App;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -449,8 +639,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D3295520D03654DD5AD4B30B /* Pods-WebCrawlingProject.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = WebCrawlingProject/WebCrawlingProject.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = W4ZPYHTRPJ;
@@ -466,7 +658,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.SemyungUniversityCafeteriafoodApp.ManduU2App;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -482,6 +674,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		DE785B692BB19BD20011EA6D /* Build configuration list for PBXNativeTarget "CalWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DE785B672BB19BD20011EA6D /* Debug */,
+				DE785B682BB19BD20011EA6D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		DEB9E55A2B9594820084C269 /* Build configuration list for PBXProject "WebCrawlingProject" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -526,6 +727,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DE46F4FD2BA945780042A285 /* XCRemoteSwiftPackageReference "SkeletonView" */;
 			productName = SkeletonView;
+		};
+		DE785B6C2BB32AB50011EA6D /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DEB9E57D2B95B97D0084C269 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
 		};
 		DEB9E57E2B95B97D0084C269 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;

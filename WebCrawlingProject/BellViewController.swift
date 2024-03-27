@@ -189,7 +189,7 @@ extension BellViewController: UITableViewDataSource, UITableViewDelegate {
             
             // 이메일을 추가
             let emailLabel = UILabel()
-            emailLabel.text = "wlsgurrla716@icolud.com"
+            emailLabel.text = "wlsgurrla716@iCloud.com"
             emailLabel.textColor = UIColor(hexCode: "#c8d6e5")
             cell.contentView.addSubview(emailLabel)
             

@@ -15,12 +15,15 @@ import UserNotifications
 
 
 
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate{
     
+    
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        
+        // 아침메뉴 가져오기
         FirebaseApp.configure()
         let db = Firestore.firestore()
         
@@ -32,10 +35,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
                 print("사용자가 알림 권한을 거부했습니다.")
             }
         }
+        
+        
+        
+        
+        
         UNUserNotificationCenter.current().delegate = self
         
         
-        // 아침메뉴 가져오기
+        
+        
+        
         func getBreakfastMenu(completion: @escaping (String?, Error?) -> Void) {
             // 현재 날짜 데이터 포맷
             let formatter = DateFormatter()
@@ -49,6 +59,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
                         let breakfastMenu = breakfastMenu.replacingOccurrences(of: "\\n", with: "\n")
                         
                         completion(breakfastMenu, nil)
+                        
                         
                     } else {
                         completion(nil, nil)
@@ -71,6 +82,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
                 if let document = document, document.exists {
                     if let lunchMenu = document.data()?["점심메뉴"] as? String {
                         let lunchMenu = lunchMenu.replacingOccurrences(of: "\\n", with: "\n")
+                        
                         completion(lunchMenu, nil)
                     } else {
                         completion(nil, nil)
@@ -160,6 +172,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
                     let trigger1 = UNCalendarNotificationTrigger(dateMatching: dateComponents1, repeats: false)
                     let request1 = UNNotificationRequest(identifier: "uniqueIdentifier1", content: content, trigger: trigger1)
                     
+                    
+                    
                     // 두 번째 알림: 11:30
                     var dateComponents2 = DateComponents()
                     dateComponents2.hour = 11
@@ -168,10 +182,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
                     let request2 = UNNotificationRequest(identifier: "uniqueIdentifier2", content: content2, trigger: trigger2)
                     
                     
+                    
+                    
                     // 세 번째 알림: 17:30
                     var dateComponents3 = DateComponents()
-                    dateComponents3.hour = 17
-                    dateComponents3.minute = 30
+                    dateComponents3.hour = 20
+                    dateComponents3.minute = 38
                     let trigger3 = UNCalendarNotificationTrigger(dateMatching: dateComponents3, repeats: false)
                     let request3 = UNNotificationRequest(identifier: "uniqueIdentifier3", content: content3, trigger: trigger3)
                     
@@ -200,82 +216,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
             }
         }
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-//        // 푸시 알림 등록
-//        let content = UNMutableNotificationContent()
-//        content.title = "로컬 푸시 알림"
-//        content.body = "앱이 꺼져있을 때도 동작합니다."
-//        content.sound = UNNotificationSound.default
-//        
-//        
-        
-        
-        
-        
-//
-//        // 알림 트리거 설정
-//        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
-//        
-//        
-//        
-//        // 알림 요청 생성
-//        let request = UNNotificationRequest(identifier: "localNotification", content: content, trigger: trigger)
-//        
-//        
-//        
-//        
-//        
-//        
-//        // 알림 스케줄링
-//        UNUserNotificationCenter.current().add(request) { (error) in
-//            if let error = error {
-//                print("로컬 푸시 알림 요청 실패: \(error.localizedDescription)")
-//            } else {
-//                print("로컬 푸시 알림 요청 성공")
-//            }
-//        }
-//        
-        
-        
-        
-        
-        //        // 식당 알림
-        //        UNUserNotificationCenter.current().delegate = self
-        //
-        //
-        //
-        //        let authorizationOption: UNAuthorizationOptions = [.alert,.sound]
-        //
-        //        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-        //                    if granted {
-        //                        print("Notification permission granted")
-        //                    } else {
-        //                        print("Notification permission denied")
-        //                    }
-        //                }
-        
-        
-        
+
         
         return true
     }
     
     
     
+ 
     
     
     

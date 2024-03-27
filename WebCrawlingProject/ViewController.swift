@@ -19,11 +19,15 @@
  좋아요, 싫어요 버튼을 탭할때 알림(눌렸다, 취소됐다)창이 나오도록 변경?
  
  
+ 1.0.4 ->
+ 1. 위젯 구현 완료
+ 2. 개발자 이메일 오타 수정
  
  */
 /*
  <예정>
  
+ 알림 버그 수정 (앱을 작동하지 않으면 알림에서 전 기록의 알림이 발송됨)
  
  
  
@@ -106,8 +110,8 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         
         self.navigationItem.title = ""
         
-        
-        
+        // 앱이 백그라운드에 있을 때도 실행되도록 백그라운드 작업을 등록합니다.
+        registerBackgroundTask()
         
         configureItems()
         applyConstraints()
@@ -150,6 +154,48 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         }
         
     }
+    
+    
+    // 백그라운드 작업을 등록합니다.
+        func registerBackgroundTask() {
+            DispatchQueue.global(qos: .background).async {
+                // 특정 시간에 코드를 실행하는 함수를 호출합니다.
+                self.scheduleTask()
+                
+                // 백그라운드 작업이 완료되었음을 시스템에 알립니다.
+                UIApplication.shared.endBackgroundTask(UIBackgroundTaskIdentifier(rawValue: .max))
+            }
+        }
+    
+    
+    // 이걸 델리게이트에 넣어야할꺼 같음.
+    // 특정 시간에 코드를 실행합니다.
+        func scheduleTask() {
+            // 예를 들어, 오늘 자정에 코드를 실행하려면 다음과 같이 할 수 있습니다.
+            let calendar = Calendar.current
+            var components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: Date())
+            components.hour = 23
+            components.minute = 30
+            
+            let midnight = calendar.date(from: components)!
+            
+            let notificationContent = UNMutableNotificationContent()
+            //notificationContent.title = "자동 실행"
+            //notificationContent.body = "앱이 자동으로 실행됩니다."
+            
+            let trigger = UNCalendarNotificationTrigger(dateMatching: calendar.dateComponents([.hour, .minute], from: midnight), repeats: true)
+            
+            let request = UNNotificationRequest(identifier: "AutoRunNotification", content: notificationContent, trigger: trigger)
+            
+            UNUserNotificationCenter.current().add(request) { (error) in
+                if let error = error {
+                    print("알림 요청 실패: \(error.localizedDescription)")
+                } else {
+                    print("알림 요청 성공")
+                    
+                }
+            }
+        }
     
     
     
