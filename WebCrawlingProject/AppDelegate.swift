@@ -27,6 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         FirebaseApp.configure()
         let db = Firestore.firestore()
         
+        
         // 알림 권한 요청
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { (granted, error) in
             if granted {
@@ -35,15 +36,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
                 print("사용자가 알림 권한을 거부했습니다.")
             }
         }
-        
-        
-        
-        
+    
         
         UNUserNotificationCenter.current().delegate = self
-        
-        
-        
         
         
         func getBreakfastMenu(completion: @escaping (String?, Error?) -> Void) {

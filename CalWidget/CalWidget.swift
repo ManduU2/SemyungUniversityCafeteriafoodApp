@@ -11,8 +11,16 @@ import FirebaseFirestore
 import FirebaseCore
 
 
+// 위젯 타이틀에 사용될 날짜 포맷팅
+let titleDateFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.locale = Locale(identifier: "ko_KR") // 한국어 버전
+    formatter.dateFormat = "M월 d일 (EEEEE)" // 원하는 날짜 포맷 설정
+    return formatter
+}()
 
 
+// 데이터베이스 가져올때 사용되는 날짜 포맷팅
 let dateFormatter: DateFormatter = {
     let formatter = DateFormatter()
     formatter.dateFormat = "yyyy-MM-dd" // 원하는 날짜 포맷 설정
@@ -25,7 +33,7 @@ let dateFormatter: DateFormatter = {
 struct Provider: TimelineProvider {
     
     func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(),currentDate: "" ,emoji: "", lunch: "", dinner: "")
+        SimpleEntry(date: Date(),currentDate: "", titleCurrentDate: "" ,emoji: "", lunch: "", dinner: "")
     }
     
     
@@ -36,6 +44,9 @@ struct Provider: TimelineProvider {
         
         let currentDate = Date()
         let formattedDate = dateFormatter.string(from: currentDate)
+        let titleFormattedDate = dateFormatter.string(from: currentDate)
+        
+        
         
         // 아침메뉴 가져오기
         func getBreakfastMenu(completion: @escaping (String?, Error?) -> Void) {
@@ -161,7 +172,7 @@ struct Provider: TimelineProvider {
                     
                     
                     
-                    let entry = SimpleEntry(date: Date(),currentDate: formattedDate ,emoji: breakfastMenu, lunch: lunchMenu, dinner: dinnerMenu)
+                    let entry = SimpleEntry(date: Date(),currentDate: formattedDate, titleCurrentDate: titleFormattedDate, emoji: breakfastMenu, lunch: lunchMenu, dinner: dinnerMenu)
                     completion(entry)
                 }
             }
@@ -184,6 +195,7 @@ struct Provider: TimelineProvider {
             formatter.dateFormat = "YYYY-MM-dd"
             let current_date_string = formatter.string(from: Date())
             
+            
             let docRef = db.collection("Menu").document(current_date_string)
             docRef.getDocument { (document, error) in
                 if let document = document, document.exists {
@@ -202,6 +214,7 @@ struct Provider: TimelineProvider {
                 }
             }
         }
+        
         
         // 점심메뉴 가져오기
         func getLunchMenu(completion: @escaping (String?, Error?) -> Void) {
@@ -233,6 +246,7 @@ struct Provider: TimelineProvider {
             }
         }
         
+        
         // 저녁메뉴 가져오기
         func getDinnerMenu(completion: @escaping (String?, Error?) -> Void) {
             // 현재 날짜 데이터 포맷
@@ -255,9 +269,7 @@ struct Provider: TimelineProvider {
             }
         }
         
-        
-        
-        
+    
         // 아침메뉴 가져오기
         getBreakfastMenu { (breakfastMenu, error) in
             guard let breakfastMenu = breakfastMenu else {
@@ -282,19 +294,24 @@ struct Provider: TimelineProvider {
                     
                     
                     // 00시에만 실행되게 바꾸자 -> 작동은 문제 없는데 데이터베이스 과부화걸릴 가능성 있을듯
-                    // 작은 화면은 시간마다 바꿀수 있게 해보자 -> 조식, 중식, 석식
-                    // UI 쫌 더 수정해보자 -> 살짝 삐뚤삐둘하고 글자색, 배경색도 변경해야할뜻
+                    // 작은 화면은 시간마다 바꿀수 있게 해보자 -> 조식, 중식, 석식 (완료)
+                    // UI 쫌 더 수정해보자 -> 살짝 삐뚤삐둘하고 글자색, 배경색도 변경해야할뜻 (완료)
                     
                     
                     // Generate a timeline consisting of five entries an hour apart, starting from the current date.
                     let currentDate = Date()
                     let formattedDate = dateFormatter.string(from: currentDate)
+                    let titleFormattdeDate = titleDateFormatter.string(from:currentDate)
+                    
+                    
                     for _ in 0 ..< 5 {
                         //                        let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-                        let entry = SimpleEntry(date: currentDate, currentDate: formattedDate ,emoji: breakfastMenu, lunch: lunchMenu, dinner: dinnerMenu)
+                        let entry = SimpleEntry(date: currentDate, currentDate: formattedDate, titleCurrentDate: titleFormattdeDate,emoji: breakfastMenu, lunch: lunchMenu, dinner: dinnerMenu)
                         entries.append(entry)
                         
                     }
+                    
+                    // .atEnd 수정 해야할뜻.
                     let timeline = Timeline(entries: entries, policy: .atEnd)
                     completion(timeline)
                     
@@ -344,6 +361,7 @@ struct Provider: TimelineProvider {
 struct SimpleEntry: TimelineEntry {
     var date: Date
     var currentDate: String
+    var titleCurrentDate: String
     let emoji: String
     let lunch: String
     let dinner: String
@@ -357,6 +375,7 @@ struct CalWidgetEntryView : View {
     
     var entry: Provider.Entry
     
+    
     var body: some View {
         sizeBody()
     }
@@ -367,12 +386,14 @@ struct CalWidgetEntryView : View {
     func sizeBody() -> some View {
         
         
+        
         switch family {
         case .systemMedium:
             VStack {
-                Text(entry.currentDate)
+                Text(entry.titleCurrentDate)
                     .font(.system(size: 11))
                     .foregroundColor(Color(hex: 0xc8d6e5))
+                    .fontWeight(.bold)
                 Divider()
                     .background(Color(hex: 0xc8d6e5))
                 HStack {
@@ -380,16 +401,14 @@ struct CalWidgetEntryView : View {
                         Text("조식 - ")
                             .font(.system(size: 11))
                             .foregroundColor(Color(hex: 0xc8d6e5))
-                        
+                            .fontWeight(.bold)
                         
                         Text(entry.emoji)
                             .font(.system(size: 8))
                             .foregroundColor(Color(hex: 0xc8d6e5))
-                        
+                            .fontWeight(.bold)
                     }
-                    
-                    
-                    
+            
                     
                     HStack {
                         Divider()
@@ -397,12 +416,12 @@ struct CalWidgetEntryView : View {
                         Text("중식 - ")
                             .font(.system(size: 11))
                             .foregroundColor(Color(hex: 0xc8d6e5))
-                        
+                            .fontWeight(.bold)
                         
                         Text(entry.lunch)
                             .font(.system(size: 8))
                             .foregroundColor(Color(hex: 0xc8d6e5))
-                        
+                            .fontWeight(.bold)
                     }
                     
                     
@@ -412,13 +431,14 @@ struct CalWidgetEntryView : View {
                         Divider()
                             .background(Color(hex: 0xc8d6e5))
                         Text("석식 - ")
-                        
                             .font(.system(size: 11))
                             .foregroundColor(Color(hex: 0xc8d6e5))
+                            .fontWeight(.bold)
                         
                         Text(entry.dinner)
                             .font(.system(size: 8))
                             .foregroundColor(Color(hex: 0xc8d6e5))
+                            .fontWeight(.bold)
                         
                     }
                     
@@ -428,65 +448,75 @@ struct CalWidgetEntryView : View {
                     .background(Color(hex: 0xc8d6e5))
             }
             // UI가 삐뚤했던 이유는 VStack에서 가운데 정렬로 되있어서 -> 왼쪽 정렬로 하면 성공 (보이지 않는 테두리를 생각해야함)
-            
+    
             
         case .systemLarge:
-            
-            
-            
             VStack(alignment: .center) {
                 
-                Text(entry.currentDate)
+                Text(entry.titleCurrentDate)
                     .font(.system(size: 14))
                     .foregroundColor(Color(hex: 0xc8d6e5))
+                    .fontWeight(.bold)
                 VStack(alignment: .leading) {
                     Divider()
                         .background(Color(hex: 0xc8d6e5))
                     HStack {
                         Spacer()
                             .frame(width: 50)
-                        Text("조식            -")
+                        Text("조식            -    ")
                             .font(.system(size: 14))
                             .foregroundColor(Color(hex: 0xc8d6e5))
+                            .fontWeight(.bold)
                         Spacer()
                             .frame(width: 20)
                         Text(entry.emoji)
                             .font(.system(size: 11))
                             .foregroundColor(Color(hex: 0xc8d6e5))
+                            .fontWeight(.bold)
                     }
                     Divider()
                         .background(Color(hex: 0xc8d6e5))
                     HStack{
                         Spacer()
                             .frame(width: 50)
-                        Text("중식            -")
+                        Text("중식            -    ")
                             .font(.system(size: 14))
                             .foregroundColor(Color(hex: 0xc8d6e5))
+                            .fontWeight(.bold)
                         Spacer()
                             .frame(width: 20)
                         Text(entry.lunch)
                             .font(.system(size: 11))
                             .foregroundColor(Color(hex: 0xc8d6e5))
+                            .fontWeight(.bold)
                     }
                     Divider()
                         .background(Color(hex: 0xc8d6e5))
                     HStack{
                         Spacer()
                             .frame(width: 50)
-                        Text("석식            -")
+                        Text("석식            -    ")
                             .font(.system(size: 14))
                             .foregroundColor(Color(hex: 0xc8d6e5))
+                            .fontWeight(.bold)
                         Spacer()
                             .frame(width: 20)
                         Text(entry.dinner)
                             .font(.system(size: 11))
                             .foregroundColor(Color(hex: 0xc8d6e5))
+                            .fontWeight(.bold)
                     }
                     Divider()
                         .background(Color(hex: 0xc8d6e5))
                     
                 }
             }
+            
+            
+        case .systemExtraLarge: // ExtraLarge는 iPad의 위젯에만 표출
+              Text(".systemExtraLarge")
+            
+            
             
         default:
             EmptyView()
@@ -550,9 +580,6 @@ struct CalWidget: Widget {
 
 ///
 
-
-
-
 // smallWidget
 struct SmallWidgetView : View {
     var entry: Provider.Entry
@@ -561,9 +588,9 @@ struct SmallWidgetView : View {
         let components = Calendar.current.dateComponents([.hour, .minute], from: Date())
         let currentTime = components.hour! * 60 + components.minute!
         
-        let isMorning = (0...659).contains(currentTime) // 아침 시간대: 0시부터 10시 59분까지
-        let isLunchtime = (660...1019).contains(currentTime) // 점심 시간대: 11시부터 16시 59분까지
-        let isDinnertime = (1020...1439).contains(currentTime) // 저녁 시간대: 17시부터 23시 59분까지
+        let isMorning = (0...599).contains(currentTime) // 아침 시간대: 0시부터 9시 59분까지
+        let isLunchtime = (600...899).contains(currentTime) // 점심 시간대: 10시부터 14시 59분까지
+        let isDinnertime = (900...1439).contains(currentTime) // 저녁 시간대: 15시부터 23시 59분까지
         
         var menuToShow = ""
         if isMorning {
@@ -577,9 +604,10 @@ struct SmallWidgetView : View {
         }
         
         return VStack {
-            Text(entry.currentDate)
+            Text(entry.titleCurrentDate)
                 .font(.system(size: 12))
                 .foregroundColor(Color(hex: 0xc8d6e5))
+                .fontWeight(.bold)
             
             Divider()
                 .background(Color(hex: 0xc8d6e5))
@@ -590,18 +618,22 @@ struct SmallWidgetView : View {
                         Text("조식 - ") // 아침 메뉴 표시
                             .font(.system(size: 12))
                             .foregroundColor(Color(hex: 0xc8d6e5))
+                            .fontWeight(.bold)
                     } else if isLunchtime {
                         Text("중식 - ") // 점심 메뉴 표시
                             .font(.system(size: 12))
                             .foregroundColor(Color(hex: 0xc8d6e5))
+                            .fontWeight(.bold)
                     } else if isDinnertime {
                         Text("석식 - ") // 저녁 메뉴 표시
                             .font(.system(size: 12))
                             .foregroundColor(Color(hex: 0xc8d6e5))
+                            .fontWeight(.bold)
                     }
                     Text(menuToShow)
                         .font(.system(size: 9))
                         .foregroundColor(Color(hex: 0xc8d6e5))
+                        .fontWeight(.bold)
                 }
             }
             
@@ -642,16 +674,6 @@ struct SmallWidget: Widget {
     }
 }
 
-
-
-
-
-//#Preview(as: .systemSmall) {
-//    CalWidget()
-//} timeline: {
-//    SimpleEntry(date: .now, emoji: "😀")
-//    SimpleEntry(date: .now, emoji: "🤩")
-//}
 
 
 
