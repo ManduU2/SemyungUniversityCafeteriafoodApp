@@ -368,32 +368,6 @@ struct CalWidgetEntryView : View {
         
         
         switch family {
-            //                case .systemSmall:
-            //                    VStack {
-            //                        Text(entry.currentDate)
-            //                            .font(.system(size: 12))
-            //                            .foregroundColor(Color(hex: 0xc8d6e5))
-            //
-            //                        Divider()
-            //                            .background(Color(hex: 0xc8d6e5))
-            //
-            //                        HStack {
-            //                            HStack {
-            //                                Text("중식 - ")
-            //                                    .font(.system(size: 10))
-            //                                    .foregroundColor(Color(hex: 0xc8d6e5))
-            //
-            //
-            //                                Text(entry.lunch)
-            //                                    .font(.system(size: 9))
-            //                                    .foregroundColor(Color(hex: 0xc8d6e5))
-            //
-            //                            }
-            //                        }
-            //
-            //                        Divider()
-            //                            .background(Color(hex: 0xc8d6e5))
-            //                    }
         case .systemMedium:
             VStack {
                 Text(entry.currentDate)
@@ -453,20 +427,21 @@ struct CalWidgetEntryView : View {
                 Divider()
                     .background(Color(hex: 0xc8d6e5))
             }
-            
-
-            
             // UI가 삐뚤했던 이유는 VStack에서 가운데 정렬로 되있어서 -> 왼쪽 정렬로 하면 성공 (보이지 않는 테두리를 생각해야함)
+            
+            
         case .systemLarge:
             
-            Text(entry.currentDate)
-                .font(.system(size: 14))
-                .foregroundColor(Color(hex: 0xc8d6e5))
-            Divider()
-                .background(Color(hex: 0xc8d6e5))
             
-               
+            
+            VStack(alignment: .center) {
+                
+                Text(entry.currentDate)
+                    .font(.system(size: 14))
+                    .foregroundColor(Color(hex: 0xc8d6e5))
                 VStack(alignment: .leading) {
+                    Divider()
+                        .background(Color(hex: 0xc8d6e5))
                     HStack {
                         Spacer()
                             .frame(width: 50)
@@ -507,10 +482,12 @@ struct CalWidgetEntryView : View {
                             .font(.system(size: 11))
                             .foregroundColor(Color(hex: 0xc8d6e5))
                     }
+                    Divider()
+                        .background(Color(hex: 0xc8d6e5))
+                    
                 }
+            }
             
-            Divider()
-                .background(Color(hex: 0xc8d6e5))
         default:
             EmptyView()
         }
@@ -536,18 +513,32 @@ struct CalWidget: Widget {
     
     
     
+    // iOS 17버전에는 .containerBackground을 추가로 contentMargin 색을 채울 수 있음.
+    // 17 이하는 ZStack 으로 묶어 contentMargin을 채움.
+    
+    
+    
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             if #available(iOS 17.0, *) {
                 CalWidgetEntryView(entry: entry)
                     .containerBackground(Color(hex: 0x222f3e), for: .widget) // 전체색 변경
             } else {
-                CalWidgetEntryView(entry: entry)
-                    .padding()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)    // << here !! 전체색 변경
-                    .background(Color(hex: 0x222f3e))
                 
+                ZStack {
+                    Color(hex: 0x222f3e) // Set background color
+                    CalWidgetEntryView(entry: entry)
+                }
             }
+            //                CalWidgetEntryView(entry: entry)
+            //                    //.padding()
+            //                    //.frame(maxWidth: .infinity, maxHeight: .infinity)    // << here !! 전체색 변경
+            //                   // .background(Color(hex: 0x222f3e))
+            //                    .padding() // Add padding to the content
+            //                    .background(Color(hex: 0x222f3e)) // Set background color
+            //
+            //
+            //            }
         }
         .configurationDisplayName("세명대학교 학식 알리미")
         .description("홈 화면에서 오늘의 학식 메뉴를 전부 확인 할 수 있어요!")
