@@ -44,7 +44,7 @@ struct Provider: TimelineProvider {
         
         let currentDate = Date()
         let formattedDate = dateFormatter.string(from: currentDate)
-        let titleFormattedDate = dateFormatter.string(from: currentDate)
+        let titleFormattedDate = titleDateFormatter.string(from: currentDate)
         
         
         
@@ -153,6 +153,7 @@ struct Provider: TimelineProvider {
         getBreakfastMenu { (breakfastMenu, error) in
             guard let breakfastMenu = breakfastMenu else {
                 print("Error getting breakfast menu: \(error?.localizedDescription ?? "Unknown error")")
+                
                 return
             }
             
@@ -172,7 +173,7 @@ struct Provider: TimelineProvider {
                     
                     
                     
-                    let entry = SimpleEntry(date: Date(),currentDate: formattedDate, titleCurrentDate: titleFormattedDate, emoji: breakfastMenu, lunch: lunchMenu, dinner: dinnerMenu)
+                    let entry = SimpleEntry(date: Date(), currentDate: formattedDate, titleCurrentDate: titleFormattedDate, emoji: breakfastMenu, lunch: lunchMenu, dinner: dinnerMenu)
                     completion(entry)
                 }
             }
@@ -186,6 +187,10 @@ struct Provider: TimelineProvider {
         
         
         let db = Firestore.firestore()
+        
+        let currentDate = Date()
+        let formattedDate = dateFormatter.string(from: currentDate)
+        let titleFormattdeDate = titleDateFormatter.string(from:currentDate)
         
         
         // 아침메뉴 가져오기
@@ -274,6 +279,7 @@ struct Provider: TimelineProvider {
         getBreakfastMenu { (breakfastMenu, error) in
             guard let breakfastMenu = breakfastMenu else {
                 print("Error getting breakfast menu: \(error?.localizedDescription ?? "Unknown error")")
+             
                 return
             }
             
@@ -299,9 +305,7 @@ struct Provider: TimelineProvider {
                     
                     
                     // Generate a timeline consisting of five entries an hour apart, starting from the current date.
-                    let currentDate = Date()
-                    let formattedDate = dateFormatter.string(from: currentDate)
-                    let titleFormattdeDate = titleDateFormatter.string(from:currentDate)
+
                     
                     
                     for _ in 0 ..< 5 {
@@ -391,7 +395,7 @@ struct CalWidgetEntryView : View {
         case .systemMedium:
             VStack {
                 Text(entry.titleCurrentDate)
-                    .font(.system(size: 11))
+                    .font(.system(size: 14))
                     .foregroundColor(Color(hex: 0xc8d6e5))
                     .fontWeight(.bold)
                 Divider()
@@ -408,11 +412,10 @@ struct CalWidgetEntryView : View {
                             .foregroundColor(Color(hex: 0xc8d6e5))
                             .fontWeight(.bold)
                     }
-            
-                    
+                    .frame(maxWidth: .infinity) // 각 HStack을 동일한 크기로 만듭니다.
+                    Divider()
+                        .background(Color(hex: 0xc8d6e5))
                     HStack {
-                        Divider()
-                            .background(Color(hex: 0xc8d6e5))
                         Text("중식 - ")
                             .font(.system(size: 11))
                             .foregroundColor(Color(hex: 0xc8d6e5))
@@ -423,13 +426,11 @@ struct CalWidgetEntryView : View {
                             .foregroundColor(Color(hex: 0xc8d6e5))
                             .fontWeight(.bold)
                     }
-                    
-                    
-                    
-                    
+                    .frame(maxWidth: .infinity) // 각 HStack을 동일한 크기로 만듭니다.
+                    Divider()
+                        .background(Color(hex: 0xc8d6e5))
                     HStack {
-                        Divider()
-                            .background(Color(hex: 0xc8d6e5))
+                        
                         Text("석식 - ")
                             .font(.system(size: 11))
                             .foregroundColor(Color(hex: 0xc8d6e5))
@@ -441,9 +442,8 @@ struct CalWidgetEntryView : View {
                             .fontWeight(.bold)
                         
                     }
-                    
+                    .frame(maxWidth: .infinity) // 각 HStack을 동일한 크기로 만듭니다.
                 }
-                
                 Divider()
                     .background(Color(hex: 0xc8d6e5))
             }
@@ -667,9 +667,9 @@ struct SmallWidget: Widget {
                     .background(Color(hex: 0x222f3e))
                 
             }
-        }
+        } //00시 ~ 10 || 10 ~ 15 || 15 ~ 00
         .configurationDisplayName("세명대학교 학식 알리미")
-        .description("식사시간에 맞춰 학식 메뉴가 변경돼요!")
+        .description("식사시간에 맞춰 학식 메뉴가 변경돼요!\n")
         .supportedFamilies([.systemSmall])
     }
 }

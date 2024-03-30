@@ -42,16 +42,25 @@
  -> SamllWidget 시간을 변경 -> 완료 (00시 ~ 10 || 10 ~ 15 || 15 ~ 00)
  
  
+ -> 식단이 없는 날짜는 위젯이 안나오는 버그 -> 파이어베이스에 기본값을 넣어 임시방편으로 해결
+ 
+ 
+ [1.0.5 (3)]
+ 
+ 
+ 
+ 
+ 
+ 
  */
 /*
  <예정>
  
- 1.0.5
+ [1.0.5 (4)]
+
 
  
- [1.0.5 (3)]
- 
- -> 알림 버그 수정 (앱을 작동하지 않으면 알림에서 전 기록의 알림이 발송됨)
+ -> 알림 버그 수정 (앱을 작동하지 않으면 알림에서 전 기록의 알림이 발송됨) -> 00시에 확인해보기 
  
  
  -> 셀리니움을 통해서 자동화 도구 만들기
@@ -844,6 +853,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         cell.backgroundColor = UIColor(hexCode: "#576574") // cellColor
         cell.textLabel?.numberOfLines = 0 // 줄바꿈 설정
         cell.textLabel?.textColor = UIColor(hexCode: "#c8d6e5") // tintColor
+        //cell.textLabel?.font = .boldSystemFont(ofSize: 18) // 폰트 크기와 bold -> UI개선
         cell.textLabel?.text = data[indexPath.section][indexPath.row]
         
         
