@@ -275,7 +275,6 @@
 			mainGroup = DEB9E5562B9594820084C269;
 			packageReferences = (
 				DEB9E57D2B95B97D0084C269 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				DE46F4FD2BA945780042A285 /* XCRemoteSwiftPackageReference "SkeletonView" */,
 			);
 			productRefGroup = DEB9E5602B9594820084C269 /* Products */;
 			projectDirPath = "";
@@ -700,14 +699,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		DE46F4FD2BA945780042A285 /* XCRemoteSwiftPackageReference "SkeletonView" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Juanpe/SkeletonView";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.30.4;
-			};
-		};
 		DEB9E57D2B95B97D0084C269 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";

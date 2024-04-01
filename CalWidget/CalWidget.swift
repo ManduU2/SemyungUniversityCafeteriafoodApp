@@ -677,6 +677,8 @@ struct SmallWidget: Widget {
 
 
 
+
+
 extension Color {
     init(hex: Int, opacity: Double = 1.0) {
         let red = Double((hex >> 16) & 0xff) / 255

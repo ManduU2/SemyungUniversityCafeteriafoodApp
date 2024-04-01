@@ -32,7 +32,7 @@
  -> iPad Air 모델에서 위젯 UI가 깨지는 버그 현상 -> 해결 완료 (17.0 이하 버전을 따로 설정하지 않아서 그럼(ZStack으로 해결) [1.0.5 (1)]
  
  
- [1.0.5 (2)]
+ [1.0.5 (2,3)]
  -> 위젯 글자 크기 키우기 (Bold 채로 변경 완료)
  
  
@@ -45,9 +45,11 @@
  -> 식단이 없는 날짜는 위젯이 안나오는 버그 -> 파이어베이스에 기본값을 넣어 임시방편으로 해결
  
  
- [1.0.5 (3)]
+ [1.0.5 (4)]
  
  -> 알림 버그 수정 (앱을 작동하지 않으면 알림에서 전 기록의 알림이 발송됨) -> 00시에 확인해보기x -> 임시 FCM을 사용하여 이용
+ 
+ 
  
  
  
@@ -94,6 +96,8 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         
         // 주간 달력 설정
         calendar.scope = .week
+        
+        
         
         // 텍스트 컬러 설정
         calendar.appearance.headerTitleColor = UIColor(hexCode: "#c8d6e5")
@@ -167,6 +171,10 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         self.title = Data.navTitle
         
         // Set navigation bar title text color to black
+        
+        
+        
+        
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(hexCode: "#c8d6e5")]
         
         
