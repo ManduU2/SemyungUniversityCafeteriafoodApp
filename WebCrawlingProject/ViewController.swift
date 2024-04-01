@@ -51,10 +51,23 @@
  
  
  
+ [1.0.6 (2)]
+ -> 잠금 화면 위젯 추가 (완료)
+ 
+ -> smallWidget 설명 문구 수정 (완료)
+ 
+ 
+ [1.0.6 (3)]
+ [예정] 위젯 UX 디자인 수정 -> 줄 바꿈이 제대로 안되면 조금깨짐
+ 
  
  
  
  */
+
+
+
+
 /*
  <예정>
  
@@ -68,6 +81,18 @@
  
  */
 
+
+/* 노션필기
+ //                CalWidgetEntryView(entry: entry)
+ //                    //.padding()
+ //                    //.frame(maxWidth: .infinity, maxHeight: .infinity)    // << here !! 전체색 변경
+ //                   // .background(Color(hex: 0x222f3e))
+ //                    .padding() // Add padding to the content
+ //                    .background(Color(hex: 0x222f3e)) // Set background color
+ //
+ //
+ //            }
+ */
 
 
 //
