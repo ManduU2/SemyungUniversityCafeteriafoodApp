@@ -359,9 +359,9 @@ struct CalWidgetEntryView : View {
     func sizeBody() -> some View {
         
         
-         var cleanEmojiBreak = entry.emoji.replacingOccurrences(of: "\n", with: "\n• ")
-         var cleanEmojiLunch = entry.lunch.replacingOccurrences(of: "\n", with: "\n• ")
-         var cleanEmojidinner = entry.dinner.replacingOccurrences(of: "\n", with: "\n• ")
+        let cleanEmojiBreak = entry.emoji.replacingOccurrences(of: "\n", with: "\n• ")
+        let cleanEmojiLunch = entry.lunch.replacingOccurrences(of: "\n", with: "\n• ")
+        let cleanEmojidinner = entry.dinner.replacingOccurrences(of: "\n", with: "\n• ")
         
             switch family {
                 
@@ -575,9 +575,9 @@ struct SmallWidgetView : View {
         let isLunchtime = (600...899).contains(currentTime) // 점심 시간대: 10시부터 14시 59분까지
         let isDinnertime = (900...1439).contains(currentTime) // 저녁 시간대: 15시부터 23시 59분까지
         
-        var dotBreak = entry.emoji.replacingOccurrences(of: "\n", with: "\n• ")
-        var dotLunch = entry.lunch.replacingOccurrences(of: "\n", with: "\n• ")
-        var dotDinner = entry.dinner.replacingOccurrences(of: "\n", with: "\n• ")
+        let dotBreak = entry.emoji.replacingOccurrences(of: "\n", with: "\n• ")
+        let dotLunch = entry.lunch.replacingOccurrences(of: "\n", with: "\n• ")
+        let dotDinner = entry.dinner.replacingOccurrences(of: "\n", with: "\n• ")
         
         
         
@@ -600,17 +600,17 @@ struct SmallWidgetView : View {
             VStack(alignment: .leading){
             if isMorning {
                 Text(entry.titleCurrentDate + "     < 조식 >")
-                    .font(.system(size: 12))
+                    .font(.system(size: 10))
                     .foregroundColor(Color(hex: 0xc8d6e5))
                     .fontWeight(.bold)
             } else if isLunchtime {
                 Text(entry.titleCurrentDate + "     < 중식 >")
-                    .font(.system(size: 12))
+                    .font(.system(size: 10))
                     .foregroundColor(Color(hex: 0xc8d6e5))
                     .fontWeight(.bold)
             } else if isDinnertime {
                 Text(entry.titleCurrentDate + "     < 석식 >")
-                    .font(.system(size: 12))
+                    .font(.system(size: 10))
                     .foregroundColor(Color(hex: 0xc8d6e5))
                     .fontWeight(.bold)
             }
