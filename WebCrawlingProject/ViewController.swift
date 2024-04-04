@@ -68,6 +68,10 @@
  
  
  
+ [1.0.7 (1)
+ -> 파이어베이스 getDocument 중복을 제거
+ 
+ 
  */
 
 
@@ -127,8 +131,6 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         // 주간 달력 설정
         calendar.scope = .week
         
-        
-        
         // 텍스트 컬러 설정
         calendar.appearance.headerTitleColor = UIColor(hexCode: "#c8d6e5")
         calendar.appearance.weekdayTextColor = UIColor(hexCode: "#c8d6e5")
@@ -170,13 +172,11 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         self.tableView.dataSource = self
         self.tableView.delegate = self
         
-        view.backgroundColor = UIColor(hexCode: "#222f3e") // backgroundColor
+        
 
         
         self.navigationItem.title = ""
         
-        // 앱이 백그라운드에 있을 때도 실행되도록 백그라운드 작업을 등록합니다.
-        registerBackgroundTask()
         
         configureItems()
         applyConstraints()
@@ -223,58 +223,11 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         }
         
     }
-    
-    
-    // 백그라운드 작업을 등록합니다.
-        func registerBackgroundTask() {
-            DispatchQueue.global(qos: .background).async {
-                // 특정 시간에 코드를 실행하는 함수를 호출합니다.
-                self.scheduleTask()
-                
-                // 백그라운드 작업이 완료되었음을 시스템에 알립니다.
-                UIApplication.shared.endBackgroundTask(UIBackgroundTaskIdentifier(rawValue: .max))
-            }
-        }
-    
-    
-    // 이걸 델리게이트에 넣어야할꺼 같음.
-    // 특정 시간에 코드를 실행합니다.
-        func scheduleTask() {
-            // 예를 들어, 오늘 자정에 코드를 실행하려면 다음과 같이 할 수 있습니다.
-            let calendar = Calendar.current
-            var components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: Date())
-            components.hour = 23
-            components.minute = 30
-            
-            let midnight = calendar.date(from: components)!
-            
-            let notificationContent = UNMutableNotificationContent()
-            //notificationContent.title = "자동 실행"
-            //notificationContent.body = "앱이 자동으로 실행됩니다."
-            
-            let trigger = UNCalendarNotificationTrigger(dateMatching: calendar.dateComponents([.hour, .minute], from: midnight), repeats: true)
-            
-            let request = UNNotificationRequest(identifier: "AutoRunNotification", content: notificationContent, trigger: trigger)
-            
-            UNUserNotificationCenter.current().add(request) { (error) in
-                if let error = error {
-                    print("알림 요청 실패: \(error.localizedDescription)")
-                } else {
-                    print("알림 요청 성공")
-                    
-                }
-            }
-        }
-    
-    
-    
+        
     
     
     // 네비게이션 바 아이템
     private func configureItems() {
-        
-        
-        
         
         // Custom hamburger button image (left)
         let hamburgerImage = UIImage(systemName: "line.horizontal.3")! as UIImage
@@ -303,14 +256,17 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
             action: #selector(bellButtonTapped)
         )
         
-        
-        
     }
     
     
     fileprivate func applyConstraints() {
+        
+        view.backgroundColor = UIColor(hexCode: "#222f3e") // backgroundColor
+        
+        
         view.addSubview(calendar)
-        self.view.addSubview(self.tableView)
+        view.addSubview(self.tableView)
+        
         tableView.backgroundColor = UIColor(hexCode: "#222f3e") // tableColor
         
         
@@ -319,17 +275,15 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         
         
-        let calendarConstraints = [
+        // 캘린더 UI
+        NSLayoutConstraint.activate([
             calendar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             calendar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             calendar.topAnchor.constraint(equalTo: view.topAnchor, constant: 120), // 조정된 위치
             calendar.heightAnchor.constraint(equalToConstant: 200) // 조정된 높이
-        ]
+        ])
         
-        
-        NSLayoutConstraint.activate(calendarConstraints)
-        
-        
+        // 테이블 UI
         NSLayoutConstraint.activate([
             self.tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 170),
             self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
@@ -351,42 +305,30 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         
         Data.currentDateStringSpace = dateFormatter.string(from: date)
         
+        
         if Data.navTitle == "식단표 (학생회관_학생식당)" {
             
             let docRef = db.collection("Menu").document(dateFormatter.string(from: date))
             
             docRef.getDocument { (document, error) in
                 if let document = document, document.exists {
-                    if let 아침메뉴 = document.data()?["아침메뉴"] as? String {
+                    if let breakMenu = document.data()?["아침메뉴"] as? String {
                         
-                        let 아침메뉴 = 아침메뉴.replacingOccurrences(of: "\\n", with: "\n")
-                        
-                        docRef.getDocument { (document, error) in
-                            if let document = document, document.exists {
-                                if let 점심메뉴 = document.data()?["점심메뉴"] as? String {
-                                    let 점심메뉴 = 점심메뉴.replacingOccurrences(of: "\\n", with: "\n")
-                                    
-                                    docRef.getDocument { (document, error) in
-                                        if let document = document, document.exists {
-                                            if let 저녁메뉴 = document.data()?["저녁메뉴"] as? String {
-                                                let 저녁메뉴 = 저녁메뉴.replacingOccurrences(of: "\\n", with: "\n")
-                                                self.data = [[아침메뉴],
-                                                             [점심메뉴],
-                                                             [저녁메뉴]]
+                        let breakMenu = breakMenu.replacingOccurrences(of: "\\n", with: "\n")
+                            if let lunchMenu = document.data()?["점심메뉴"] as? String {
+                                    let lunchMenu = lunchMenu.replacingOccurrences(of: "\\n", with: "\n")
+                                        if let dinnerMenu = document.data()?["저녁메뉴"] as? String {
+                                                let dinnerMenu = dinnerMenu.replacingOccurrences(of: "\\n", with: "\n")
+                                                self.data = [[breakMenu],
+                                                             [lunchMenu],
+                                                             [dinnerMenu]]
                                                 self.tableView.reloadData()
-                                                
+    
                                             }
-                                        }
                                     }
-                                    
-                                }
-                            }
-                        }
                         
 
                         
-                    } else {
-                        print("아침메뉴가 없습니다.")
                     }
                 } else {
                     self.data = [["아직 식단이 등록되지 않았습니다."],
@@ -401,41 +343,29 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         }
         
         
-        if Data.navTitle == "식단표 (학생회관_자율식당)" {
+        if Data.navTitle == "식단표 (학생회관_자율식당)"  {
             
             let docRef = db.collection("Menu2").document(dateFormatter.string(from: date))
             
             docRef.getDocument { (document, error) in
                 if let document = document, document.exists {
-                    if let 아침메뉴 = document.data()?["아침메뉴"] as? String {
-                        let 아침메뉴 = 아침메뉴.replacingOccurrences(of: "\\n", with: "\n")
+                    if let breakMenu = document.data()?["아침메뉴"] as? String {
                         
-                        docRef.getDocument { (document, error) in
-                            if let document = document, document.exists {
-                                if let 점심메뉴 = document.data()?["점심메뉴"] as? String {
-                                    let 점심메뉴 = 점심메뉴.replacingOccurrences(of: "\\n", with: "\n")
-                                    
-                                    docRef.getDocument { (document, error) in
-                                        if let document = document, document.exists {
-                                            if let 저녁메뉴 = document.data()?["저녁메뉴"] as? String {
-                                                let 저녁메뉴 = 저녁메뉴.replacingOccurrences(of: "\\n", with: "\n")
-                                                
-                                                self.data = [[아침메뉴],
-                                                             [점심메뉴],
-                                                             [저녁메뉴]]
+                        let breakMenu = breakMenu.replacingOccurrences(of: "\\n", with: "\n")
+                            if let lunchMenu = document.data()?["점심메뉴"] as? String {
+                                    let lunchMenu = lunchMenu.replacingOccurrences(of: "\\n", with: "\n")
+                                        if let dinnerMenu = document.data()?["저녁메뉴"] as? String {
+                                                let dinnerMenu = dinnerMenu.replacingOccurrences(of: "\\n", with: "\n")
+                                                self.data = [[breakMenu],
+                                                             [lunchMenu],
+                                                             [dinnerMenu]]
                                                 self.tableView.reloadData()
+    
                                             }
-                                        }
                                     }
-                                    
-                                }
-                            }
-                        }
                         
+
                         
-                        
-                    } else {
-                        print("아침메뉴가 없습니다.")
                     }
                 } else {
                     self.data = [["아직 식단이 등록되지 않았습니다."],
@@ -450,41 +380,29 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         }
         
         
-        if Data.navTitle == "식단표 (예지학사_식당)" {
+        if Data.navTitle == "식단표 (예지학사_식당)"  {
             
             let docRef = db.collection("Menu3").document(dateFormatter.string(from: date))
             
             docRef.getDocument { (document, error) in
                 if let document = document, document.exists {
-                    if let 아침메뉴 = document.data()?["아침메뉴"] as? String {
-                        let 아침메뉴 = 아침메뉴.replacingOccurrences(of: "\\n", with: "\n")
+                    if let breakMenu = document.data()?["아침메뉴"] as? String {
                         
-                        docRef.getDocument { (document, error) in
-                            if let document = document, document.exists {
-                                if let 점심메뉴 = document.data()?["점심메뉴"] as? String {
-                                    let 점심메뉴 = 점심메뉴.replacingOccurrences(of: "\\n", with: "\n")
-                                    
-                                    docRef.getDocument { (document, error) in
-                                        if let document = document, document.exists {
-                                            if let 저녁메뉴 = document.data()?["저녁메뉴"] as? String {
-                                                let 저녁메뉴 = 저녁메뉴.replacingOccurrences(of: "\\n", with: "\n")
-                                                
-                                                self.data = [[아침메뉴],
-                                                             [점심메뉴],
-                                                             [저녁메뉴]]
+                        let breakMenu = breakMenu.replacingOccurrences(of: "\\n", with: "\n")
+                            if let lunchMenu = document.data()?["점심메뉴"] as? String {
+                                    let lunchMenu = lunchMenu.replacingOccurrences(of: "\\n", with: "\n")
+                                        if let dinnerMenu = document.data()?["저녁메뉴"] as? String {
+                                                let dinnerMenu = dinnerMenu.replacingOccurrences(of: "\\n", with: "\n")
+                                                self.data = [[breakMenu],
+                                                             [lunchMenu],
+                                                             [dinnerMenu]]
                                                 self.tableView.reloadData()
+    
                                             }
-                                        }
                                     }
-                                    
-                                }
-                            }
-                        }
                         
+
                         
-                        
-                    } else {
-                        print("아침메뉴가 없습니다.")
                     }
                 } else {
                     self.data = [["아직 식단이 등록되지 않았습니다."],
@@ -499,41 +417,29 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         }
         
         
-        if Data.navTitle == "식단표 (65번가_도서관지하분식점)" {
+        if Data.navTitle == "식단표 (65번가_도서관지하분식점)"  {
             
             let docRef = db.collection("Menu4").document(dateFormatter.string(from: date))
             
             docRef.getDocument { (document, error) in
                 if let document = document, document.exists {
-                    if let 아침메뉴 = document.data()?["아침메뉴"] as? String {
-                        let 아침메뉴 = 아침메뉴.replacingOccurrences(of: "\\n", with: "\n")
+                    if let breakMenu = document.data()?["아침메뉴"] as? String {
                         
-                        docRef.getDocument { (document, error) in
-                            if let document = document, document.exists {
-                                if let 점심메뉴 = document.data()?["점심메뉴"] as? String {
-                                    let 점심메뉴 = 점심메뉴.replacingOccurrences(of: "\\n", with: "\n")
-                                    
-                                    docRef.getDocument { (document, error) in
-                                        if let document = document, document.exists {
-                                            if let 저녁메뉴 = document.data()?["저녁메뉴"] as? String {
-                                                let 저녁메뉴 = 저녁메뉴.replacingOccurrences(of: "\\n", with: "\n")
-                                                
-                                                self.data = [[아침메뉴],
-                                                             [점심메뉴],
-                                                             [저녁메뉴]]
+                        let breakMenu = breakMenu.replacingOccurrences(of: "\\n", with: "\n")
+                            if let lunchMenu = document.data()?["점심메뉴"] as? String {
+                                    let lunchMenu = lunchMenu.replacingOccurrences(of: "\\n", with: "\n")
+                                        if let dinnerMenu = document.data()?["저녁메뉴"] as? String {
+                                                let dinnerMenu = dinnerMenu.replacingOccurrences(of: "\\n", with: "\n")
+                                                self.data = [[breakMenu],
+                                                             [lunchMenu],
+                                                             [dinnerMenu]]
                                                 self.tableView.reloadData()
+    
                                             }
-                                        }
                                     }
-                                    
-                                }
-                            }
-                        }
                         
+
                         
-                        
-                    } else {
-                        print("아침메뉴가 없습니다.")
                     }
                 } else {
                     self.data = [["아직 식단이 등록되지 않았습니다."],
@@ -578,24 +484,18 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
             
             docRef.getDocument { (document, error) in
                 if let document = document, document.exists {
-                    if let 아침메뉴 = document.data()?["아침메뉴"] as? String {
-                        let 아침메뉴 = 아침메뉴.replacingOccurrences(of: "\\n", with: "\n")
-                        
-                        docRef.getDocument { (document, error) in
-                            if let document = document, document.exists {
-                                if let 점심메뉴 = document.data()?["점심메뉴"] as? String {
-                                    let 점심메뉴 = 점심메뉴.replacingOccurrences(of: "\\n", with: "\n")
-                                    
-                                    docRef.getDocument { (document, error) in
-                                        if let document = document, document.exists {
-                                            if let 저녁메뉴 = document.data()?["저녁메뉴"] as? String {
-                                                let 저녁메뉴 = 저녁메뉴.replacingOccurrences(of: "\\n", with: "\n")
+                    if let breakMenu = document.data()?["아침메뉴"] as? String {
+                        if let lunchMenu = document.data()?["점심메뉴"] as? String {
+                            if let dinnerMenu = document.data()?["저녁메뉴"] as? String {
+                                let breakMenu = breakMenu.replacingOccurrences(of: "\\n", with: "\n")
+                                let lunchMenu = lunchMenu.replacingOccurrences(of: "\\n", with: "\n")
+                                let dinnerMenu = dinnerMenu.replacingOccurrences(of: "\\n", with: "\n")
                                                 
                                                 
-                                                
-                                                self.data = [[아침메뉴],
-                                                             [점심메뉴],
-                                                             [저녁메뉴]]
+                                
+                                                self.data = [[breakMenu],
+                                                             [lunchMenu],
+                                                             [dinnerMenu]]
                                                 
                                                 // 이곳이 데이터 로딩이 끝내는 함수
                                                 activityIndicator.stopAnimating()
@@ -605,21 +505,11 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
                                                 self.tableView.reloadData()
                                                 
                                                 
-                                                
+                                    
                                                 
                                             }
                                         }
                                     }
-                                    
-                                }
-                            }
-                        }
-                        
-                        
-                        
-                    } else {
-                        print("아침메뉴가 없습니다.")
-                    }
                 } else {
                     self.data = [["아직 식단이 등록되지 않았습니다."],
                                  ["아직 식단이 등록되지 않았습니다."],
@@ -639,44 +529,34 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         if Data.navTitle == "식단표 (학생회관_자율식당)" {
             let docRef = db.collection("Menu2").document(current_date_string)
             
-            
             docRef.getDocument { (document, error) in
                 if let document = document, document.exists {
-                    if let 아침메뉴 = document.data()?["아침메뉴"] as? String {
-                        let 아침메뉴 = 아침메뉴.replacingOccurrences(of: "\\n", with: "\n")
-                        
-                        
-                        docRef.getDocument { (document, error) in
-                            if let document = document, document.exists {
-                                if let 점심메뉴 = document.data()?["점심메뉴"] as? String {
-                                    let 점심메뉴 = 점심메뉴.replacingOccurrences(of: "\\n", with: "\n")
-                                    
-                                    docRef.getDocument { (document, error) in
-                                        if let document = document, document.exists {
-                                            if let 저녁메뉴 = document.data()?["저녁메뉴"] as? String {
-                                                let 저녁메뉴 = 저녁메뉴.replacingOccurrences(of: "\\n", with: "\n")
+                    if let breakMenu = document.data()?["아침메뉴"] as? String {
+                        if let lunchMenu = document.data()?["점심메뉴"] as? String {
+                            if let dinnerMenu = document.data()?["저녁메뉴"] as? String {
+                                let breakMenu = breakMenu.replacingOccurrences(of: "\\n", with: "\n")
+                                let lunchMenu = lunchMenu.replacingOccurrences(of: "\\n", with: "\n")
+                                let dinnerMenu = dinnerMenu.replacingOccurrences(of: "\\n", with: "\n")
                                                 
                                                 
-                                                self.data = [[아침메뉴],
-                                                             [점심메뉴],
-                                                             [저녁메뉴]]
-                                                self.tableView.reloadData()
+                                
+                                                self.data = [[breakMenu],
+                                                             [lunchMenu],
+                                                             [dinnerMenu]]
                                                 
+                                                // 이곳이 데이터 로딩이 끝내는 함수
                                                 activityIndicator.stopAnimating()
                                                 loadingView.removeFromSuperview()
+                                                
+                                                
+                                                self.tableView.reloadData()
+                                                
+                                                
+                                    
+                                                
                                             }
                                         }
                                     }
-                                    
-                                }
-                            }
-                        }
-                        
-                        
-                        
-                    } else {
-                        print("아침메뉴가 없습니다.")
-                    }
                 } else {
                     self.data = [["아직 식단이 등록되지 않았습니다."],
                                  ["아직 식단이 등록되지 않았습니다."],
@@ -688,52 +568,42 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
                 }
             }
             self.tableView.reloadData()
+            
+            
         }
         
         
         if Data.navTitle == "식단표 (예지학사_식당)" {
             let docRef = db.collection("Menu3").document(current_date_string)
             
-            
             docRef.getDocument { (document, error) in
                 if let document = document, document.exists {
-                    if let 아침메뉴 = document.data()?["아침메뉴"] as? String {
-                        let 아침메뉴 = 아침메뉴.replacingOccurrences(of: "\\n", with: "\n")
-                        
-                        
-                        docRef.getDocument { (document, error) in
-                            if let document = document, document.exists {
-                                if let 점심메뉴 = document.data()?["점심메뉴"] as? String {
-                                    let 점심메뉴 = 점심메뉴.replacingOccurrences(of: "\\n", with: "\n")
-                                    
-                                    docRef.getDocument { (document, error) in
-                                        if let document = document, document.exists {
-                                            if let 저녁메뉴 = document.data()?["저녁메뉴"] as? String {
-                                                let 저녁메뉴 = 저녁메뉴.replacingOccurrences(of: "\\n", with: "\n")
+                    if let breakMenu = document.data()?["아침메뉴"] as? String {
+                        if let lunchMenu = document.data()?["점심메뉴"] as? String {
+                            if let dinnerMenu = document.data()?["저녁메뉴"] as? String {
+                                let breakMenu = breakMenu.replacingOccurrences(of: "\\n", with: "\n")
+                                let lunchMenu = lunchMenu.replacingOccurrences(of: "\\n", with: "\n")
+                                let dinnerMenu = dinnerMenu.replacingOccurrences(of: "\\n", with: "\n")
                                                 
                                                 
-                                                self.data = [[아침메뉴],
-                                                             [점심메뉴],
-                                                             [저녁메뉴]]
-                                                self.tableView.reloadData()
+                                
+                                                self.data = [[breakMenu],
+                                                             [lunchMenu],
+                                                             [dinnerMenu]]
                                                 
                                                 // 이곳이 데이터 로딩이 끝내는 함수
                                                 activityIndicator.stopAnimating()
                                                 loadingView.removeFromSuperview()
+                                                
+                                                
                                                 self.tableView.reloadData()
+                                                
+                                                
+                                    
+                                                
                                             }
                                         }
                                     }
-                                    
-                                }
-                            }
-                        }
-                        
-                        
-                        
-                    } else {
-                        print("아침메뉴가 없습니다.")
-                    }
                 } else {
                     self.data = [["아직 식단이 등록되지 않았습니다."],
                                  ["아직 식단이 등록되지 않았습니다."],
@@ -745,52 +615,42 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
                 }
             }
             self.tableView.reloadData()
+            
+            
         }
         
         
         if Data.navTitle == "식단표 (65번가_도서관지하분식점)" {
             let docRef = db.collection("Menu4").document(current_date_string)
             
-            
             docRef.getDocument { (document, error) in
                 if let document = document, document.exists {
-                    if let 아침메뉴 = document.data()?["아침메뉴"] as? String {
-                        let 아침메뉴 = 아침메뉴.replacingOccurrences(of: "\\n", with: "\n")
-                        
-                        
-                        docRef.getDocument { (document, error) in
-                            if let document = document, document.exists {
-                                if let 점심메뉴 = document.data()?["점심메뉴"] as? String {
-                                    let 점심메뉴 = 점심메뉴.replacingOccurrences(of: "\\n", with: "\n")
-                                    
-                                    docRef.getDocument { (document, error) in
-                                        if let document = document, document.exists {
-                                            if let 저녁메뉴 = document.data()?["저녁메뉴"] as? String {
-                                                let 저녁메뉴 = 저녁메뉴.replacingOccurrences(of: "\\n", with: "\n")
+                    if let breakMenu = document.data()?["아침메뉴"] as? String {
+                        if let lunchMenu = document.data()?["점심메뉴"] as? String {
+                            if let dinnerMenu = document.data()?["저녁메뉴"] as? String {
+                                let breakMenu = breakMenu.replacingOccurrences(of: "\\n", with: "\n")
+                                let lunchMenu = lunchMenu.replacingOccurrences(of: "\\n", with: "\n")
+                                let dinnerMenu = dinnerMenu.replacingOccurrences(of: "\\n", with: "\n")
                                                 
                                                 
-                                                self.data = [[아침메뉴],
-                                                             [점심메뉴],
-                                                             [저녁메뉴]]
-                                                self.tableView.reloadData()
+                                
+                                                self.data = [[breakMenu],
+                                                             [lunchMenu],
+                                                             [dinnerMenu]]
                                                 
                                                 // 이곳이 데이터 로딩이 끝내는 함수
                                                 activityIndicator.stopAnimating()
                                                 loadingView.removeFromSuperview()
+                                                
+                                                
                                                 self.tableView.reloadData()
+                                                
+                                                
+                                    
+                                                
                                             }
                                         }
                                     }
-                                    
-                                }
-                            }
-                        }
-                        
-                        
-                        
-                    } else {
-                        print("아침메뉴가 없습니다.")
-                    }
                 } else {
                     self.data = [["아직 식단이 등록되지 않았습니다."],
                                  ["아직 식단이 등록되지 않았습니다."],
@@ -802,6 +662,8 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
                 }
             }
             self.tableView.reloadData()
+            
+            
         }
         
         
@@ -814,6 +676,8 @@ class ViewController: UIViewController, FSCalendarDelegate, FSCalendarDataSource
         
         // backButton
         let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil) // title 부분 수정
+        
+        
         backBarButtonItem.tintColor = UIColor(hexCode: "#c8d6e5")
         self.navigationItem.backBarButtonItem = backBarButtonItem
         
@@ -872,6 +736,9 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             return button
         }()
         
+        let likeCountLabel = UILabel()
+        
+        let dislikeCountLabel = UILabel()
         
         let cell = UITableViewCell(style: .default, reuseIdentifier: .none)
         
@@ -886,13 +753,8 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         cell.backgroundColor = UIColor(hexCode: "#576574") // cellColor
         cell.textLabel?.numberOfLines = 0 // 줄바꿈 설정
         cell.textLabel?.textColor = UIColor(hexCode: "#c8d6e5") // tintColor
-        //cell.textLabel?.font = .boldSystemFont(ofSize: 18) // 폰트 크기와 bold -> UI개선
         cell.textLabel?.text = data[indexPath.section][indexPath.row]
         
-        
-        
-        let likeCountLabel = UILabel()
-        let dislikeCountLabel = UILabel()
         
         
         // 파이어베이스 [데이터 불러오기] (임시)
@@ -929,28 +791,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         if Data.navTitle == "식단표 (학생회관_학생식당)" {
             
             let docRef = db.collection("Menu").document(Data.currentDateStringSpace)
-            
-            
-            //
-            //////
-            //
-            //            docRef.getDocument { (document, error) in
-            //                if let document = document, document.exists {
-            //                    if let like = document.data()?[mealType] as? String {
-            //                        likeCountLabel.text = like
-            //                        likeCountLabel.textColor = .red
-            //                        likeCountLabel.tag = 1000 // Set tag for identification
-            //
-            //                    }
-            //
-            //                }
-            //                else {
-            //                    print("   2   ")
-            //                }
-            //
-            //            }
-            
-            
             
             // 이쪽 중요
             // 데이터 변경 사항을 수신하는 메서드 // 기기로 한 번 테스트
@@ -1016,35 +856,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             
             let docRef = db.collection("Menu2").document(Data.currentDateStringSpace)
             
-            
-//            docRef.getDocument { (document, error) in
-//                if let document = document, document.exists {
-//                    if let like = document.data()?[mealType] as? String {
-//                        likeCountLabel.text = like
-//                        likeCountLabel.textColor = .red
-//                        likeCountLabel.tag = 1000 // Set tag for identification
-//                    }
-//                }
-//                else {
-//                    print("   2   ")
-//                }
-//                
-//            }
-//            
-//            docRef.getDocument { (document, error) in
-//                if let document = document, document.exists {
-//                    if let like = document.data()?[dismealType] as? String {
-//                        dislikeCountLabel.text = like
-//                        dislikeCountLabel.textColor = .systemBlue
-//                        dislikeCountLabel.tag = 2000 // Set tag for identification
-//                    }
-//                }
-//                else {
-//                    print("   2   ")
-//                }
-//                
-//            }
-            
             // 이쪽 중요
             // 데이터 변경 사항을 수신하는 메서드 // 기기로 한 번 테스트
             docRef.addSnapshotListener { (document, error) in
@@ -1090,35 +901,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             
             let docRef = db.collection("Menu3").document(Data.currentDateStringSpace)
             
-            
-//            docRef.getDocument { (document, error) in
-//                if let document = document, document.exists {
-//                    if let like = document.data()?[mealType] as? String {
-//                        likeCountLabel.text = like
-//                        likeCountLabel.textColor = .red
-//                        likeCountLabel.tag = 1000 // Set tag for identification
-//                    }
-//                }
-//                else {
-//                    print("   2   ")
-//                }
-//                
-//            }
-//            
-//            docRef.getDocument { (document, error) in
-//                if let document = document, document.exists {
-//                    if let like = document.data()?[dismealType] as? String {
-//                        dislikeCountLabel.text = like
-//                        dislikeCountLabel.textColor = .systemBlue
-//                        dislikeCountLabel.tag = 2000 // Set tag for identification
-//                    }
-//                }
-//                else {
-//                    print("   2   ")
-//                }
-//                
-//            }
-            
             // 이쪽 중요
             // 데이터 변경 사항을 수신하는 메서드 // 기기로 한 번 테스트
             docRef.addSnapshotListener { (document, error) in
@@ -1163,35 +945,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         if Data.navTitle == "식단표 (65번가_도서관지하분식점)" {
             
             let docRef = db.collection("Menu4").document(Data.currentDateStringSpace)
-            
-            
-//            docRef.getDocument { (document, error) in
-//                if let document = document, document.exists {
-//                    if let like = document.data()?[mealType] as? String {
-//                        likeCountLabel.text = like
-//                        likeCountLabel.textColor = .red
-//                        likeCountLabel.tag = 1000 // Set tag for identification
-//                    }
-//                }
-//                else {
-//                    print("   2   ")
-//                }
-//                
-//            }
-//            
-//            docRef.getDocument { (document, error) in
-//                if let document = document, document.exists {
-//                    if let like = document.data()?[dismealType] as? String {
-//                        dislikeCountLabel.text = like
-//                        dislikeCountLabel.textColor = .systemBlue
-//                        dislikeCountLabel.tag = 2000 // Set tag for identification
-//                    }
-//                }
-//                else {
-//                    print("   2   ")
-//                }
-//                
-//            }
             
             
             // 이쪽 중요
@@ -1240,25 +993,24 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         cell.contentView.addSubview(dislikeCountLabel)
         
         
-        // Layout constraints for labels
-        likeCountLabel.translatesAutoresizingMaskIntoConstraints = false
-        dislikeCountLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        
-        
-        
-        
-        
-        
         // Add buttons to cell
         cell.contentView.addSubview(likeButton)
         cell.contentView.addSubview(dislikeButton)
         
         
         
+        
+        // Layout constraints for labels
+        likeCountLabel.translatesAutoresizingMaskIntoConstraints = false
+        dislikeCountLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        
         // Layout constraints for buttons
         likeButton.translatesAutoresizingMaskIntoConstraints = false
         dislikeButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        
+        
         
         
         NSLayoutConstraint.activate([
@@ -2681,9 +2433,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     
     
-    
-    
-    
+
     
     // 섹션
     func numberOfSections(in tableView: UITableView) -> Int {

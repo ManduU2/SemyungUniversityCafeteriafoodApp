@@ -21,9 +21,7 @@ class BellViewController: UIViewController, UNUserNotificationCenterDelegate  {
     var tableView = UITableView(frame: .zero, style: .insetGrouped)
     
     
-    
-    
-    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
