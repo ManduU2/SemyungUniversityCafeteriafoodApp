@@ -42,11 +42,6 @@ class BellViewController: UIViewController, UNUserNotificationCenterDelegate  {
         
         
         applyConstraints()
-        
-        
-        
-       
-        
     }
     
     
@@ -67,24 +62,8 @@ class BellViewController: UIViewController, UNUserNotificationCenterDelegate  {
         
     }
     
-    
-    
-    
-    
-    
+
 }
-
-    
-
-    
-    
-  
-    
-    
-    
-
-    
-
 
 
 // 테이블 델리게이트
@@ -104,9 +83,6 @@ extension BellViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        
-        
         
         if indexPath.section == 0 && indexPath.row == 0 {
             let switchCell = UITableViewCell(style: .default, reuseIdentifier: nil)

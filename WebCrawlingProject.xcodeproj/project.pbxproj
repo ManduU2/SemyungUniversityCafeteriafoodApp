@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DE2C7FFA2BBFB1280036B524 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2C7FF92BBFB1280036B524 /* UIColorExtension.swift */; };
+		DE2C7FFC2BBFB2150036B524 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2C7FFB2BBFB2150036B524 /* UIImageExtension.swift */; };
+		DE2C7FFE2BBFB3360036B524 /* FSCalendarExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2C7FFD2BBFB3360036B524 /* FSCalendarExtension.swift */; };
+		DE2C80012BC12E9D0036B524 /* MealType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2C80002BC12E9D0036B524 /* MealType.swift */; };
 		DE46F4FC2BA6E1A50042A285 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE46F4FB2BA6E1A50042A285 /* Data.swift */; };
 		DE785B582BB19BD10011EA6D /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE785B572BB19BD10011EA6D /* WidgetKit.framework */; };
 		DE785B5A2BB19BD10011EA6D /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE785B592BB19BD10011EA6D /* SwiftUI.framework */; };
@@ -62,6 +66,10 @@
 /* Begin PBXFileReference section */
 		5EEA7539B0386A136A69209D /* Pods-WebCrawlingProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WebCrawlingProject.debug.xcconfig"; path = "Target Support Files/Pods-WebCrawlingProject/Pods-WebCrawlingProject.debug.xcconfig"; sourceTree = "<group>"; };
 		D3295520D03654DD5AD4B30B /* Pods-WebCrawlingProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WebCrawlingProject.release.xcconfig"; path = "Target Support Files/Pods-WebCrawlingProject/Pods-WebCrawlingProject.release.xcconfig"; sourceTree = "<group>"; };
+		DE2C7FF92BBFB1280036B524 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
+		DE2C7FFB2BBFB2150036B524 /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
+		DE2C7FFD2BBFB3360036B524 /* FSCalendarExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSCalendarExtension.swift; sourceTree = "<group>"; };
+		DE2C80002BC12E9D0036B524 /* MealType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealType.swift; sourceTree = "<group>"; };
 		DE46F4FB2BA6E1A50042A285 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		DE785B562BB19BD10011EA6D /* CalWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = CalWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE785B572BB19BD10011EA6D /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -134,10 +142,34 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		DE2C7FF82BBFB0900036B524 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				DEB9E56E2B9594830084C269 /* Assets.xcassets */,
+				DEB9E5622B9594820084C269 /* AppDelegate.swift */,
+				DEB9E5642B9594820084C269 /* SceneDelegate.swift */,
+				DE2C7FF92BBFB1280036B524 /* UIColorExtension.swift */,
+				DE2C7FFB2BBFB2150036B524 /* UIImageExtension.swift */,
+				DE2C7FFD2BBFB3360036B524 /* FSCalendarExtension.swift */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		DE2C7FFF2BBFB3930036B524 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				DEB9E5662B9594820084C269 /* ViewController.swift */,
+				DEB9E58A2B96D8370084C269 /* HouseViewController.swift */,
+				DEB9E5962B9AC4600084C269 /* BellViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
 		DE46F4FA2BA6E17D0042A285 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				DE46F4FB2BA6E1A50042A285 /* Data.swift */,
+				DE2C80002BC12E9D0036B524 /* MealType.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -158,10 +190,10 @@
 			children = (
 				DEE3ED6F2BB7E59B0081B124 /* CalWidgetExtensionRelease.entitlements */,
 				DEB9E5612B9594820084C269 /* WebCrawlingProject */,
-				DE785B5B2BB19BD10011EA6D /* CalWidget */,
 				DEB9E5602B9594820084C269 /* Products */,
 				82C6BAE3598AEBED84A80A2B /* Pods */,
 				484F961CDE61C99EBADFE1D8 /* Frameworks */,
+				DE785B5B2BB19BD10011EA6D /* CalWidget */,
 			);
 			sourceTree = "<group>";
 		};
@@ -178,18 +210,14 @@
 			isa = PBXGroup;
 			children = (
 				DEE3ED682BB7DA230081B124 /* WebCrawlingProjectRelease.entitlements */,
+				DE2C7FF82BBFB0900036B524 /* Support */,
 				DE46F4FA2BA6E17D0042A285 /* Models */,
-				DEB9E5622B9594820084C269 /* AppDelegate.swift */,
-				DEB9E5642B9594820084C269 /* SceneDelegate.swift */,
-				DEB9E5662B9594820084C269 /* ViewController.swift */,
-				DEB9E58A2B96D8370084C269 /* HouseViewController.swift */,
-				DEB9E5962B9AC4600084C269 /* BellViewController.swift */,
-				DEB9E5682B9594820084C269 /* Main.storyboard */,
-				DEB9E56E2B9594830084C269 /* Assets.xcassets */,
-				DEB9E5702B9594830084C269 /* LaunchScreen.storyboard */,
+				DE2C7FFF2BBFB3930036B524 /* Controllers */,
 				DEB9E5732B9594830084C269 /* Info.plist */,
-				DEB9E56B2B9594820084C269 /* WebCrawlingProject.xcdatamodeld */,
 				DE797E732BAC40E300E45A58 /* GoogleService-Info.plist */,
+				DEB9E56B2B9594820084C269 /* WebCrawlingProject.xcdatamodeld */,
+				DEB9E5682B9594820084C269 /* Main.storyboard */,
+				DEB9E5702B9594830084C269 /* LaunchScreen.storyboard */,
 			);
 			path = WebCrawlingProject;
 			sourceTree = "<group>";
@@ -367,9 +395,13 @@
 			files = (
 				DEB9E58B2B96D8370084C269 /* HouseViewController.swift in Sources */,
 				DEB9E5672B9594820084C269 /* ViewController.swift in Sources */,
+				DE2C80012BC12E9D0036B524 /* MealType.swift in Sources */,
 				DEB9E5632B9594820084C269 /* AppDelegate.swift in Sources */,
 				DEB9E5652B9594820084C269 /* SceneDelegate.swift in Sources */,
+				DE2C7FFE2BBFB3360036B524 /* FSCalendarExtension.swift in Sources */,
 				DEB9E56D2B9594820084C269 /* WebCrawlingProject.xcdatamodeld in Sources */,
+				DE2C7FFC2BBFB2150036B524 /* UIImageExtension.swift in Sources */,
+				DE2C7FFA2BBFB1280036B524 /* UIColorExtension.swift in Sources */,
 				DEB9E5972B9AC4600084C269 /* BellViewController.swift in Sources */,
 				DE46F4FC2BA6E1A50042A285 /* Data.swift in Sources */,
 			);

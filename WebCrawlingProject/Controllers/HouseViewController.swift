@@ -15,6 +15,10 @@ class HouseViewController: UIViewController {
     let header = ["식당"]
     
     
+    // meal
+    let meal = MealType()
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -97,21 +101,21 @@ extension HouseViewController:  UITableViewDataSource, UITableViewDelegate {
         switch indexPath.row {
         case 0:
             // 학생회관_학생식당 selected
-            Data.navTitle = "식단표 (학생회관_학생식당)"
+            Data.navTitle = meal.mealType[0]
             navigationController?.popViewController(animated: true)
         case 1:
             // 학생회관_자율식당 selected
-            Data.navTitle = "식단표 (학생회관_자율식당)"
+            Data.navTitle = meal.mealType[1]
             navigationController?.popViewController(animated: true)
         case 2:
             // 예지학사식당 selected
             // Handle as needed
-            Data.navTitle = "식단표 (예지학사_식당)"
+            Data.navTitle = meal.mealType[2]
             navigationController?.popViewController(animated: true)
         case 3:
             // 세명식당 selected
             // Handle as needed
-            Data.navTitle = "식단표 (65번가_도서관지하분식점)"
+            Data.navTitle = meal.mealType[3]
             navigationController?.popViewController(animated: true)
         default:
             break
