@@ -729,7 +729,6 @@ struct LockScreenWidgetView: View {
     @ViewBuilder
     func sizeBody() -> some View {
         
-        
         if #available(iOSApplicationExtension 16.0, *) {
             switch family {
             
@@ -738,13 +737,11 @@ struct LockScreenWidgetView: View {
                         Circle()
                         .fill(Color.black.opacity(1.0)) // 원의 배경색 설정 / 원의 투명도 설정
                             .frame(width: 58, height: 58) // 원의 크기 조정
-                    
                         Image("meal(white2)")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 40, height: 40) // 이미지 크기 조정
                     }
-            
             default:
                 EmptyView()
             }
@@ -842,7 +839,6 @@ struct LockScreenAccessoryRectangularView: View {
         
         return GeometryReader { geometry in
             
-                    
                     HStack {
                         HStack {
                             if isMorning {
